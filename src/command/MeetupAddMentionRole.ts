@@ -10,8 +10,8 @@ import {
 } from "discord.js";
 import {addRole} from "../cache/meetupAllowedMentionsRoles";
 import {db} from "../database/Database";
-import {assertMeetupCreateChannelUsed} from "../permissions/assertMeetupCreateChannelUsed";
-import {assertUserHasMeetupConfigRole} from "../permissions/assertUserHasMeetupConfigRole";
+import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
+import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
 import {postSuccess} from "../util/postEmbeds";
 import {AbstractCommand} from "./AbstractCommand";
 

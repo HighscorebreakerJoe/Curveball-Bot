@@ -13,8 +13,8 @@ import {
 } from "discord.js";
 import {MeetupRow} from "../database/table/Meetup";
 import env from "../env";
-import {assertMessageHasValidMeetup} from "../permissions/assertMessageHasValidMeetup";
-import {assertUserIsMeetupCreatorOrConfig} from "../permissions/assertUserIsMeetupCreatorOrConfig";
+import {assertMessageHasValidMeetup} from "../permission/assertMessageHasValidMeetup";
+import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {AbstractButton} from "./AbstractButton";
 
 export class MeetupDeleteButton extends AbstractButton{

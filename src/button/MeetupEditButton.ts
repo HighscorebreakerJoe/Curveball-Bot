@@ -2,9 +2,9 @@
  * Class for handling "Edit meetup" buttonpress in meetup info embeds
  */
 import {ButtonInteraction} from "discord.js";
-import {modalsMap} from "../maps/modalsMap";
-import {assertMessageHasValidMeetup} from "../permissions/assertMessageHasValidMeetup";
-import {assertUserIsMeetupCreatorOrConfig} from "../permissions/assertUserIsMeetupCreatorOrConfig";
+import {modalsMap} from "../map/modalsMap";
+import {assertMessageHasValidMeetup} from "../permission/assertMessageHasValidMeetup";
+import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {AbstractButton} from "./AbstractButton";
 
 export class MeetupEditButton extends AbstractButton{

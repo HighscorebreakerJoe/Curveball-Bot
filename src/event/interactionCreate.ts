@@ -9,10 +9,10 @@ import {
 } from "discord.js";
 import {AbstractButton} from "../button/AbstractButton";
 import {AbstractCommand} from "../command/AbstractCommand";
-import {dynamicIdRegExp} from "../constants/dynamicIdRegExp";
-import {buttonsMap} from "../maps/buttonsMap";
-import commandsMap from "../maps/commandsMap";
-import {modalSubmitsMap} from "../maps/modalSubmitsMap";
+import {dynamicIdRegExp} from "../constant/dynamicIdRegExp";
+import {buttonsMap} from "../map/buttonsMap";
+import commandsMap from "../map/commandsMap";
+import {modalSubmitsMap} from "../map/modalSubmitsMap";
 import {AbstractModalSubmit} from "../modal/submit/AbstractModalSubmit";
 
 export default function onInteractionCreate(client: Client): void {

@@ -10,8 +10,8 @@ import {
 import {getMeetupInfoChannel} from "../../cache/meetupChannels";
 import {db} from "../../database/Database";
 import {MeetupRow} from "../../database/table/Meetup";
-import {assertMeetupIDIsValid} from "../../permissions/assertMeetupIDIsValid";
-import {assertUserIsMeetupCreatorOrConfig} from "../../permissions/assertUserIsMeetupCreatorOrConfig";
+import {assertMeetupIDIsValid} from "../../permission/assertMeetupIDIsValid";
+import {assertUserIsMeetupCreatorOrConfig} from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import {editMeetupInfoEmbed} from "../../util/editMeetupInfoEmbed";
 import {getDynamicData} from "../../util/getDynamicIDData";
 import {resetMeetupListChannel} from "../../util/resetMeetupListChannel";

@@ -4,8 +4,8 @@
 import {APIApplicationCommandOption, ChatInputCommandInteraction, Locale, MessageFlags} from "discord.js";
 import {db} from "../database/Database";
 import {MeetupRow} from "../database/table/Meetup";
-import {assertMeetupCreateChannelUsed} from "../permissions/assertMeetupCreateChannelUsed";
-import {assertUserHasMeetupConfigRole} from "../permissions/assertUserHasMeetupConfigRole";
+import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
+import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
 import {deleteMeetupData} from "../util/deleteMeetupData";
 import {postSuccess} from "../util/postEmbeds";
 import {AbstractCommand} from "./AbstractCommand";

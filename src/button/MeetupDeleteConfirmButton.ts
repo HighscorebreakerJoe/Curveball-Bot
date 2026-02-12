@@ -3,8 +3,8 @@
  */
 import {ButtonInteraction} from "discord.js";
 import {MeetupRow} from "../database/table/Meetup";
-import {assertMeetupIDIsValid} from "../permissions/assertMeetupIDIsValid";
-import {assertUserIsMeetupCreatorOrConfig} from "../permissions/assertUserIsMeetupCreatorOrConfig";
+import {assertMeetupIDIsValid} from "../permission/assertMeetupIDIsValid";
+import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {deleteMeetupData} from "../util/deleteMeetupData";
 import {getDynamicData} from "../util/getDynamicIDData";
 import {postSuccess} from "../util/postEmbeds";

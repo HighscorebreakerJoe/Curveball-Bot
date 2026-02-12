@@ -10,8 +10,8 @@ import {
     Role,
     roleMention
 } from "discord.js";
-import {modalsMap} from "../maps/modalsMap";
-import {assertMeetupCreateChannelUsed} from "../permissions/assertMeetupCreateChannelUsed";
+import {modalsMap} from "../map/modalsMap";
+import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
 import {AbstractCommand} from "./AbstractCommand";
 
 export class MeetupCommand extends AbstractCommand {

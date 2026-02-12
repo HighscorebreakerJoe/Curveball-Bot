@@ -2,7 +2,7 @@ import {ActivityType, Client, Events, REST, RESTPostAPIApplicationCommandsJSONBo
 import {loadMeetupAllowedMentionsRoles} from "../cache/meetupAllowedMentionsRoles";
 import {loadMeetupChannels} from "../cache/meetupChannels";
 import env from "../env";
-import commandsMap from "../maps/commandsMap";
+import commandsMap from "../map/commandsMap";
 
 export default function onClientReady(client: Client): void {
     client.on(Events.ClientReady, async () => {

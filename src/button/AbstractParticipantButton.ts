@@ -5,7 +5,7 @@ import {ButtonInteraction, EmbedBuilder} from "discord.js";
 import {db} from "../database/Database";
 import {MeetupRow} from "../database/table/Meetup";
 import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
-import {assertMessageHasValidMeetup} from "../permissions/assertMessageHasValidMeetup";
+import {assertMessageHasValidMeetup} from "../permission/assertMessageHasValidMeetup";
 import {createParticipantListMessage} from "../util/createParticipantListMessage";
 import {editMeetupInfoEmbed, ParticipantData} from "../util/editMeetupInfoEmbed";
 import {AbstractButton} from "./AbstractButton";

@@ -1,7 +1,7 @@
 import {ButtonInteraction, ChatInputCommandInteraction} from "discord.js";
 import {MeetupRow} from "../database/table/Meetup";
-import {assertMeetupIDIsValid} from "../permissions/assertMeetupIDIsValid";
-import {assertUserIsMeetupCreatorOrConfig} from "../permissions/assertUserIsMeetupCreatorOrConfig";
+import {assertMeetupIDIsValid} from "../permission/assertMeetupIDIsValid";
+import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {getDynamicData} from "../util/getDynamicIDData";
 import {MeetupCreateModal} from "./MeetupCreateModal";
 
