@@ -1,0 +1,145 @@
+import {
+    ActionRowBuilder,
+    ButtonInteraction,
+    ChatInputCommandInteraction,
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle
+} from "discord.js";
+import {db} from "../database/Database";
+import {MeetupAllowedMentionsRoleRow} from "../database/table/MeetupAllowedMentionsRole";
+import {AbstractModal} from "./AbstractModal";
+
+/**
+ * Displays Create Meetup Modal
+ */
+
+export class MeetupCreateModal extends AbstractModal{
+    customId: string = "meetup_create";
+
+    protected modalTitle: string = "Neuen Meetup erstellen";
+
+    private allowedCommands: string[] = ["meetup", "poll"];
+
+    protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
+        //check interaction type
+        if(!interaction.isCommand()){
+            throw Error("Falscher Interaktionstyp");
+        }
+
+        if (!this.allowedCommands.includes(interaction.commandName)) {
+            throw Error(`Ungültiges Kommando: ${interaction.commandName}`);
+        }
+
+        //check option roles
+        const options = interaction.options;
+        const roleIds: string[] = [];
+
+        const role1 = options.getRole('role1');
+        if(role1 && role1.id){
+            await this.checkRole(role1.id);
+            roleIds.push(role1.id);
+        }
+
+        const role2 = options.getRole('role2');
+        if(role2 && role2.id){
+            await this.checkRole(role2.id);
+            roleIds.push(role2.id);
+        }
+
+        const role3 = options.getRole('role3');
+        if(role3 && role3.id){
+            await this.checkRole(role3.id);
+            roleIds.push(role3.id);
+        }
+
+        this.setAdditionalData({
+            roleIds: roleIds
+        });
+    }
+
+    protected setSubmitCustomId() {
+        const roleIdString = this.additionalData.roleIds.join(',');
+
+        this.submitCustomId = "meetup_create:" + roleIdString;
+    }
+
+    protected buildModal(): ModalBuilder {
+        const modal: ModalBuilder = new ModalBuilder()
+            .setCustomId(this.submitCustomId)
+            .setTitle(this.modalTitle);
+
+        const{pokemon, location, time, date, note} = this.buildInputs()
+
+        const row1 = new ActionRowBuilder<TextInputBuilder>().addComponents(pokemon);
+        const row2 = new ActionRowBuilder<TextInputBuilder>().addComponents(location);
+        const row3 = new ActionRowBuilder<TextInputBuilder>().addComponents(time);
+        const row4 = new ActionRowBuilder<TextInputBuilder>().addComponents(date);
+        const row5 = new ActionRowBuilder<TextInputBuilder>().addComponents(note);
+
+        // Add inputs to the modal
+        modal.addComponents(row1, row2, row3, row4, row5);
+
+        return modal;
+    };
+
+    protected buildInputs() {
+        const pokemon: TextInputBuilder = new TextInputBuilder()
+            .setCustomId("pokemon")
+            .setLabel("Pokémon")
+            .setPlaceholder("z.B. Enton")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true);
+
+        const location: TextInputBuilder = new TextInputBuilder()
+            .setCustomId("location")
+            .setLabel("Treffpunkt")
+            .setPlaceholder("z.B. eine Arena")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true);
+
+        const time: TextInputBuilder = new TextInputBuilder()
+            .setCustomId("time")
+            .setLabel("Uhrzeit (HH:MM)")
+            .setPlaceholder("z.B. 13:37")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true);
+
+        const nowDate = new Date;
+
+        const date: TextInputBuilder = new TextInputBuilder()
+            .setCustomId("date")
+            .setLabel("Datum (TT.MM)")
+            .setPlaceholder("z.B. 24.12")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+            .setValue(nowDate.getDate() + "." + (nowDate.getMonth() + 1));
+
+        const note: TextInputBuilder = new TextInputBuilder()
+            .setCustomId("note")
+            .setLabel("Anmerkungen")
+            .setPlaceholder("Zusätzliche Infos/Anmerkungen zu deinem Meetup , wie z.B. das zugehörige Event (Raid-Stunde etc.)")
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false);
+
+        return {
+            pokemon: pokemon,
+            location: location,
+            time: time,
+            date: date,
+            note: note
+        }
+    }
+
+    private async checkRole(roleId: string): Promise<void>{
+        const role = await db
+            .selectFrom("meetup_allowed_mentions_role")
+            .selectAll()
+            .where("roleID", "=", roleId)
+            .executeTakeFirst() as MeetupAllowedMentionsRoleRow | undefined;
+
+        if(!role){
+            throw Error(`Ungültige Rolle mit der RoleID ${roleId}`)
+        }
+    }
+}
