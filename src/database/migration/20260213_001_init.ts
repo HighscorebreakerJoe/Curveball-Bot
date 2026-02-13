@@ -30,7 +30,7 @@ function createMeetupTable(db: Kysely<any>): Promise<void> {
         .addColumn("location", "varchar(255)", col =>
             col.notNull()
         )
-        .addColumn("note", "text")
+        .addColumn("note", sql`MEDIUMTEXT`)
         .addColumn("time", "datetime", col =>
             col.notNull()
         )
@@ -44,9 +44,8 @@ function createMeetupTable(db: Kysely<any>): Promise<void> {
             col.defaultTo(sql`CURRENT_TIMESTAMP`)
         )
         .addColumn("lastUpdateTime", "timestamp", col =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`)
-                //see: https://github.com/kysely-org/kysely/issues/1163
-                .modifyEnd(sql`ON UPDATE CURRENT_TIMESTAMP`)
+            //see: https://github.com/kysely-org/kysely/issues/1163
+            col.modifyEnd(sql`ON UPDATE CURRENT_TIMESTAMP`)
         )
         .execute();
 }
@@ -85,7 +84,7 @@ function createAllowedMentionsRoleTable(db: Kysely<any>): Promise<void> {
         .addColumn("roleID", "varchar(255)", col =>
             col.notNull()
         )
-        .addColumn("userID", "varchar(255)", col =>
+        .addColumn("userID", "varchar(32)", col =>
             col.notNull()
         )
         .addColumn("createTime", "timestamp", col =>
