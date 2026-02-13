@@ -64,28 +64,23 @@ Create the following channels in your Discord server:
 
 ### 2.3 Roles
 
-Next, create a role that will be used as the Meetup Configurator role.
+Next, create a role that will be used as the **Meetup Configurator** role.
 Users with this role will be allowed to manage meetups created by others.
 
-### 2.4 Database setup
-
-Create a database that will be used by Curveball Bot. 
-Afterward, execute all SQL instructions located in `extra/install.sql` 
-(NOTE: This step will be redundant once the migration system has been implemented).
-
-### 2.5 Configuration
+### 2.4 Configuration
 
 Copy the contents of `.env.example` into a new file called `.env`.
 
 This file contains all important configuration values required by the bot.
 Edit the `.env` file according to the instructions provided in the comments.
 
-### 2.6 GO!
+## 3. GO!
 
-Now nothing can stop you to finally start the bot!
+With all preparations done, you're ready to start the bot!
+When the bot starts, it automatically sets up and updates the database by applying any pending migrations.
 
-Just start it by running 
-`npm run start`. 
+Start the bot using: 
+`npm run start`.
 
 ## Technologies and Tools Used
 
