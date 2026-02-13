@@ -1,11 +1,23 @@
 import {client} from "./client";
+import {migrateToLatest} from "./database/Migrate";
 import env from "./env";
 import onClientReady from "./event/clientReady";
 import onInteractionCreate from "./event/interactionCreate";
 
-//events
-onClientReady(client);
-onInteractionCreate(client);
 
-//login
-client.login(env.BOT_TOKEN);
+async function main() {
+    //db migration
+    await migrateToLatest();
+
+    //events
+    onClientReady(client);
+    onInteractionCreate(client);
+
+    //login
+    await client.login(env.BOT_TOKEN);
+}
+
+main().catch(mainError => {
+    console.error(mainError);
+    process.exit(1);
+});
