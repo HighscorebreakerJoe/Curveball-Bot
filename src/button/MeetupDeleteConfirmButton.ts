@@ -27,7 +27,7 @@ export class MeetupDeleteConfirmButton extends AbstractButton{
         const meetup: MeetupRow = await assertMeetupIDIsValid(meetupID);
 
         //check if current user is mod or creator of this meetup
-        assertUserIsMeetupCreatorOrConfig(interaction, meetup, true);
+        await assertUserIsMeetupCreatorOrConfig(interaction, meetup, true);
 
         //save relevant variables for run
         this.context.meetup = meetup;

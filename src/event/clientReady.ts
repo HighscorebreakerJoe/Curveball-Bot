@@ -1,4 +1,5 @@
 import {ActivityType, Client, Events, REST, RESTPostAPIApplicationCommandsJSONBody, Routes} from "discord.js";
+import {loadGuild} from "../cache/guild";
 import {loadMeetupAllowedMentionsRoles} from "../cache/meetupAllowedMentionsRoles";
 import {loadMeetupChannels} from "../cache/meetupChannels";
 import env from "../env";
@@ -18,6 +19,7 @@ export default function onClientReady(client: Client): void {
         console.log(`Logged in as ${client.user.tag}`);
 
         //load cache data
+        await loadGuild();
         await loadMeetupAllowedMentionsRoles();
         await loadMeetupChannels();
 
