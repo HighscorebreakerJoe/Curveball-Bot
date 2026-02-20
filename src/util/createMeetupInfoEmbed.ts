@@ -1,7 +1,6 @@
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Guild, time, TimestampStyles} from "discord.js";
-import {client} from "../client";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, time, TimestampStyles} from "discord.js";
+import {getGuild} from "../cache/guild";
 import {db} from "../database/Database";
-import env from "../env";
 import {ParticipantData} from "./editMeetupInfoEmbed";
 import {printParticipantData} from "./printParticipantData";
 
@@ -131,8 +130,7 @@ export async function getParticipantData(meetupID: number): Promise<ParticipantD
 
     const userIDs: string[] = meetupUserRows.map((row) => row.userID);
 
-    const guild: Guild = client.guilds.cache.get(env.GUILD_ID) ?? await client.guilds.fetch(env.GUILD_ID);
-    const members = await guild.members.fetch({ user: userIDs }); //TODO Cache?
+    const members = await getGuild().members.fetch({ user: userIDs });
 
     const participantData: ParticipantData[] = [];
 

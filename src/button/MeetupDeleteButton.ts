@@ -28,7 +28,7 @@ export class MeetupDeleteButton extends AbstractButton{
         const messageID: string = interaction.message.id;
         const meetup: MeetupRow = await  assertMessageHasValidMeetup(messageID);
 
-        assertUserIsMeetupCreatorOrConfig(interaction, meetup, true);
+        await assertUserIsMeetupCreatorOrConfig(interaction, meetup, true);
 
         //save relevant variables for run
         this.context.meetup = meetup;

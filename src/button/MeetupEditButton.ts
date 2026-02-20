@@ -19,7 +19,7 @@ export class MeetupEditButton extends AbstractButton{
         const messageID: string = interaction.message.id;
         const meetup = await assertMessageHasValidMeetup(messageID);
 
-        assertUserIsMeetupCreatorOrConfig(interaction, meetup, false);
+        await assertUserIsMeetupCreatorOrConfig(interaction, meetup, false);
     }
 
     protected async run(interaction: ButtonInteraction): Promise<void> {

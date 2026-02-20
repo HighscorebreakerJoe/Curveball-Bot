@@ -20,7 +20,7 @@ export class MeetupEditModal extends MeetupCreateModal{
 
         const meetupID: number = Number(getDynamicData(interaction.customId));
         const meetup: MeetupRow = await assertMeetupIDIsValid(meetupID);
-        assertUserIsMeetupCreatorOrConfig(interaction, meetup, false);
+        await assertUserIsMeetupCreatorOrConfig(interaction, meetup, false);
 
         this.setAdditionalData({
             meetup: meetup
