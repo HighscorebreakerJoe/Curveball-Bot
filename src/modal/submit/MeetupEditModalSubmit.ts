@@ -7,6 +7,7 @@ import {
     time,
     TimestampStyles
 } from "discord.js";
+import {getGuild} from "../../cache/guild";
 import {getMeetupInfoChannel} from "../../cache/meetupChannels";
 import {db} from "../../database/Database";
 import {MeetupRow} from "../../database/table/Meetup";
@@ -104,9 +105,17 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         const message = await getMeetupInfoChannel().messages.fetch(messageID);
 
         const embed: EmbedBuilder = EmbedBuilder.from(message.embeds[0]);
+        let userTag: string = interaction.user?.tag;
+
+        if(meetup.userID !== interaction.user?.id){
+            const member = await getGuild().members.fetch(meetup.userID);
+            userTag = member?.user.tag;
+        }
+
+        const embedTitle: string = pokemon + ": Raid von " + userTag;
 
         const newEmbed: EmbedBuilder = editMeetupInfoEmbed(embed, {
-            embedTitle: pokemon + ": Raid von " + interaction.user?.tag,
+            embedTitle: embedTitle,
             pokemon: pokemon,
             location: location,
             toSaveDate: toSaveDate,
