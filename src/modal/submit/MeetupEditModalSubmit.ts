@@ -112,7 +112,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
             userTag = member?.user.tag;
         }
 
-        let embedTitle: string = pokemon + ": Raid von " + userTag;
+        const embedTitle: string = pokemon + ": Raid von " + userTag;
 
         const newEmbed: EmbedBuilder = editMeetupInfoEmbed(embed, {
             embedTitle: embedTitle,
