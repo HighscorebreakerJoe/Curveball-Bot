@@ -88,6 +88,7 @@ The following technologies and tools are used in this project:
 
 - **Discord API:** [discord.js](https://discord.js.org)
 - **Database / Query Builder:** [Kysely](https://kysely.dev)
+- **i18n Framework:** [i18next](https://www.i18next.com/)
 
 ## License & Credits
 

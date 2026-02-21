@@ -3,11 +3,15 @@ import {migrateToLatest} from "./database/Migrate";
 import env from "./env";
 import onClientReady from "./event/clientReady";
 import onInteractionCreate from "./event/interactionCreate";
+import {initI18n} from "./i18n";
 
 
 async function main() {
     //db migration
     await migrateToLatest();
+
+    //language
+    await initI18n();
 
     //events
     onClientReady(client);

@@ -1,7 +1,8 @@
 import 'dotenv/config';
 
 declare type envStruct = {
-    BOT_TOKEN: string
+    BOT_TOKEN: string,
+    LANGUAGE: string,
     CLIENT_ID: string,
     GUILD_ID: string,
     MEETUP_CONFIGURATOR_ROLE_ID: string,
@@ -17,6 +18,7 @@ declare type envStruct = {
 
 const env: envStruct = {
     BOT_TOKEN: process.env.BOT_TOKEN || '',
+    LANGUAGE: process.env.LANGUAGE || '',
     CLIENT_ID: process.env.CLIENT_ID  || '',
     GUILD_ID: process.env.GUILD_ID  || '',
     MEETUP_CONFIGURATOR_ROLE_ID: process.env.MEETUP_CONFIGURATOR_ROLE_ID  || '',
