@@ -35,11 +35,11 @@ export async function initI18n(): Promise<i18n> {
 function getLocaleResources(): InitResource{
     const resources: InitResource = {};
 
-    const localesDir: string = path.join(__dirname, "locales");
+    const localeDir: string = path.join(__dirname, "locale");
 
-    //get all language files from locales folder
-    for(const lang of  fs.readdirSync(localesDir)){
-        const langDir: string = path.join(localesDir, lang);
+    //get all language files from locale folder
+    for(const lang of  fs.readdirSync(localeDir)){
+        const langDir: string = path.join(localeDir, lang);
         if (!fs.statSync(langDir).isDirectory()){
             continue;
         }
