@@ -6,9 +6,9 @@ import {
     TextInputBuilder,
     TextInputStyle
 } from "discord.js";
-import i18next from "i18next";
 import {db} from "../database/Database";
 import {MeetupAllowedMentionsRoleRow} from "../database/table/MeetupAllowedMentionsRole";
+import {tModal} from "../i18n";
 import {AbstractModal} from "./AbstractModal";
 
 /**
@@ -18,19 +18,19 @@ import {AbstractModal} from "./AbstractModal";
 export class MeetupCreateModal extends AbstractModal{
     customId: string = "meetup_create";
 
-    protected modalTitle: string = i18next.t("modal.meetupCreate.title");
+    protected modalTitle: string = tModal("modal.meetupCreate.title");
 
     private allowedCommands: string[] = ["meetup", "poll"];
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
         //check interaction type
         if(!interaction.isCommand()){
-            throw new Error(i18next.t("global.error.invalidInteractionType"));
+            throw new Error(tModal("global.error.invalidInteractionType"));
         }
 
         if (!this.allowedCommands.includes(interaction.commandName)) {
             const interactionName: string = (interaction as ChatInputCommandInteraction).commandName;
-            throw new Error(i18next.t("global.error.invalidCommand", {ns: "modal", commandName: interactionName}));
+            throw new Error(tModal("global.error.invalidCommand", {commandName: interactionName}));
         }
 
         //check option roles
@@ -88,22 +88,22 @@ export class MeetupCreateModal extends AbstractModal{
     protected buildInputs() {
         const pokemon: TextInputBuilder = new TextInputBuilder()
             .setCustomId("pokemon")
-            .setLabel(i18next.t("meetupCreate.field.pokemon", {ns: "modal"}))
-            .setPlaceholder(i18next.t("meetupCreate.field.pokemonPlaceholder", {ns: "modal"}))
+            .setLabel(tModal("meetupCreate.field.pokemon"))
+            .setPlaceholder(tModal("meetupCreate.field.pokemonPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const location: TextInputBuilder = new TextInputBuilder()
             .setCustomId("location")
-            .setLabel(i18next.t("meetupCreate.field.location", {ns: "modal"}))
-            .setPlaceholder(i18next.t("meetupCreate.field.locationPlaceholder", {ns: "modal"}))
+            .setLabel(tModal("meetupCreate.field.location"))
+            .setPlaceholder(tModal("meetupCreate.field.locationPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const time: TextInputBuilder = new TextInputBuilder()
             .setCustomId("time")
-            .setLabel(i18next.t("meetupCreate.field.time", {ns: "modal"}))
-            .setPlaceholder(i18next.t("meetupCreate.field.timePlaceholder", {ns: "modal"}))
+            .setLabel(tModal("meetupCreate.field.time"))
+            .setPlaceholder(tModal("meetupCreate.field.timePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
@@ -111,16 +111,16 @@ export class MeetupCreateModal extends AbstractModal{
 
         const date: TextInputBuilder = new TextInputBuilder()
             .setCustomId("date")
-            .setLabel(i18next.t("meetupCreate.field.date", {ns: "modal"}))
-            .setPlaceholder(i18next.t("meetupCreate.field.datePlaceholder", {ns: "modal"}))
+            .setLabel(tModal("meetupCreate.field.date"))
+            .setPlaceholder(tModal("meetupCreate.field.datePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
             .setValue(nowDate.getDate() + "." + (nowDate.getMonth() + 1));
 
         const note: TextInputBuilder = new TextInputBuilder()
             .setCustomId("note")
-            .setLabel(i18next.t("meetupCreate.field.note", {ns: "modal"}))
-            .setPlaceholder(i18next.t("meetupCreate.field.notePlaceholder", {ns: "modal"}))
+            .setLabel(tModal("meetupCreate.field.note"))
+            .setPlaceholder(tModal("meetupCreate.field.notePlaceholder"))
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
 
@@ -141,7 +141,7 @@ export class MeetupCreateModal extends AbstractModal{
             .executeTakeFirst() as MeetupAllowedMentionsRoleRow | undefined;
 
         if(!role){
-            throw new Error(i18next.t("meetupCreate.error.invalidRole", {ns: "modal", roleID: roleId}))
+            throw new Error(tModal("meetupCreate.error.invalidRole", {roleID: roleId}))
         }
     }
 }

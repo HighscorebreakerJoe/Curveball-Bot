@@ -6,6 +6,7 @@ import env from "./env";
 const namespaces: string[] = ["common", "modal"];
 type Namespace = typeof namespaces[number];
 type InitResource = Record<string, Record<string, any>>;
+type translationParams = Record<string, string | number | boolean>;
 
 export interface TranslationObject {
     [key: string]: string | TranslationObject;
@@ -30,6 +31,21 @@ export async function initI18n(): Promise<i18n> {
         });
 
     return i18next;
+}
+
+export function t(key: string, namespace: string = "common", params?: translationParams): string{
+    return i18next.t(key,{
+        ns: namespace,
+        ...params
+    })
+}
+
+export function tCommon(key: string, params?: translationParams): string{
+    return t(key, "common", params);
+}
+
+export function tModal(key: string, params?: translationParams): string{
+    return t(key, "modal", params);
 }
 
 function getLocaleResources(): InitResource{
