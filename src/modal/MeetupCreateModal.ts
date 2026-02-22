@@ -18,7 +18,9 @@ import {AbstractModal} from "./AbstractModal";
 export class MeetupCreateModal extends AbstractModal{
     customId: string = "meetup_create";
 
-    protected modalTitle: string = tModal("modal.meetupCreate.title");
+    protected get modalTitle(): string {
+        return tModal("modal.meetupCreate.title");
+    };
 
     private allowedCommands: string[] = ["meetup", "poll"];
 

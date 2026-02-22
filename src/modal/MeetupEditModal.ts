@@ -12,7 +12,10 @@ import {MeetupCreateModal} from "./MeetupCreateModal";
 
 export class MeetupEditModal extends MeetupCreateModal{
     customId: string = "meetup_edit:{d}";
-    modalTitle: string = tModal("meetupEdit.title");
+
+    protected get modalTitle(): string {
+        return tModal("meetupEdit.title");
+    };
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
         if(!interaction.isButton()){
