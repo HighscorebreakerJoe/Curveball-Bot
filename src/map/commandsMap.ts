@@ -1,5 +1,5 @@
 import {AbstractCommand} from "../command/AbstractCommand";
-import {ChangeLanguageCommand} from "../command/ChangeLanguageRole";
+import {ChangeLanguageCommand} from "../command/ChangeLanguage";
 import {MeetupAddMentionRoleCommand} from "../command/MeetupAddMentionRole";
 import {MeetupCleanUpCommand} from "../command/MeetupCleanUpCommand";
 import {MeetupCommand} from "../command/MeetupCommand";
