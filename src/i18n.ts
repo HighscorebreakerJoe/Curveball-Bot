@@ -21,7 +21,7 @@ export async function initI18n(): Promise<i18n> {
             ns: namespaces,
             defaultNS: "common",
 
-            //debug: true,
+            debug: env.I18NEXT_DEBUG_ENABLED,
             showSupportNotice: false,
 
             resources: getLocaleResources(),
