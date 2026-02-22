@@ -12,6 +12,8 @@ export interface TranslationObject {
     [key: string]: string | TranslationObject;
 }
 
+export const foundLanguages: string[] = [];
+
 export async function initI18n(): Promise<i18n> {
     await i18next
         .init({
@@ -65,6 +67,7 @@ function getLocaleResources(): InitResource{
         }
 
         resources[lang] = {} as Record<Namespace, any>;
+        foundLanguages.push(lang);
 
         for (const name of namespaces) {
             const file: string = path.join(langDir, `${name}.js`);

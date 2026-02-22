@@ -23,23 +23,27 @@ export default function onClientReady(client: Client): void {
         await loadMeetupAllowedMentionsRoles();
         await loadMeetupChannels();
 
-        //register commands
-        const commandJSONs: RESTPostAPIApplicationCommandsJSONBody[] = [];
-
-        for (const command of commandsMap.values()){
-            commandJSONs.push(command.buildSlashCommandJSON())
-        }
-
-        const rest: REST = new REST({ version: "10" }).setToken(env.BOT_TOKEN);
-
-        try {
-            await rest.put(
-                Routes.applicationGuildCommands(env.CLIENT_ID, env.GUILD_ID),
-                { body: commandJSONs }
-            );
-            console.log("Successfully registered commands.");
-        } catch (error) {
-            console.error("Error registering commands:", error);
-        }
+        await registerCommands();
     })
+}
+
+export async function registerCommands(): Promise<void>{
+    //register commands
+    const commandJSONs: RESTPostAPIApplicationCommandsJSONBody[] = [];
+
+    for (const command of commandsMap.values()){
+        commandJSONs.push(command.buildSlashCommandJSON())
+    }
+
+    const rest: REST = new REST({ version: "10" }).setToken(env.BOT_TOKEN);
+
+    try {
+        await rest.put(
+            Routes.applicationGuildCommands(env.CLIENT_ID, env.GUILD_ID),
+            { body: commandJSONs }
+        );
+        console.log("Successfully registered commands.");
+    } catch (error) {
+        console.error("Error registering commands:", error);
+    }
 }

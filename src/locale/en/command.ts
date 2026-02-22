@@ -1,6 +1,22 @@
 import {TranslationObject} from "../../i18n";
 
 const command: TranslationObject = {
+    changeLanguage: {
+        description: "Changes the output language of the bot",
+
+        option: {
+            localeDescription: "The locale of the language"
+        },
+
+        error: {
+            invalidLocale: "Invalid locale"
+        },
+
+        success: {
+            languageChanged: "The bot's output language was successfully changed to {{locale}}."
+        }
+    },
+
     meetup: {
         description: "Creates a meetup",
 
