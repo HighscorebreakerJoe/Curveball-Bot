@@ -5,11 +5,11 @@ import {
     APIApplicationCommandOption,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
-    Locale,
     MessageFlags
 } from "discord.js";
 import {addRole} from "../cache/meetupAllowedMentionsRoles";
 import {db} from "../database/Database";
+import {tCommand} from "../i18n";
 import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
 import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
 import {postSuccess} from "../util/postEmbeds";
@@ -18,22 +18,20 @@ import {AbstractCommand} from "./AbstractCommand";
 export class MeetupAddMentionRoleCommand extends AbstractCommand {
     name: string = "meetup_add_mention_role";
 
-    description: string = "Adds a role to the mentionable roles list for meetups";
-    localizedDescriptions = {
-        [Locale.German]: "Fügt eine Rolle zu den erwähnbaren Rollen in Meetups zu"
-    };
+    protected get description(): string {
+        return tCommand("meetupAddMention.description");
+    }
 
-    options: APIApplicationCommandOption[] = [
-        {
-            name: "role",
-            description: "The role which will be added to the mentionable roles",
-            description_localizations: {
-                [Locale.German]: "Die Rolle, die zu den erwähnbaren Rollen hinzugefügt werden soll"
-            },
-            type: ApplicationCommandOptionType.Role,
-            required: true
-        }
-    ];
+    protected get options(): APIApplicationCommandOption[] {
+        return [
+            {
+                name: "role",
+                description: tCommand("meetupAddMention.option.roleDescription"),
+                type: ApplicationCommandOptionType.Role,
+                required: true
+            }
+        ];
+    }
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction): Promise<void> {
         assertMeetupCreateChannelUsed(interaction);
@@ -45,7 +43,7 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         const role = interaction.options.getRole("role");
 
         if (!role) {
-            throw new Error("Die angegebene Rolle konnte nicht gefunden werden");
+            throw new Error(tCommand("meetupAddMention.error.invalidRole"));
         }
 
         this.sanitizedInputs = {
@@ -82,7 +80,7 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
             .execute();
 
         if (result.length) {
-            throw new Error(`Die Rolle <@&${roleID}> befindet sich bereits in den erwähnabren Rollen`);
+            throw new Error(tCommand("meetupAddMention.error.roleAlreadyAdded", {roleID: roleID}));
         }
     }
 }

@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import path from "path";
 import env from "./env";
 
-const namespaces: string[] = ["common", "modal"];
+const namespaces: string[] = ["command", "common", "modal"];
 type Namespace = typeof namespaces[number];
 type InitResource = Record<string, Record<string, any>>;
 type translationParams = Record<string, string | number | boolean>;
@@ -38,6 +38,10 @@ export function t(key: string, namespace: string = "common", params?: translatio
         ns: namespace,
         ...params
     })
+}
+
+export function tCommand(key: string, params?: translationParams): string{
+    return t(key, "command", params);
 }
 
 export function tCommon(key: string, params?: translationParams): string{

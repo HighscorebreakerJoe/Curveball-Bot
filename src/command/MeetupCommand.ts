@@ -6,10 +6,9 @@ import {
     APIRole,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
-    Locale,
-    Role,
-    roleMention
+    Role
 } from "discord.js";
+import {tCommand} from "../i18n";
 import {modalsMap} from "../map/modalsMap";
 import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
 import {AbstractCommand} from "./AbstractCommand";
@@ -17,40 +16,32 @@ import {AbstractCommand} from "./AbstractCommand";
 export class MeetupCommand extends AbstractCommand {
     name: string = "meetup";
 
-    description: string = "Creates a Meetup";
-    localizedDescriptions = {
-        [Locale.German]: "Erstellt einen Meetup"
-    };
+    protected get description(): string {
+        return tCommand("meetup.description");
+    }
 
-    options: APIApplicationCommandOption[] = [
-        {
-            name: "role1",
-            description: "The first role which will be notified in your meetup",
-            description_localizations: {
-                [Locale.German]: "Die erste Rolle, die in dem Meetup benachrichtigt werden soll"
+    protected get options(): APIApplicationCommandOption[] {
+        return [
+            {
+                name: "role1",
+                description: tCommand("meetup.option.role1Description"),
+                type: ApplicationCommandOptionType.Role,
+                required: false
             },
-            type: ApplicationCommandOptionType.Role,
-            required: false
-        },
-        {
-            name: "role2",
-            description: "The second role which will be notified in your meetup",
-            description_localizations: {
-                [Locale.German]: "Die zweite Rolle, die in dem Meetup benachrichtigt werden soll"
+            {
+                name: "role2",
+                description: tCommand("meetup.option.role2Description"),
+                type: ApplicationCommandOptionType.Role,
+                required: false
             },
-            type: ApplicationCommandOptionType.Role,
-            required: false
-        },
-        {
-            name: "role3",
-            description: "The third role which will be notified in your meetup",
-            description_localizations: {
-                [Locale.German]: "Die dritte Rolle, die in dem Meetup benachrichtigt werden soll"
-            },
-            type: ApplicationCommandOptionType.Role,
-            required: false
-        }
-    ];
+            {
+                name: "role3",
+                description: tCommand("meetup.option.role3Description"),
+                type: ApplicationCommandOptionType.Role,
+                required: false
+            }
+        ];
+    }
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction): Promise<void> {
         assertMeetupCreateChannelUsed(interaction);
@@ -87,7 +78,7 @@ export class MeetupCommand extends AbstractCommand {
 
     private checkRole(role: Role| APIRole | null): void{
         if (role && !role.mentionable) {
-            throw new Error(`Die Rolle ${roleMention(role.id)} kann nicht erwähnt werden.`);
+            throw new Error(tCommand("meetup.error.roleNotMentionable", {roleID: role.id}));
         }
     }
 }

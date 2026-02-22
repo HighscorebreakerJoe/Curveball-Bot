@@ -13,10 +13,9 @@ import {postError} from "../util/postEmbeds";
 export abstract class AbstractCommand {
     public readonly name!: string;
 
-    protected readonly description!: string;
-    protected readonly localizedDescriptions?: Partial<Record<Locale, string>>;
+    protected abstract get description(): string;
 
-    protected readonly options!: APIApplicationCommandOption[];
+    protected abstract get options(): APIApplicationCommandOption[];
 
     protected sanitizedInputs: Record<string, any> = {};
 
@@ -51,13 +50,8 @@ export abstract class AbstractCommand {
             description: this.description
         }
 
-        //localization: description
-        if(this.localizedDescriptions && Object.keys(this.localizedDescriptions).length > 0){
-            command.description_localizations = this.localizedDescriptions;
-        }
-
         //options
-        if(this.options && Object.keys(this.options).length > 0){
+        if(this.options && this.options.length > 0){
             command.options = this.options;
         }
 

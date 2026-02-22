@@ -1,5 +1,6 @@
 import {ButtonInteraction, ChatInputCommandInteraction} from "discord.js";
 import {MeetupRow} from "../database/table/Meetup";
+import {tModal} from "../i18n";
 import {assertMeetupIDIsValid} from "../permission/assertMeetupIDIsValid";
 import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {getDynamicData} from "../util/getDynamicIDData";
@@ -11,11 +12,11 @@ import {MeetupCreateModal} from "./MeetupCreateModal";
 
 export class MeetupEditModal extends MeetupCreateModal{
     customId: string = "meetup_edit:{d}";
-    modalTitle: string = "Meetup bearbeiten";
+    modalTitle: string = tModal("meetupEdit.title");
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
         if(!interaction.isButton()){
-            throw new Error("Falscher Interaktionstyp");
+            throw new Error(tModal("global.error.invalidInteractionType"));
         }
 
         const meetupID: number = Number(getDynamicData(interaction.customId));

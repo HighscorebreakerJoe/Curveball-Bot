@@ -8,7 +8,7 @@ const modal: TranslationObject = {
         }
     },
 
-    meetupCreate : {
+    meetupCreate: {
         title: "Create new meetup",
 
         field: {
@@ -32,6 +32,10 @@ const modal: TranslationObject = {
         error: {
             invalidRole: "Invalid role with roleID: {{roleID}}"
         }
+    },
+
+    meetupEdit: {
+        title: "Edit meetup"
     }
 }
 
