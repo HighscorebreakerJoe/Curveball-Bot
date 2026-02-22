@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import path from "path";
 import env from "./env";
 
-const namespaces: string[] = ["common"];
+const namespaces: string[] = ["common", "modal"];
 type Namespace = typeof namespaces[number];
 type InitResource = Record<string, Record<string, any>>;
 

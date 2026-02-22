@@ -6,6 +6,7 @@ import {
     TextInputBuilder,
     TextInputStyle
 } from "discord.js";
+import i18next from "i18next";
 import {db} from "../database/Database";
 import {MeetupAllowedMentionsRoleRow} from "../database/table/MeetupAllowedMentionsRole";
 import {AbstractModal} from "./AbstractModal";
@@ -17,18 +18,19 @@ import {AbstractModal} from "./AbstractModal";
 export class MeetupCreateModal extends AbstractModal{
     customId: string = "meetup_create";
 
-    protected modalTitle: string = "Neuen Meetup erstellen";
+    protected modalTitle: string = i18next.t("modal.meetupCreate.title");
 
     private allowedCommands: string[] = ["meetup", "poll"];
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
         //check interaction type
         if(!interaction.isCommand()){
-            throw Error("Falscher Interaktionstyp");
+            throw new Error(i18next.t("global.error.invalidInteractionType"));
         }
 
         if (!this.allowedCommands.includes(interaction.commandName)) {
-            throw Error(`Ungültiges Kommando: ${interaction.commandName}`);
+            const interactionName: string = (interaction as ChatInputCommandInteraction).commandName;
+            throw new Error(i18next.t("global.error.invalidCommand", {ns: "modal", commandName: interactionName}));
         }
 
         //check option roles
@@ -86,22 +88,22 @@ export class MeetupCreateModal extends AbstractModal{
     protected buildInputs() {
         const pokemon: TextInputBuilder = new TextInputBuilder()
             .setCustomId("pokemon")
-            .setLabel("Pokémon")
-            .setPlaceholder("z.B. Enton")
+            .setLabel(i18next.t("meetupCreate.field.pokemon", {ns: "modal"}))
+            .setPlaceholder(i18next.t("meetupCreate.field.pokemonPlaceholder", {ns: "modal"}))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const location: TextInputBuilder = new TextInputBuilder()
             .setCustomId("location")
-            .setLabel("Treffpunkt")
-            .setPlaceholder("z.B. eine Arena")
+            .setLabel(i18next.t("meetupCreate.field.location", {ns: "modal"}))
+            .setPlaceholder(i18next.t("meetupCreate.field.locationPlaceholder", {ns: "modal"}))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const time: TextInputBuilder = new TextInputBuilder()
             .setCustomId("time")
-            .setLabel("Uhrzeit (HH:MM)")
-            .setPlaceholder("z.B. 13:37")
+            .setLabel(i18next.t("meetupCreate.field.time", {ns: "modal"}))
+            .setPlaceholder(i18next.t("meetupCreate.field.timePlaceholder", {ns: "modal"}))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
@@ -109,16 +111,16 @@ export class MeetupCreateModal extends AbstractModal{
 
         const date: TextInputBuilder = new TextInputBuilder()
             .setCustomId("date")
-            .setLabel("Datum (TT.MM)")
-            .setPlaceholder("z.B. 24.12")
+            .setLabel(i18next.t("meetupCreate.field.date", {ns: "modal"}))
+            .setPlaceholder(i18next.t("meetupCreate.field.datePlaceholder", {ns: "modal"}))
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
             .setValue(nowDate.getDate() + "." + (nowDate.getMonth() + 1));
 
         const note: TextInputBuilder = new TextInputBuilder()
             .setCustomId("note")
-            .setLabel("Anmerkungen")
-            .setPlaceholder("Zusätzliche Infos/Anmerkungen zu deinem Meetup , wie z.B. das zugehörige Event (Raid-Stunde etc.)")
+            .setLabel(i18next.t("meetupCreate.field.note", {ns: "modal"}))
+            .setPlaceholder(i18next.t("meetupCreate.field.notePlaceholder", {ns: "modal"}))
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
 
@@ -139,7 +141,7 @@ export class MeetupCreateModal extends AbstractModal{
             .executeTakeFirst() as MeetupAllowedMentionsRoleRow | undefined;
 
         if(!role){
-            throw Error(`Ungültige Rolle mit der RoleID ${roleId}`)
+            throw new Error(i18next.t("meetupCreate.error.invalidRole", {ns: "modal", roleID: roleId}))
         }
     }
 }
