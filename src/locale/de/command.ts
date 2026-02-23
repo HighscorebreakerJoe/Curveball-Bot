@@ -23,8 +23,8 @@ const command: TranslationObject = {
         },
 
         error: {
-            invalidRole: "Can't find role",
-            roleAlreadyAdded: "Die Rolle mit der ID {{roleID}} befindet sich bereits in den erwähnabren Rollen"
+            invalidRole: "Die angegebene Rolle wurde nicht gefunden.",
+            roleAlreadyAdded: "Die Rolle mit der ID {{roleID}} befindet sich bereits in den erwähnabren Rollen."
         }
     },
 
@@ -40,7 +40,7 @@ const command: TranslationObject = {
         },
 
         error: {
-            roleAlreadyAdded: "Die Rolle mit der ID {{roleID}} befindet sich nicht in den erwähnabren Rollen"
+            roleAlreadyAdded: "Die Rolle mit der ID {{roleID}} befindet sich nicht in den erwähnabren Rollen."
         }
     },
 

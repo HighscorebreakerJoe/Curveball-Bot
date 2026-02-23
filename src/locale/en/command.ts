@@ -23,8 +23,8 @@ const command: TranslationObject = {
         },
 
         error: {
-            invalidRole: "Can't find role",
-            roleAlreadyAdded: "Role with ID {{roleID}} is already added as a mentionable role"
+            invalidRole: "Can't find role.",
+            roleAlreadyAdded: "Role with ID {{roleID}} is already added as a mentionable role."
         }
     },
 
@@ -40,7 +40,7 @@ const command: TranslationObject = {
         },
 
         error: {
-            roleAlreadyAdded: "Role with ID {{roleID}} is not added as a mentionable role"
+            roleAlreadyAdded: "Role with ID {{roleID}} is not added as a mentionable role."
         }
     },
 
