@@ -1,8 +1,9 @@
-import {MessageFlags, ModalSubmitFields, ModalSubmitInteraction} from "discord.js";
+import {hyperlink, MessageFlags, ModalSubmitFields, ModalSubmitInteraction} from "discord.js";
 import {InsertResult} from "kysely";
 import {getMeetupAllowedMentionsRoles} from "../../cache/meetupAllowedMentionsRoles";
 import {getMeetupInfoChannel} from "../../cache/meetupChannels";
 import {db} from "../../database/Database";
+import {tCommon, tMeetup, tModal} from "../../i18n";
 import {calculateYear} from "../../util/calculateYear";
 import {checkForLinks} from "../../util/checkForLinks";
 import {createMeetupInfoEmbed} from "../../util/createMeetupInfoEmbed";
@@ -41,40 +42,40 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         const pokemon: string = sanitizeTextInput(fields.getTextInputValue("pokemon"));
 
         if(!pokemon.length){
-            throw new Error("Du hast vergessen, ein Pokémon anzugeben. Wie kannst du nur?");
+            throw new Error(tModal("meetupCreate.submit.error.pokemonEmpty"));
         }
 
         if(checkForLinks(pokemon)){
-            throw new Error("Hey, bitte keine Links posten!");
+            throw new Error(tCommon("error.linkDetected"));
         }
 
         //check location
         const location: string = sanitizeTextInput(fields.getTextInputValue("location"));
 
         if(!location.length){
-            throw new Error("Du hast vergessen, einen Ort anzugeben. Wo sollen wir uns treffen?");
+            throw new Error(tModal("meetupCreate.submit.error.locationEmpty"));
         }
 
         if(checkForLinks(location)){
-            throw new Error("Hey, bitte keine Links posten!");
+            throw new Error(tCommon("error.linkDetected"));
         }
 
         //check time
         const time: string = fields.getTextInputValue("time");
 
         if(!time.length){
-            throw new Error("Du musst uns schon eine Uhrzeit angeben...");
+            throw new Error(tModal("meetupCreate.submit.error.timeEmpty"));
         }
 
         const timeRegexp = new RegExp('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
 
         if(!timeRegexp.test(time)){
-            throw new Error("Die Uhrzeit muss dem Format HH:MM entsprechen");
+            throw new Error(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const timeParts: string[] = time.split(":");
         if (timeParts.length !== 2) {
-            throw new Error("Die Uhrzeit muss dem Format HH:MM entsprechen");
+            throw new Error(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const [hour, minute] = timeParts.map(Number);
@@ -85,15 +86,19 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         //check date
         const date: string = fields.getTextInputValue("date");
 
+        if(!date.length){
+            throw new Error(tModal("meetupCreate.submit.error.dateEmpty"));
+        }
+
         const dateRegexp = new RegExp('^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$');
 
         if(!dateRegexp.test(date)){
-            throw new Error("Das Datum muss dem Format TT.MM entsprechen");
+            throw new Error(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const dateParts: string[] = date.split(".");
         if (dateParts.length !== 2) {
-            throw new Error("Das Datum muss dem Format TT.MM entsprechen");
+            throw new Error(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const [day, month] = dateParts.map(Number);
@@ -102,11 +107,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         const dateObject = new Date(year, month - 1, day, hour, minute);
 
         if(dateObject.getDate() !== day || dateObject.getMonth() !== month - 1){
-            throw new Error("Ungültiges Datum eingegeben");
+            throw new Error(tModal("meetupCreate.submit.error.dateInvalid"));
         }
 
         if(dateObject < currentDate){
-            throw new Error("Deine eingetragene Zeit liegt in der Vergangenheit. Wir können nicht Zeitreisen.");
+            throw new Error(tModal("meetupCreate.submit.error.dateInThePast"));
         }
 
         //check note (optional)
@@ -114,7 +119,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
 
         if(note.length > 0){
             if(checkForLinks(note)){
-                throw new Error("Hey, bitte keine Links posten!");
+                throw new Error(tCommon("error.linkDetected"));
             }
         }
 
@@ -168,7 +173,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
             .executeTakeFirstOrThrow();
 
         //create and post meetup-embed
-        let embedTitle: string = pokemon + ": Raid von " + interaction.user?.tag;
+        let embedTitle: string = pokemon + ": " + tMeetup("info.titleRaidFrom") + " " + interaction.user?.tag;
 
         const meetupCreatorParticipant: ParticipantData = {
             userID: interaction.user.id,
@@ -209,9 +214,9 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
 
         //create thread
         const meetupInfoThread = await meetupInfoMessage.startThread({
-            name: `Meetup #${meetupID}: Absprache`,
+            name: tMeetup("info.threadTitle", {meetupID: meetupID}),
             autoArchiveDuration: 60,
-            reason: "Automatisch erzeugt"
+            reason: tMeetup("info.threadDefaultReason")
         });
 
         //write participant message in thread
@@ -235,7 +240,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         await resetMeetupListChannel();
 
         //create success embed
-        await postSuccess(interaction, "Dein Meetup wurde erfolgreich erstellt!");
+        await postSuccess(interaction,
+            tMeetup("info.createSuccess")
+                + " " +
+            hyperlink(tMeetup("info.createSuccessLink"), meetupInfoMessage.url)
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
  * Class for handling "Meetup delete cancel" buttonpress in meetup delete embeds
  */
 import {ButtonInteraction, Message} from "discord.js";
+import {tButton} from "../i18n";
 import {postSuccess} from "../util/postEmbeds";
 import {AbstractButton} from "./AbstractButton";
 
@@ -13,6 +14,6 @@ export class MeetupDeleteCancelButton extends AbstractButton{
         const message: Message = interaction.message;
         await message.delete();
 
-        await postSuccess(interaction, "Na gut, dann löschen wir deinen Meetup eben nicht...")
+        await postSuccess(interaction, tButton("meetupDeleteCancel.success"));
     }
 }

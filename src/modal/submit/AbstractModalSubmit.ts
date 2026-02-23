@@ -2,6 +2,7 @@
  * Base class for all modals submit handlers for Curveball Bot.
  */
 import {ModalSubmitFields, ModalSubmitInteraction} from "discord.js";
+import {tCommon} from "../../i18n";
 import {postError} from "../../util/postEmbeds";
 
 export abstract class AbstractModalSubmit {
@@ -19,7 +20,7 @@ export abstract class AbstractModalSubmit {
             this.checkModalInputs(interaction.fields);
             await this.successModalInputs(interaction);
         }catch (error){
-            let errorMessage: string = "Unbekannter Fehler";
+            let errorMessage: string = tCommon("error.unknown");
 
             if (error instanceof Error){
                 errorMessage = error.message;

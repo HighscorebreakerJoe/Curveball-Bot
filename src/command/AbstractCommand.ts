@@ -8,15 +8,15 @@ import {
     Locale,
     RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
+import {tCommon} from "../i18n";
 import {postError} from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
     public readonly name!: string;
 
-    protected readonly description!: string;
-    protected readonly localizedDescriptions?: Partial<Record<Locale, string>>;
+    protected abstract get description(): string;
 
-    protected readonly options!: APIApplicationCommandOption[];
+    protected abstract get options(): APIApplicationCommandOption[];
 
     protected sanitizedInputs: Record<string, any> = {};
 
@@ -31,7 +31,7 @@ export abstract class AbstractCommand {
             }
             this.run(interaction);
         }catch (error){
-            let errorMessage: string = "Unbekannter Fehler";
+            let errorMessage: string = tCommon("error.unknown");
 
             if (error instanceof Error){
                 errorMessage = error.message;
@@ -51,13 +51,8 @@ export abstract class AbstractCommand {
             description: this.description
         }
 
-        //localization: description
-        if(this.localizedDescriptions && Object.keys(this.localizedDescriptions).length > 0){
-            command.description_localizations = this.localizedDescriptions;
-        }
-
         //options
-        if(this.options && Object.keys(this.options).length > 0){
+        if(this.options && this.options.length > 0){
             command.options = this.options;
         }
 

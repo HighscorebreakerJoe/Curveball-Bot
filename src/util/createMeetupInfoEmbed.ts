@@ -1,6 +1,7 @@
 import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, time, TimestampStyles} from "discord.js";
 import {getGuild} from "../cache/guild";
 import {db} from "../database/Database";
+import {tCommon, tMeetup} from "../i18n";
 import {ParticipantData} from "./editMeetupInfoEmbed";
 import {printParticipantData} from "./printParticipantData";
 
@@ -42,26 +43,26 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
         })
         .addFields(
             {
-                name: "👾 Pokémon", value: pokemon
+                name: "👾 " + tMeetup("info.pokemon"), value: pokemon
             },
             {
-                name: "📍 Treffpunkt", value: location
+                name: "📍 " + tMeetup("info.location"), value: location
             },
             {
-                name: "📅 Datum und Uhrzeit", value: time(toSaveDate, TimestampStyles.LongDateShortTime), inline: true
+                name: "📅 " + tMeetup("info.dateTime"), value: time(toSaveDate, TimestampStyles.LongDateShortTime), inline: true
             },
             {
-                name: "⏳ Verbleibende Zeit", value: time(toSaveDate, TimestampStyles.RelativeTime), inline: true
+                name: "⏳ " + tMeetup("info.remainingTime"), value: time(toSaveDate, TimestampStyles.RelativeTime), inline: true
             },
             {
-                name: "📝 Anmerkungen", value: (note.length ? note: "-")
+                name: "📝 " + tMeetup("info.note"), value: (note.length ? note: "-")
             },
             {
-                name: "✅ Zusagen", value: (meetupCreatorParticipant ? printParticipantData(meetupCreatorParticipant, true): "")
+                name: "✅ " + tMeetup("info.participants"), value: (meetupCreatorParticipant ? printParticipantData(meetupCreatorParticipant, true): "")
             }
         )
         .setFooter({
-            text: "Meetup #" + meetupID
+            text: tMeetup("info.footerText", {meetupID: meetupID})
         });
 
     const addParticipantButton: ButtonBuilder = new ButtonBuilder()
@@ -78,25 +79,25 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
 
     const unsureButton: ButtonBuilder = new ButtonBuilder()
         .setCustomId("meetup_unsure")
-        .setLabel("Unsicher")
+        .setLabel(tMeetup("info.unsure"))
         .setEmoji("🤷")
         .setStyle(ButtonStyle.Primary);
 
     const remoteButton: ButtonBuilder = new ButtonBuilder()
         .setCustomId("meetup_remote")
-        .setLabel("Fern")
+        .setLabel(tMeetup("info.remote"))
         .setEmoji("🚀")
         .setStyle(ButtonStyle.Primary);
 
     const editButton: ButtonBuilder = new ButtonBuilder()
         .setCustomId("meetup_edit:" + meetupID)
-        .setLabel("Bearbeiten")
+        .setLabel(tCommon("edit"))
         .setEmoji("✏️")
         .setStyle(ButtonStyle.Secondary);
 
     const deleteButton: ButtonBuilder = new ButtonBuilder()
         .setCustomId("meetup_delete:" + meetupID)
-        .setLabel("Löschen")
+        .setLabel(tCommon("delete"))
         .setEmoji("🗑️")
         .setStyle(ButtonStyle.Secondary);
 
@@ -139,7 +140,7 @@ export async function getParticipantData(meetupID: number): Promise<ParticipantD
 
         participantData.push({
             userID: row.userID,
-            nickname: (member && member.displayName ? member.displayName : "Unbekannt"),
+            nickname: (member && member.displayName ? member.displayName : tCommon("unknown")),
             participants: row.participants,
             unsure: row.unsure,
             remote: row.remote

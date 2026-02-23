@@ -1,4 +1,5 @@
 import {bold, inlineCode} from "discord.js";
+import {tMeetup} from "../i18n";
 import {ParticipantData} from "./editMeetupInfoEmbed";
 import {printParticipantData} from "./printParticipantData";
 
@@ -22,18 +23,18 @@ export function createParticipantListMessage(data: ParticipantData[]): string{
 
     const lines: string[] = [];
 
-    lines.push("# ✅ Zusagen");
-    lines.push(bold("Personen insgesamt: ") + inlineCode(totalParticipantsCount + ""));
+    lines.push("# ✅ " + tMeetup("participantList.participants"));
+    lines.push(bold(tMeetup("participantList.personsTotal")) + " " + inlineCode(totalParticipantsCount + ""));
 
-    lines.push("## 👍 Sichere Zusagen");
-    lines.push(bold("Personen: ") + inlineCode(sureParticipantsCount + ""));
+    lines.push("## 👍 " + tMeetup("participantList.confirmedParticipants"));
+    lines.push(bold(tMeetup("participantList.persons")) + " " + inlineCode(sureParticipantsCount + ""));
 
     for(const participant of sureParticipants){
         lines.push(printParticipantData(participant, true, false));
     }
 
-    lines.push("## 🤷 Unsichere Zusagen");
-    lines.push(bold("Personen: ") + inlineCode(unsureParticipantsCount + ""));
+    lines.push("## 🤷 " + tMeetup("participantList.unsureParticipants"));
+    lines.push(bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + ""));
 
     for(const participant of unsureParticipants){
         lines.push(printParticipantData(participant, true, false));

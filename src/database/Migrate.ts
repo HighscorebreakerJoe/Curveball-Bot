@@ -1,6 +1,7 @@
 import {FileMigrationProvider, MigrationResult, Migrator} from "kysely";
 import {promises as fs} from "fs";
 import * as path from "path";
+import {tSetup} from "../i18n";
 import {db} from "./Database";
 
 const migrator = new Migrator({
@@ -13,24 +14,24 @@ const migrator = new Migrator({
 })
 
 export async function migrateToLatest(): Promise<void> {
-    console.log("Search for new database migrations");
+    console.log(tSetup("step.searchForDatabaseMigrations"));
 
     const {error, results} = await migrator.migrateToLatest();
 
     if(error){
-        console.error("Migration failed:", error);
+        console.error(tSetup("error.databaseMigrationFailed"), error);
         process.exit(1);
     }
 
     if(!results?.length){
-        console.log("No new database migrations found");
+        console.log(tSetup("step.noDatabaseMigrationsFound"));
     }
 
     results?.forEach((result: MigrationResult): void => {
         if(result.status === "Success"){
-            console.log(`Migration "${result.migrationName}" was executed successfully`);
+            console.log(tSetup("step.databaseMigrationsSuccess", {migrationName: result.migrationName}));
         } else if (result.status === "Error"){
-            console.error(`Failed to execute migration "${result.migrationName}"`);
+            console.error(tSetup("error.executeDatabaseMigrationFailed", {migrationName: result.migrationName}));
         }
     });
 }

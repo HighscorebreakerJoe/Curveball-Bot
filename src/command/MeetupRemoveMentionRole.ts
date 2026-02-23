@@ -5,33 +5,31 @@ import {
     APIApplicationCommandOption,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
-    Locale,
     MessageFlags
 } from "discord.js";
 import {removeRole} from "../cache/meetupAllowedMentionsRoles";
 import {db} from "../database/Database";
+import {tCommand} from "../i18n";
 import {postSuccess} from "../util/postEmbeds";
 import {MeetupAddMentionRoleCommand} from "./MeetupAddMentionRole";
 
 export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand {
     name: string = "meetup_remove_mention_role";
 
-    description: string = "Removes a role from the mentionable roles list for meetups";
-    localizedDescriptions = {
-        [Locale.German]: "Entfernt eine Rolle aus den erwähnbaren Rollen für Meetups"
-    };
+    protected get description(): string {
+        return tCommand("meetupRemoveMention.description");
+    }
 
-    options: APIApplicationCommandOption[] = [
-        {
-            name: "role",
-            description: "The role which will be removed from the mentionable roles",
-            description_localizations: {
-                [Locale.German]: "Die Rolle, die aus den erwähnbaren Rollen entfernt werden soll"
-            },
-            type: ApplicationCommandOptionType.Role,
-            required: true
-        }
-    ];
+    protected get options(): APIApplicationCommandOption[] {
+        return [
+            {
+                name: "role",
+                description: tCommand("meetupRemoveMention.option.roleDescription"),
+                type: ApplicationCommandOptionType.Role,
+                required: true
+            }
+        ];
+    }
 
     protected async run(interaction: ChatInputCommandInteraction): Promise<void> {
         //post defer reply to prevent timeout errors
@@ -57,7 +55,7 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
         removeRole(roleID);
 
         if (!result.length) {
-            throw new Error(`Die Rolle <@&${roleID}> befindet sich nicht in den erwähnabren Rollen`);
+            throw new Error(tCommand("meetupRemoveMention.error.roleAlreadyAdded", {roleID: roleID}));
         }
     }
 }

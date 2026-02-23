@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import {db} from "../database/Database";
 import {MeetupAllowedMentionsRoleRow} from "../database/table/MeetupAllowedMentionsRole";
+import {tModal} from "../i18n";
 import {AbstractModal} from "./AbstractModal";
 
 /**
@@ -17,18 +18,21 @@ import {AbstractModal} from "./AbstractModal";
 export class MeetupCreateModal extends AbstractModal{
     customId: string = "meetup_create";
 
-    protected modalTitle: string = "Neuen Meetup erstellen";
+    protected get modalTitle(): string {
+        return tModal("meetupCreate.title");
+    };
 
     private allowedCommands: string[] = ["meetup", "poll"];
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
         //check interaction type
         if(!interaction.isCommand()){
-            throw Error("Falscher Interaktionstyp");
+            throw new Error(tModal("global.error.invalidInteractionType"));
         }
 
         if (!this.allowedCommands.includes(interaction.commandName)) {
-            throw Error(`Ungültiges Kommando: ${interaction.commandName}`);
+            const interactionName: string = (interaction as ChatInputCommandInteraction).commandName;
+            throw new Error(tModal("global.error.invalidCommand", {commandName: interactionName}));
         }
 
         //check option roles
@@ -86,39 +90,42 @@ export class MeetupCreateModal extends AbstractModal{
     protected buildInputs() {
         const pokemon: TextInputBuilder = new TextInputBuilder()
             .setCustomId("pokemon")
-            .setLabel("Pokémon")
-            .setPlaceholder("z.B. Enton")
+            .setLabel(tModal("meetupCreate.field.pokemon"))
+            .setPlaceholder(tModal("meetupCreate.field.pokemonPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const location: TextInputBuilder = new TextInputBuilder()
             .setCustomId("location")
-            .setLabel("Treffpunkt")
-            .setPlaceholder("z.B. eine Arena")
+            .setLabel(tModal("meetupCreate.field.location"))
+            .setPlaceholder(tModal("meetupCreate.field.locationPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const time: TextInputBuilder = new TextInputBuilder()
             .setCustomId("time")
-            .setLabel("Uhrzeit (HH:MM)")
-            .setPlaceholder("z.B. 13:37")
+            .setLabel(tModal("meetupCreate.field.time"))
+            .setPlaceholder(tModal("meetupCreate.field.timePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
         const nowDate = new Date;
+        const day: string = String(nowDate.getDate()).padStart(2, "0");
+        const month: string = String(nowDate.getMonth() + 1).padStart(2, "0");
+        const dateValue: string = `${day}.${month}`;
 
         const date: TextInputBuilder = new TextInputBuilder()
             .setCustomId("date")
-            .setLabel("Datum (TT.MM)")
-            .setPlaceholder("z.B. 24.12")
+            .setLabel(tModal("meetupCreate.field.date"))
+            .setPlaceholder(tModal("meetupCreate.field.datePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
-            .setValue(nowDate.getDate() + "." + (nowDate.getMonth() + 1));
+            .setValue(dateValue);
 
         const note: TextInputBuilder = new TextInputBuilder()
             .setCustomId("note")
-            .setLabel("Anmerkungen")
-            .setPlaceholder("Zusätzliche Infos/Anmerkungen zu deinem Meetup , wie z.B. das zugehörige Event (Raid-Stunde etc.)")
+            .setLabel(tModal("meetupCreate.field.note"))
+            .setPlaceholder(tModal("meetupCreate.field.notePlaceholder"))
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
 
@@ -139,7 +146,7 @@ export class MeetupCreateModal extends AbstractModal{
             .executeTakeFirst() as MeetupAllowedMentionsRoleRow | undefined;
 
         if(!role){
-            throw Error(`Ungültige Rolle mit der RoleID ${roleId}`)
+            throw new Error(tModal("meetupCreate.error.invalidRole", {roleID: roleId}))
         }
     }
 }

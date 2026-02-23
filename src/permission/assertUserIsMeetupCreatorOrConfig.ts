@@ -2,6 +2,7 @@ import {ButtonInteraction, ChatInputCommandInteraction, GuildMember, ModalSubmit
 import {getGuild} from "../cache/guild";
 import {MeetupRow} from "../database/table/Meetup";
 import env from "../env";
+import {tPermission} from "../i18n";
 
 /**
  * Checks if user is creator of given meetup or has meetup config role
@@ -22,10 +23,12 @@ export async function assertUserIsMeetupCreatorOrConfig(
     }
 
     if(!member){
-        throw new Error("Member nicht gefunden.");
+        throw new Error(tPermission("error.memberNotFound"));
     }
 
     if (meetup.userID !== userID && !member.roles.cache.has(env.MEETUP_CONFIGURATOR_ROLE_ID)){
-        throw new Error("Du hast nicht die notwendigen Rechte, diesen Meetup zu " + (deleteMessage ? "löschen" : "bearbeiten") + ".");
+        throw new Error(
+            deleteMessage ? tPermission("error.meetupCantDelete") : tPermission("error.meetupCantEdit")
+        );
     }
 }

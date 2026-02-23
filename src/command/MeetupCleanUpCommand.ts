@@ -1,10 +1,11 @@
 /**
  * Command for cleaning up meetup data and channels
  */
-import {APIApplicationCommandOption, ChatInputCommandInteraction, Locale, MessageFlags} from "discord.js";
+import {APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags} from "discord.js";
 import {getMeetupInfoChannel} from "../cache/meetupChannels";
 import {db} from "../database/Database";
 import {MeetupRow} from "../database/table/Meetup";
+import {tCommand} from "../i18n";
 import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
 import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
 import {deleteMeetupData} from "../util/deleteMeetupData";
@@ -14,12 +15,13 @@ import {AbstractCommand} from "./AbstractCommand";
 export class MeetupCleanUpCommand extends AbstractCommand {
     name: string = "meetup_cleanup";
 
-    description: string = "Cleans up meetup data and channels";
-    localizedDescriptions = {
-        [Locale.German]: "Bereinigt Meetup-Daten und -Kanäle"
-    };
+    protected get description(): string {
+        return tCommand("meetupCleanup.description");
+    }
 
-    options: APIApplicationCommandOption[] = [];
+    protected get options(): APIApplicationCommandOption[] {
+        return [];
+    }
 
     protected async checkPermissions(interaction: ChatInputCommandInteraction): Promise<void> {
         assertMeetupCreateChannelUsed(interaction);

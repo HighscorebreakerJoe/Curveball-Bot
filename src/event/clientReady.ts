@@ -3,20 +3,21 @@ import {loadGuild} from "../cache/guild";
 import {loadMeetupAllowedMentionsRoles} from "../cache/meetupAllowedMentionsRoles";
 import {loadMeetupChannels} from "../cache/meetupChannels";
 import env from "../env";
+import {tSetup} from "../i18n";
 import commandsMap from "../map/commandsMap";
 
 export default function onClientReady(client: Client): void {
     client.on(Events.ClientReady, async () => {
         if(!client.user || !client.application){
-            console.error("Login failed");
+            console.error(tSetup("error.loginFailed"));
             return;
         }
 
         client.user.setActivity({
-            name: "Pokémon GO",
+            name: tSetup("client.activity"),
             type: ActivityType.Playing
         })
-        console.log(`Logged in as ${client.user.tag}`);
+        console.log(tSetup("client.loginMessage", {tag: client.user.tag}));
 
         //load cache data
         await loadGuild();
@@ -37,9 +38,9 @@ export default function onClientReady(client: Client): void {
                 Routes.applicationGuildCommands(env.CLIENT_ID, env.GUILD_ID),
                 { body: commandJSONs }
             );
-            console.log("Successfully registered commands.");
+            console.log(tSetup("step.registeredCommands"));
         } catch (error) {
-            console.error("Error registering commands:", error);
+            console.error(tSetup("error.registerCommands"), error);
         }
     })
 }
