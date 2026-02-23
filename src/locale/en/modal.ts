@@ -18,7 +18,7 @@ const modal: TranslationObject = {
             location: "Location",
             locationPlaceholder: "i.e. a gym",
 
-            time: "Time (HH:MM)",
+            time: "Time (HH:mm)",
             timePlaceholder: "i.e. 13:37",
 
             date: "Date (DD.MM)",
@@ -31,6 +31,19 @@ const modal: TranslationObject = {
 
         error: {
             invalidRole: "Invalid role with roleID: {{roleID}}"
+        },
+
+        submit: {
+            error: {
+                pokemonEmpty: "You forgot to specify a Pokémon. How could you?",
+                locationEmpty: "You forgot to specify a location. Where should we meet?",
+                timeEmpty: "You forgot to specify a time.",
+                timeWrongFormat: "The time must be in HH:mm format.",
+                dateEmpty: "You forgot to specify a date.",
+                dateWrongFormat: "The date must be in DD.MM format.",
+                dateInvalid: "The specified date is invalid.",
+                dateInThePast: "The specified date is in the past. We can't travel back in time...",
+            }
         }
     },
 

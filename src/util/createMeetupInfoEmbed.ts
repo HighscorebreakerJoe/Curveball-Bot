@@ -1,7 +1,7 @@
 import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, time, TimestampStyles} from "discord.js";
 import {getGuild} from "../cache/guild";
 import {db} from "../database/Database";
-import {tCommand, tCommon, tMeetup} from "../i18n";
+import {tCommon, tMeetup} from "../i18n";
 import {ParticipantData} from "./editMeetupInfoEmbed";
 import {printParticipantData} from "./printParticipantData";
 
@@ -97,7 +97,7 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
 
     const deleteButton: ButtonBuilder = new ButtonBuilder()
         .setCustomId("meetup_delete:" + meetupID)
-        .setLabel(tCommand("delete"))
+        .setLabel(tCommon("delete"))
         .setEmoji("🗑️")
         .setStyle(ButtonStyle.Secondary);
 

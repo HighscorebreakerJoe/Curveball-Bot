@@ -10,7 +10,8 @@ const common: TranslationObject = {
 
     error : {
         unknown: "Unkown error.",
-        notANumber: "Value is not a number: {{var}}"
+        notANumber: "Value is not a number: {{var}}",
+        linkDetected: "Hey, please don't enter any links!"
     }
 }
 

@@ -110,6 +110,9 @@ export class MeetupCreateModal extends AbstractModal{
             .setRequired(true);
 
         const nowDate = new Date;
+        const day: string = String(nowDate.getDate()).padStart(2, "0");
+        const month: string = String(nowDate.getMonth() + 1).padStart(2, "0");
+        const dateValue: string = `${day}.${month}`;
 
         const date: TextInputBuilder = new TextInputBuilder()
             .setCustomId("date")
@@ -117,7 +120,7 @@ export class MeetupCreateModal extends AbstractModal{
             .setPlaceholder(tModal("meetupCreate.field.datePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
-            .setValue(nowDate.getDate() + "." + (nowDate.getMonth() + 1));
+            .setValue(dateValue);
 
         const note: TextInputBuilder = new TextInputBuilder()
             .setCustomId("note")

@@ -10,7 +10,8 @@ const common: TranslationObject = {
 
     error : {
         unknown: "Unbekannter Fehler",
-        notANumber: "Wert ist keine gültige Zahl: {{var}}"
+        notANumber: "Wert ist keine gültige Zahl: {{var}}",
+        linkDetected: "Hey, bitte keine Links posten!"
     }
 }
 
