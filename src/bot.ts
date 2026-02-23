@@ -6,12 +6,12 @@ import onInteractionCreate from "./event/interactionCreate";
 import {initI18n} from "./i18n";
 
 
-async function main() {
-    //db migration
-    await migrateToLatest();
-
+async function main(): Promise<void> {
     //language
     await initI18n();
+
+    //db migration
+    await migrateToLatest();
 
     //events
     onClientReady(client);

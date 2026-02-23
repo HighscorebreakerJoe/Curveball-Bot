@@ -8,6 +8,7 @@ import {
     Locale,
     RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
+import {tCommon} from "../i18n";
 import {postError} from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
@@ -30,7 +31,7 @@ export abstract class AbstractCommand {
             }
             this.run(interaction);
         }catch (error){
-            let errorMessage: string = "Unbekannter Fehler";
+            let errorMessage: string = tCommon("error.unknown");
 
             if (error instanceof Error){
                 errorMessage = error.message;

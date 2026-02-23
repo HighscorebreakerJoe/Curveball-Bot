@@ -1,4 +1,5 @@
 import {db} from "../database/Database";
+import {tSetup} from "../i18n";
 
 const meetupAllowedMentionsRoles = new Set<string>();
 
@@ -13,7 +14,7 @@ export async function loadMeetupAllowedMentionsRoles() {
         meetupAllowedMentionsRoles.add(row.roleID);
     }
 
-    console.log("Set up mention roles cache.");
+    console.log(tSetup("step.setupMentionsRolesCache"));
 }
 
 export function getMeetupAllowedMentionsRoles(): Set<string> {

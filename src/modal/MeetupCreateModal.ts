@@ -19,7 +19,7 @@ export class MeetupCreateModal extends AbstractModal{
     customId: string = "meetup_create";
 
     protected get modalTitle(): string {
-        return tModal("modal.meetupCreate.title");
+        return tModal("meetupCreate.title");
     };
 
     private allowedCommands: string[] = ["meetup", "poll"];
