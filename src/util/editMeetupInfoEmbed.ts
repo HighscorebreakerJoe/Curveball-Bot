@@ -1,4 +1,5 @@
 import {EmbedBuilder, time, TimestampStyles} from "discord.js";
+import {tMeetup} from "../i18n";
 import {printParticipantData} from "./printParticipantData";
 
 export interface ParticipantData {
@@ -70,7 +71,7 @@ export function editMeetupInfoEmbed(embed: EmbedBuilder, options: EditMeetupEmbe
         );
 
         if(options.participants.length > 10){
-            participantStrings.push("Vollständige Liste im Absprachen-Thread")
+            participantStrings.push(tMeetup("participantList.completeListThreadInfo"))
         }
 
         if (participantsIndex !== -1){

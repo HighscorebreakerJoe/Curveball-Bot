@@ -24,7 +24,7 @@ const modal: TranslationObject = {
             date: "Date (DD.MM)",
             datePlaceholder: "i.e. 24.12",
 
-            note: "Notes",
+            note: "Note",
             notePlaceholder: "Additional information/notes to your meetup , " +
                 "i.e. the associated event (raid-hour etc.)",
         },

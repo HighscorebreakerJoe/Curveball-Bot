@@ -6,19 +6,20 @@ import {
     MessageFlags,
     ModalSubmitInteraction
 } from "discord.js";
+import {tCommon} from "../i18n";
 
 /**
  * Posts success message to user
  */
 export async function postSuccess(interaction: ChatInputCommandInteraction|ModalSubmitInteraction|ButtonInteraction, message: string): Promise<void> {
-    return await postEmbedMessage(interaction, message, "Hurra!", 0x00ff00);
+    return await postEmbedMessage(interaction, message, tCommon("successDefaultEmbedTitle"), 0x00ff00);
 }
 
 /**
  * Posts error message to user
  */
 export async function postError(interaction: ChatInputCommandInteraction|ModalSubmitInteraction|ButtonInteraction, message: string): Promise<void> {
-    return await postEmbedMessage(interaction, message, "Fehler...", 0xff0000);
+    return await postEmbedMessage(interaction, message, tCommon("errorDefaultEmbedTitle"), 0xff0000);
 }
 
 /**

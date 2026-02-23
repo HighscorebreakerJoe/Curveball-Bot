@@ -1,8 +1,9 @@
-import {MessageFlags, ModalSubmitFields, ModalSubmitInteraction} from "discord.js";
+import {hyperlink, MessageFlags, ModalSubmitFields, ModalSubmitInteraction} from "discord.js";
 import {InsertResult} from "kysely";
 import {getMeetupAllowedMentionsRoles} from "../../cache/meetupAllowedMentionsRoles";
 import {getMeetupInfoChannel} from "../../cache/meetupChannels";
 import {db} from "../../database/Database";
+import {tMeetup} from "../../i18n";
 import {calculateYear} from "../../util/calculateYear";
 import {checkForLinks} from "../../util/checkForLinks";
 import {createMeetupInfoEmbed} from "../../util/createMeetupInfoEmbed";
@@ -168,7 +169,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
             .executeTakeFirstOrThrow();
 
         //create and post meetup-embed
-        let embedTitle: string = pokemon + ": Raid von " + interaction.user?.tag;
+        let embedTitle: string = pokemon + ": " + tMeetup("info.titleRaidFrom") + " " + interaction.user?.tag;
 
         const meetupCreatorParticipant: ParticipantData = {
             userID: interaction.user.id,
@@ -209,9 +210,9 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
 
         //create thread
         const meetupInfoThread = await meetupInfoMessage.startThread({
-            name: `Meetup #${meetupID}: Absprache`,
+            name: tMeetup("info.threadTitle", {meetupID: meetupID}),
             autoArchiveDuration: 60,
-            reason: "Automatisch erzeugt"
+            reason: tMeetup("info.threadDefaultReason")
         });
 
         //write participant message in thread
@@ -235,7 +236,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         await resetMeetupListChannel();
 
         //create success embed
-        await postSuccess(interaction, "Dein Meetup wurde erfolgreich erstellt!");
+        await postSuccess(interaction,
+            tMeetup("info.createSuccess")
+                + " " +
+            hyperlink(tMeetup("info.createSuccessLink"), meetupInfoMessage.url)
+        );
     }
 
     /**

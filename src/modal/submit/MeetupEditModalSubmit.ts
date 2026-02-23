@@ -11,6 +11,7 @@ import {getGuild} from "../../cache/guild";
 import {getMeetupInfoChannel} from "../../cache/meetupChannels";
 import {db} from "../../database/Database";
 import {MeetupRow} from "../../database/table/Meetup";
+import {tMeetup} from "../../i18n";
 import {assertMeetupIDIsValid} from "../../permission/assertMeetupIDIsValid";
 import {assertUserIsMeetupCreatorOrConfig} from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import {editMeetupInfoEmbed} from "../../util/editMeetupInfoEmbed";
@@ -53,7 +54,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         if(meetup.pokemon !== pokemon){
             differences.set("pokemon",
                 {
-                    title: "👾 Pokémon",
+                    title: "👾 " + tMeetup("info.pokemon"),
                     old: meetup.pokemon,
                     new: pokemon
                 }
@@ -63,7 +64,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         if(meetup.location !== location){
             differences.set("location",
                 {
-                    title: "📍 Treffpunkt",
+                    title: "📍 " + tMeetup("info.location"),
                     old: meetup.location,
                     new: location
                 }
@@ -73,7 +74,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         if(meetup.time.getTime() !== toSaveDate.getTime()){
             differences.set("time",
                 {
-                    title: "📅 Datum und Uhrzeit",
+                    title: "📅 " + tMeetup("info.dateTime"),
                     old: meetup.time,
                     new: toSaveDate
                 }
@@ -82,7 +83,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
 
         if(meetup.note !== note){
             differences.set("note", {
-                title: "📝 Anmerkungen",
+                title: "📝 " + tMeetup("info.note"),
                 old: (meetup.note ? meetup.note : ""),
                 new: note
             });
@@ -112,7 +113,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
             userTag = member?.user.tag;
         }
 
-        const embedTitle: string = pokemon + ": Raid von " + userTag;
+        const embedTitle: string = pokemon + ": " + tMeetup("info.titleRaidFrom") +  " " + userTag;
 
         const newEmbed: EmbedBuilder = editMeetupInfoEmbed(embed, {
             embedTitle: embedTitle,
@@ -148,8 +149,8 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         new: string | Date;
     }>, thread: TextThreadChannel): Promise<void> {
         const updateEmbed: EmbedBuilder = new EmbedBuilder();
-        updateEmbed.setTitle("Dieser Meetup wurde aktualisiert!");
-        updateEmbed.setDescription("Im Folgenden findet ihr die Änderungen diesen Meetups:");
+        updateEmbed.setTitle(tMeetup("update.embedTitle"));
+        updateEmbed.setDescription(tMeetup("update.embedDescription"));
         updateEmbed.setColor(0xff0000);
 
         const fields: {name: string, value: string}[] = [];
@@ -166,7 +167,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit{
         updateEmbed.addFields(fields);
 
         await thread.send({
-            content: heading("Update!"),
+            content: heading(tMeetup("update.title")),
             embeds: [updateEmbed]
         });
     }
