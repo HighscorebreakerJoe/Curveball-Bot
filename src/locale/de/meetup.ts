@@ -31,7 +31,7 @@ const meetup: TranslationObject = {
     },
 
     update: {
-        embedTitle: "Dieser Meetup wurde aktualisiert!",
+        embedTitle: "Dieses Meetup wurde aktualisiert!",
         embedDescription: "Im Folgenden findet ihr die Änderungen zu diesem Meetups:"
     },
 

@@ -5,6 +5,7 @@ import {ButtonInteraction} from "discord.js";
 import {db} from "../database/Database";
 import {MeetupRow} from "../database/table/Meetup";
 import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
+import {tButton} from "../i18n";
 import {getParticipantData} from "../util/createMeetupInfoEmbed";
 import {ParticipantData} from "../util/editMeetupInfoEmbed";
 import {AbstractParticipantButton} from "./AbstractParticipantButton";
@@ -22,7 +23,7 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton{
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         if(!meetupParticipant){
-            throw new Error("Du bist in diesem Meetup nicht als Teilnehmer markiert. Verdrückt?")
+            throw new Error(tButton("meetupRemoveParticipant.notParticipant"))
         }
     }
 

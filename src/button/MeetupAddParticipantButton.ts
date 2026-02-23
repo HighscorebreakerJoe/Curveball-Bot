@@ -5,6 +5,7 @@ import {ButtonInteraction} from "discord.js";
 import {db} from "../database/Database";
 import {MeetupRow} from "../database/table/Meetup";
 import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
+import {tButton} from "../i18n";
 import {getParticipantData} from "../util/createMeetupInfoEmbed";
 import {ParticipantData} from "../util/editMeetupInfoEmbed";
 import {AbstractParticipantButton} from "./AbstractParticipantButton";
@@ -24,7 +25,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton{
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         if(meetupParticipant && meetupParticipant.participants >= 10){
-            throw new Error("Maximalanzahl der Mitteilnehmenden erreicht. Mich freut es aber, dass du so viele Freunde hast!")
+            throw new Error(tButton("meetupAddParticipant.error.maxParticipantsReached"));
         }
     }
 

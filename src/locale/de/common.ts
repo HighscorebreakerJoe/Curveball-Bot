@@ -9,7 +9,8 @@ const common: TranslationObject = {
     errorDefaultEmbedTitle: "Fehler...",
 
     error : {
-        unknown: "Unbekannter Fehler"
+        unknown: "Unbekannter Fehler",
+        notANumber: "Wert ist keine gültige Zahl: {{var}}"
     }
 }
 

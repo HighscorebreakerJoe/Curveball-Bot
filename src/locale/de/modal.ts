@@ -9,7 +9,7 @@ const modal: TranslationObject = {
     },
 
     meetupCreate: {
-        title: "Neuen Meetup erstellen",
+        title: "Neues Meetup erstellen",
 
         field: {
             pokemon: "Pokémon",

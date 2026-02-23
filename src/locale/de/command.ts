@@ -2,7 +2,7 @@ import {TranslationObject} from "../../i18n";
 
 const command: TranslationObject = {
     meetup: {
-        description: "Erstellt einen Meetup",
+        description: "Erstellt ein Meetup",
 
         option: {
             role1Description: "Die erste Rolle, die in dem Meetup benachrichtigt werden soll",
@@ -45,7 +45,7 @@ const command: TranslationObject = {
     },
 
     poll: {
-        description: "Erstellt einen Meetup (Alias für /meetup)"
+        description: "Erstellt ein Meetup (Alias für /meetup)"
     }
 }
 

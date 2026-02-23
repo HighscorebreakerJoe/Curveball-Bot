@@ -13,6 +13,7 @@ import {
 } from "discord.js";
 import {MeetupRow} from "../database/table/Meetup";
 import env from "../env";
+import {tButton, tMeetup} from "../i18n";
 import {assertMessageHasValidMeetup} from "../permission/assertMessageHasValidMeetup";
 import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
 import {AbstractButton} from "./AbstractButton";
@@ -41,35 +42,42 @@ export class MeetupDeleteButton extends AbstractButton{
         const meetup = this.context.meetup as MeetupRow;
 
         const messageLink = `https://discord.com/channels/${env.GUILD_ID}/${env.MEETUP_INFO_CHANNEL_ID}/${meetup.messageID}`;
+        const messageDescription: string = tButton("meetupDelete.confirmEmbedDescription") +
+            "\n\n" +
+            hyperlink(tMeetup("list.toMeetup"), messageLink) +
+            "\n";
 
         const embed = new EmbedBuilder()
-            .setTitle("❗ Löschbestätigung ❗")
-            .setDescription(`Möchtest du wirklich den Meetup mit der ID ${meetup.meetupID} löschen?\n\n${hyperlink("Zum Meetup", messageLink)}\n`)
+            .setTitle(tButton("meetupDelete.confirmEmbedTitle"))
+            .setDescription(messageDescription)
             .setColor(0xff0000)
             .addFields(
                 {
-                    name: "👾 Pokémon", value: meetup.pokemon
+                    name: "👾 " + tMeetup("info.pokemon"), value: meetup.pokemon
                 },
                 {
-                    name: "📍 Treffpunkt", value: meetup.location
+                    name: "📍 " + tMeetup("info.location"), value: meetup.location
                 },
                 {
-                    name: "📅 Datum und Uhrzeit", value: time(meetup.time, TimestampStyles.LongDateShortTime)
+                    name: "📅 " + tMeetup("info.dateTime"), value: time(meetup.time, TimestampStyles.LongDateShortTime)
                 }
-            );
+            )
+            .setFooter({
+                text: tMeetup("info.footerText", {meetupID: meetup.meetupID})
+            });
 
         //dm user
         const meetupDeleteConfirmButton: ButtonBuilder = new ButtonBuilder()
             .setCustomId("meetup_delete_confirm:" + meetup.meetupID)
-            .setLabel("Ja, möchte ich!")
+            .setLabel(tButton("meetupDelete.confirm"))
             .setEmoji("😤")
-            .setStyle(ButtonStyle.Success);
+            .setStyle(ButtonStyle.Danger);
 
         const meetupDeleteCancelButton: ButtonBuilder = new ButtonBuilder()
             .setCustomId("meetup_delete_cancel")
-            .setLabel("Nein, habs mir doch anders überlegt...")
+            .setLabel(tButton("meetupDelete.cancel"))
             .setEmoji("😶‍🌫️")
-            .setStyle(ButtonStyle.Danger);
+            .setStyle(ButtonStyle.Success);
 
         const meetupDeleteButtonRow: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents(
             meetupDeleteConfirmButton, meetupDeleteCancelButton
