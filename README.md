@@ -30,6 +30,10 @@ Currently, Curveball Bot provides following features:
 - **Participate in meetups**
   - Each meetup provides interactive buttons to confirm or revoke participation 
     - You can also indicate whether you are joining as a remote raider or if your participation is uncertain
+- **Supported languages**
+  - English
+    - This language will serve as a fallback for any untranslated text
+  - German
 
 ## 2. Installation
 
@@ -80,9 +84,9 @@ With all preparations done, you're ready to start the bot!
 When the bot starts, it automatically sets up and updates the database by applying any pending migrations.
 
 Start the bot using: 
-`npm run start`.
+`npm run start`
 
-## Technologies and Tools Used
+## Technologies and tools used
 
 The following technologies and tools are used in this project:
 
@@ -90,7 +94,7 @@ The following technologies and tools are used in this project:
 - **Database / Query Builder:** [Kysely](https://kysely.dev)
 - **i18n Framework:** [i18next](https://www.i18next.com/)
 
-## License & Credits
+## License & credits
 
 Curveball Bot is licensed under [GNU AGPLv3](LICENSE).
 
