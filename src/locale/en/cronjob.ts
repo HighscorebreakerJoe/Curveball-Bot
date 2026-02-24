@@ -1,9 +1,9 @@
 import {TranslationObject} from "../../i18n";
 
 const cronjob: TranslationObject = {
-    dailyCleanup: {
-        success: "Cronjob: DailyCleanup - Success - {{time}}.",
-        error: "Cronjob: DailyCleanup - Failed - {{time}}."
+    hourlyCleanup: {
+        success: "Cronjob: HourlyCleanup - Success - {{time}}.",
+        error: "Cronjob: HourlyCleanup - Failed - {{time}}."
     }
 }
 
