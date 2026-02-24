@@ -1,59 +1,132 @@
 import {getMeetupInfoChannel} from "../cache/meetupChannels";
 import {db} from "../database/Database";
 import {getMeetupsByMeetupIDs, MeetupRow} from "../database/table/Meetup";
+import {delay} from "./delay";
 import {resetMeetupListChannel} from "./resetMeetupListChannel";
+import {splitArray} from "./splitArray";
+
+type DeleteData = {
+    lessThanTwoWeeks: MeetupRow[],
+    moreThanTwoWeeks: MeetupRow[]
+}
 
 /**
  * Function for deleting meetup-channels and data
  */
 export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
-    const toDeleteMeetupIDs: number[] = [];
-    const toDeleteMessageIDs: string[] = [];
+    // Discord allows bulk deleting up to 100 messages which are not older than 14 days old
+    // -> split up messages into two categories
+
+    const deleteStruct: DeleteData = {
+        lessThanTwoWeeks: [],
+        moreThanTwoWeeks: []
+    }
 
     const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
+    const dateNow = new Date();
+    const twoWeeksAgo = new Date(dateNow);
+    twoWeeksAgo.setDate(dateNow.getDate() - 14);
+
     for (const toDeleteMeetup of toDeleteMeetups){
-        if(toDeleteMeetup.meetupID && toDeleteMeetup.messageID){
-            toDeleteMeetupIDs.push(toDeleteMeetup.meetupID);
-            toDeleteMessageIDs.push(toDeleteMeetup.messageID);
-        }
+        sortInDeleteStruct(deleteStruct, toDeleteMeetup, twoWeeksAgo);
     }
 
-    if(toDeleteMeetupIDs.length == 0){
-        return;
+    if(deleteStruct.lessThanTwoWeeks.length > 0){
+        await deleteBulk(deleteStruct.lessThanTwoWeeks);
     }
 
-    //delete meetups
-    await db
-        .deleteFrom("meetup")
-        .where("meetupID", "in", toDeleteMeetupIDs)
-        .execute();
-
-    //delete messages
-    const toDeleteMessages = [];
-    const toDeleteThreads = [];
-
-    for (const messageID of toDeleteMessageIDs){
-        if(messageID !== null) {
-            const message = await getMeetupInfoChannel().messages.fetch(messageID);
-            toDeleteMessages.push(message);
-
-            const thread = message.thread;
-            toDeleteThreads.push(thread);
-        }
-    }
-
-    if (toDeleteMessages.length > 0) {
-        await getMeetupInfoChannel().bulkDelete(toDeleteMessages, true);
-    }
-
-    if(toDeleteThreads.length > 0){
-        //TODO: Bulk delete if possible?
-        for(const thread of toDeleteThreads){
-            thread?.delete();
-        }
+    if(deleteStruct.moreThanTwoWeeks.length > 0){
+        await deleteManually(deleteStruct.moreThanTwoWeeks);
     }
 
     //reset meetup list channel
     await resetMeetupListChannel();
+}
+
+async function deleteBulk(meetups: MeetupRow[]) {
+    //split message IDs in chunks
+    const messageIDs: string[] = meetups
+        .map((meetup: MeetupRow) => meetup.messageID)
+        .filter((messageID): messageID is string => !!messageID);
+
+    const messageIDChunks: string[][] = splitArray(messageIDs, 100);
+
+    const deletedMessageIDs = new Set<string>();
+
+    // bulk delete all message chunks
+    for(const messageIDChunk of messageIDChunks){
+        const deleted = await getMeetupInfoChannel().bulkDelete(messageIDChunk, true);
+        for (const messageID of deleted.keys()) {
+            deletedMessageIDs.add(messageID);
+        }
+
+        await delay(500);
+    }
+
+    //delete meetups
+    const toDeleteMeetupIDs: number[] = meetups
+        .filter((meetup: MeetupRow) => meetup.messageID && deletedMessageIDs.has(meetup.messageID))
+        .map((meetup: MeetupRow) => meetup.meetupID);
+
+    await deleteMeetupsFromDatabase(toDeleteMeetupIDs);
+}
+
+async function deleteManually(meetups: MeetupRow[]) {
+    //get messages
+    const messageIDs: string[] = meetups
+        .map((meetup: MeetupRow) => meetup.messageID)
+        .filter((messageID): messageID is string => !!messageID);
+
+    const toDeleteMessages = [];
+    const failedMessageIDs = new Set<string>();
+
+    for(const messageID of messageIDs){
+        const message = await getMeetupInfoChannel().messages.fetch(messageID).catch(() => {
+            failedMessageIDs.add(messageID)
+            return null
+        });
+
+        if(!message) {
+            continue;
+        }
+
+        if(message) {
+            toDeleteMessages.push(message)
+        }
+    }
+
+    // delete messages one by one without reaching rate limit
+    for(const toDeleteMessage of toDeleteMessages){
+        await toDeleteMessage.delete().catch(() => {
+            failedMessageIDs.add(toDeleteMessage.id);
+            return null;
+        });
+
+        await delay(500);
+    }
+
+    //delete meetups
+    const toDeleteMeetupIDs: number[] = meetups
+        .filter((meetup: MeetupRow) => meetup.messageID && !failedMessageIDs.has(meetup.messageID))
+        .map((meetup: MeetupRow) => meetup.meetupID);
+
+    await deleteMeetupsFromDatabase(toDeleteMeetupIDs);
+}
+
+function sortInDeleteStruct(deleteStruct: DeleteData, toDeleteMeetup: MeetupRow, limitDate: Date): void {
+    const isLessThanTwoWeeks: boolean = !!(toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate);
+
+    if (isLessThanTwoWeeks) {
+        deleteStruct.lessThanTwoWeeks.push(toDeleteMeetup);
+    } else {
+        deleteStruct.moreThanTwoWeeks.push(toDeleteMeetup);
+    }
+}
+
+async function deleteMeetupsFromDatabase(toDeleteMeetupIDs: number[]) {
+    await db
+        .deleteFrom("meetup")
+        .where("meetupID", "in", toDeleteMeetupIDs)
+        .execute();
 }
