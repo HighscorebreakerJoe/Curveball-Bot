@@ -16,7 +16,7 @@ const button: TranslationObject = {
     },
 
     meetupDeleteCancel: {
-        success: "Na gut, dann löschen wir das Meetup eben nicht...\""
+        success: "Na gut, dann löschen wir das Meetup eben nicht..."
     },
 
     meetupDeleteConfirm: {
