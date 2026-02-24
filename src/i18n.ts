@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import path from "path";
 import env from "./env";
 
-const namespaces: string[] = ["button" ,"command", "common", "meetup", "modal", "permission", "setup"];
+const namespaces: string[] = ["button" ,"command", "common", "cronjob", "meetup", "modal", "permission", "setup"];
 type Namespace = typeof namespaces[number];
 type InitResource = Record<string, Record<string, any>>;
 type translationParams = Record<string, string | number | boolean>;
@@ -50,6 +50,10 @@ export function tCommand(key: string, params?: translationParams): string{
 
 export function tCommon(key: string, params?: translationParams): string{
     return t(key, "common", params);
+}
+
+export function tCronjob(key: string, params?: translationParams): string{
+    return t(key, "cronjob", params);
 }
 
 export function tMeetup(key: string, params?: translationParams): string{

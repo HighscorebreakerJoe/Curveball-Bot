@@ -15,7 +15,8 @@
     "dotenv": "^17.2.3",
     "i18next": "^25.8.13",
     "kysely": "^0.28.8",
-    "mysql2": "^3.15.3"
+    "mysql2": "^3.15.3",
+    "node-cron": "^4.2.1"
   },
   "devDependencies": {
     "kysely-codegen": "^0.19.0",

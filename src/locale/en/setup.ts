@@ -10,6 +10,7 @@ const setup: TranslationObject = {
         setupGuildCache: "Set up guild cache.",
         setupMentionsRolesCache: "Set up mention roles cache.",
         setupMeetupChannelCache: "Set up meetup channel cache.",
+        setupDailyCleanupCronjob: "Set up daily cleanup cronjob.",
         searchForDatabaseMigrations: "Search for new database migrations.",
         noDatabaseMigrationsFound: "No new database migrations found.",
         databaseMigrationsSuccess: "Migration executed successfully: {{migrationName}}",
