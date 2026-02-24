@@ -26,7 +26,9 @@ export default function onClientReady(client: Client): void {
         await loadMeetupChannels();
 
         //register cronjobs
-        await setupDailyCleanupCronjob();
+        if(!env.DISABLE_CRONJOBS){
+            await setupDailyCleanupCronjob();
+        }
 
         //register commands
         const commandJSONs: RESTPostAPIApplicationCommandsJSONBody[] = [];
