@@ -1,6 +1,5 @@
 import {getMeetupInfoChannel} from "../cache/meetupChannels";
-import {db} from "../database/Database";
-import {getMeetupsByMeetupIDs, MeetupRow} from "../database/table/Meetup";
+import {deleteMeetupsByMeetupIDs, getMeetupsByMeetupIDs, MeetupRow} from "../database/table/Meetup";
 import {delay} from "./delay";
 import {resetMeetupListChannel} from "./resetMeetupListChannel";
 import {splitArray} from "./splitArray";
@@ -69,7 +68,7 @@ async function deleteBulk(meetups: MeetupRow[]) {
         .filter((meetup: MeetupRow) => meetup.messageID && deletedMessageIDs.has(meetup.messageID))
         .map((meetup: MeetupRow) => meetup.meetupID);
 
-    await deleteMeetupsFromDatabase(toDeleteMeetupIDs);
+    await deleteMeetupsByMeetupIDs(toDeleteMeetupIDs);
 }
 
 async function deleteManually(meetups: MeetupRow[]) {
@@ -111,7 +110,7 @@ async function deleteManually(meetups: MeetupRow[]) {
         .filter((meetup: MeetupRow) => meetup.messageID && !failedMessageIDs.has(meetup.messageID))
         .map((meetup: MeetupRow) => meetup.meetupID);
 
-    await deleteMeetupsFromDatabase(toDeleteMeetupIDs);
+    await deleteMeetupsByMeetupIDs(toDeleteMeetupIDs);
 }
 
 function sortInDeleteStruct(deleteStruct: DeleteData, toDeleteMeetup: MeetupRow, limitDate: Date): void {
@@ -122,11 +121,4 @@ function sortInDeleteStruct(deleteStruct: DeleteData, toDeleteMeetup: MeetupRow,
     } else {
         deleteStruct.moreThanTwoWeeks.push(toDeleteMeetup);
     }
-}
-
-async function deleteMeetupsFromDatabase(toDeleteMeetupIDs: number[]) {
-    await db
-        .deleteFrom("meetup")
-        .where("meetupID", "in", toDeleteMeetupIDs)
-        .execute();
 }

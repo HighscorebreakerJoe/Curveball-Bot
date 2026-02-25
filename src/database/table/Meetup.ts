@@ -1,4 +1,4 @@
-import {Generated, Selectable} from "kysely";
+import {DeleteResult, Generated, Selectable} from "kysely";
 import {Database, db} from "../Database";
 
 export interface Meetup {
@@ -37,4 +37,11 @@ export async function getMeetupsByMeetupIDs(meetupIDs: number[]): Promise<Meetup
         .selectAll()
         .where("meetupID", "in", meetupIDs)
         .execute() as MeetupRow[];
+}
+
+export async function deleteMeetupsByMeetupIDs(toDeleteMeetupIDs: number[]): Promise<DeleteResult[]> {
+    return await db
+        .deleteFrom("meetup")
+        .where("meetupID", "in", toDeleteMeetupIDs)
+        .execute();
 }
