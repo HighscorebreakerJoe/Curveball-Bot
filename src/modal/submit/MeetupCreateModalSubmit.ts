@@ -216,7 +216,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit{
         const meetupInfoThread = await meetupInfoMessage.startThread({
             name: tMeetup("info.threadTitle", {meetupID: meetupID}),
             autoArchiveDuration: 60,
-            reason: tMeetup("info.threadDefaultReason")
+            reason: tMeetup("info.threadDefaultCreateReason")
         });
 
         //write participant message in thread
