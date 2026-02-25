@@ -3,12 +3,7 @@ import {tCronjob, tSetup} from "../i18n";
 import {cleanupMeetupData} from "../util/cleanupMeetupData";
 
 export async function setupHourlyCleanupCronjob(): Promise<void> {
-    nodeCron.schedule("0 0 * * * *", cronjob,
-        {
-            timezone: "Europe/Berlin"
-        }
-    );
-
+    nodeCron.schedule("0 0 * * * *", cronjob);
     console.log(tSetup("step.setupHourlyCleanupCronjob"));
 }
 

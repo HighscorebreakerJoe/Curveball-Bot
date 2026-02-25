@@ -6,12 +6,7 @@ import {delay} from "../util/delay";
 import {getAllAvailableMeetupInfoThreads} from "../util/getAllAvailableMeetupInfoThreads";
 
 export async function setupDailyCleanupCronjob(): Promise<void> {
-    nodeCron.schedule("0 30 0 * * *", cronjob,
-        {
-            timezone: "Europe/Berlin"
-        }
-    );
-
+    nodeCron.schedule("0 30 0 * * *", cronjob);
     console.log(tSetup("step.setupDailyCleanupCronjob"));
 }
 
