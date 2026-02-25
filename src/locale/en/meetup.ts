@@ -4,7 +4,8 @@ const meetup: TranslationObject = {
     info : {
         titleRaidFrom: "Raid from",
         threadTitle: "Meetup #{{meetupID}}: Discussion",
-        threadDefaultReason: "Created automatically",
+        threadDefaultCreateReason: "Created automatically",
+        threadDefaultDeleteReason: "Deleted automatically",
         createSuccess: "Your meetup was successfully created!",
         createSuccessLink: "You can find your meetup here.",
         footerText: "Meetup #{{meetupID}}",

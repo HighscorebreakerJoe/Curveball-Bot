@@ -2,6 +2,8 @@ import {ActivityType, Client, Events, REST, RESTPostAPIApplicationCommandsJSONBo
 import {loadGuild} from "../cache/guild";
 import {loadMeetupAllowedMentionsRoles} from "../cache/meetupAllowedMentionsRoles";
 import {loadMeetupChannels} from "../cache/meetupChannels";
+import {setupDailyCleanupCronjob} from "../cronjob/dailyCleanup";
+import {setupHourlyCleanupCronjob} from "../cronjob/hourlyCleanup";
 import env from "../env";
 import {tSetup} from "../i18n";
 import commandsMap from "../map/commandsMap";
@@ -23,6 +25,12 @@ export default function onClientReady(client: Client): void {
         await loadGuild();
         await loadMeetupAllowedMentionsRoles();
         await loadMeetupChannels();
+
+        //register cronjobs
+        if(!env.DISABLE_CRONJOBS){
+            await setupHourlyCleanupCronjob();
+            await setupDailyCleanupCronjob();
+        }
 
         //register commands
         const commandJSONs: RESTPostAPIApplicationCommandsJSONBody[] = [];

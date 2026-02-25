@@ -29,7 +29,8 @@ const command: TranslationObject = {
     },
 
     meetupCleanup: {
-        description: "Bereinigt Meetup-Daten und -Kanäle"
+        description: "Bereinigt Meetup-Daten und -Kanäle",
+        success: "Die Meetup-Daten und -Kanäle wurden erfolgreich bereinigt."
     },
 
     meetupRemoveMention: {
