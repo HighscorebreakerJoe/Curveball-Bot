@@ -30,6 +30,6 @@ async function handleMeetupMessage(message: OmitPartialGroupDMChannel<Message | 
     try{
         await deleteMeetupsByMeetupIDs([meetup.meetupID]);
     }catch (error){
-        console.error(tCommon("error.meetupDeleteError"), error)
+        console.error(tCommon("error.meetupDeleteError"), error);
     }
 }
