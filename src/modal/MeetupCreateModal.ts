@@ -17,12 +17,11 @@ import { AbstractModal } from "./AbstractModal";
 
 export class MeetupCreateModal extends AbstractModal {
     customId: string = "meetup_create";
+    private allowedCommands: string[] = ["meetup", "poll"];
 
     protected get modalTitle(): string {
         return tModal("meetupCreate.title");
     }
-
-    private allowedCommands: string[] = ["meetup", "poll"];
 
     protected async checkPermissions(
         interaction: ChatInputCommandInteraction | ButtonInteraction,

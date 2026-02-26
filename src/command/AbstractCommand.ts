@@ -12,12 +12,11 @@ import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
     public readonly name!: string;
+    protected sanitizedInputs: Record<string, any> = {};
 
     protected abstract get description(): string;
 
     protected abstract get options(): APIApplicationCommandOption[];
-
-    protected sanitizedInputs: Record<string, any> = {};
 
     /**
      * Executes command after permissions were checked and options were verified
