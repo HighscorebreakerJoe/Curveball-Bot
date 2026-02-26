@@ -1,9 +1,9 @@
 /**
  * Base class for all buttons for Curveball Bot. Handles buttons when activated.
  */
-import {ButtonInteraction} from "discord.js";
-import {tCommon} from "../i18n";
-import {postError} from "../util/postEmbeds";
+import { ButtonInteraction } from "discord.js";
+import { tCommon } from "../i18n";
+import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractButton {
     public readonly customId!: string;
@@ -11,14 +11,14 @@ export abstract class AbstractButton {
     /**
      * Executes function of this button after being activated
      */
-    public async execute(interaction: ButtonInteraction): Promise<void>{
-        try{
+    public async execute(interaction: ButtonInteraction): Promise<void> {
+        try {
             await this.checkPermissions(interaction);
             await this.run(interaction);
-        }catch (error){
+        } catch (error) {
             let errorMessage: string = tCommon("error.unknown");
 
-            if (error instanceof Error){
+            if (error instanceof Error) {
                 errorMessage = error.message;
             }
 

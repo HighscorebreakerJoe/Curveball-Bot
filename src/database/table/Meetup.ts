@@ -1,5 +1,5 @@
-import {DeleteResult, Generated, Selectable} from "kysely";
-import {Database, db} from "../Database";
+import { DeleteResult, Generated, Selectable } from "kysely";
+import { Database, db } from "../Database";
 
 export interface Meetup {
     meetupID: Generated<number>;
@@ -18,50 +18,44 @@ export interface Meetup {
 
 export type MeetupRow = Selectable<Database["meetup"]>;
 
-export async function getMeetupByMeetupID(meetupID: number): Promise<MeetupRow | undefined>{
-    return await db.selectFrom("meetup")
+export async function getMeetupByMeetupID(meetupID: number): Promise<MeetupRow | undefined> {
+    return (await db
+        .selectFrom("meetup")
         .selectAll()
         .where("meetupID", "=", meetupID)
-        .executeTakeFirst() as MeetupRow | undefined;
+        .executeTakeFirst()) as MeetupRow | undefined;
 }
 
-export async function getMeetupByMessageID(messageID: string): Promise<MeetupRow | undefined>{
-    return await db.selectFrom("meetup")
+export async function getMeetupByMessageID(messageID: string): Promise<MeetupRow | undefined> {
+    return (await db
+        .selectFrom("meetup")
         .selectAll()
         .where("messageID", "=", messageID)
-        .executeTakeFirst() as MeetupRow | undefined;
+        .executeTakeFirst()) as MeetupRow | undefined;
 }
 
 export async function getMeetupsByMeetupIDs(meetupIDs: number[]): Promise<MeetupRow[]> {
-    return await db.selectFrom("meetup")
+    return (await db
+        .selectFrom("meetup")
         .selectAll()
         .where("meetupID", "in", meetupIDs)
-        .execute() as MeetupRow[];
+        .execute()) as MeetupRow[];
 }
 
-export async function getAllMeetupMessageIDs(){
-    const rows = await db.selectFrom("meetup")
-        .select("messageID")
-        .execute();
+export async function getAllMeetupMessageIDs() {
+    const rows = await db.selectFrom("meetup").select("messageID").execute();
 
-    return rows
-        .map(row => row.messageID)
-        .filter((id): id is string => id !== null);
+    return rows.map((row) => row.messageID).filter((id): id is string => id !== null);
 }
 
-export async function getAllMeetupThreadIDs(){
-    const rows = await db.selectFrom("meetup")
-        .select("threadID")
-        .execute();
+export async function getAllMeetupThreadIDs() {
+    const rows = await db.selectFrom("meetup").select("threadID").execute();
 
-    return rows
-        .map(row => row.threadID)
-        .filter((id): id is string => id !== null);
+    return rows.map((row) => row.threadID).filter((id): id is string => id !== null);
 }
 
-export async function deleteMeetupsByMeetupIDs(toDeleteMeetupIDs: number[]): Promise<DeleteResult[]> {
-    return await db
-        .deleteFrom("meetup")
-        .where("meetupID", "in", toDeleteMeetupIDs)
-        .execute();
+export async function deleteMeetupsByMeetupIDs(
+    toDeleteMeetupIDs: number[],
+): Promise<DeleteResult[]> {
+    return await db.deleteFrom("meetup").where("meetupID", "in", toDeleteMeetupIDs).execute();
 }

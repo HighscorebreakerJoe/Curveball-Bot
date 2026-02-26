@@ -1,6 +1,6 @@
-import {Generated} from "kysely";
-import {Selectable} from "kysely/dist/esm";
-import {Database} from "../Database";
+import { Generated } from "kysely";
+import { Selectable } from "kysely/dist/esm";
+import { Database } from "../Database";
 
 export interface MeetupParticipant {
     meetupID: Generated<number>;

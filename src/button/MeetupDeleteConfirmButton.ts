@@ -1,17 +1,17 @@
 /**
  * Class for handling "Meetup delete confirm" buttonpress in meetup delete embeds
  */
-import {ButtonInteraction} from "discord.js";
-import {MeetupRow} from "../database/table/Meetup";
-import {tButton, tCommand} from "../i18n";
-import {assertMeetupIDIsValid} from "../permission/assertMeetupIDIsValid";
-import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
-import {deleteMeetupData} from "../util/deleteMeetupData";
-import {getDynamicData} from "../util/getDynamicIDData";
-import {postSuccess} from "../util/postEmbeds";
-import {AbstractButton} from "./AbstractButton";
+import { ButtonInteraction } from "discord.js";
+import { MeetupRow } from "../database/table/Meetup";
+import { tButton, tCommand } from "../i18n";
+import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
+import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
+import { deleteMeetupData } from "../util/deleteMeetupData";
+import { getDynamicData } from "../util/getDynamicIDData";
+import { postSuccess } from "../util/postEmbeds";
+import { AbstractButton } from "./AbstractButton";
 
-export class MeetupDeleteConfirmButton extends AbstractButton{
+export class MeetupDeleteConfirmButton extends AbstractButton {
     customId: string = "meetup_delete_confirm:{d}";
     protected context: Record<string, unknown> = {};
 
@@ -21,8 +21,8 @@ export class MeetupDeleteConfirmButton extends AbstractButton{
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         const meetupID: number = Number(getDynamicData(interaction.customId));
 
-        if(Number.isNaN(meetupID)){
-            throw new Error(tCommand("error.notANumber", {var: "meetupID"}));
+        if (Number.isNaN(meetupID)) {
+            throw new Error(tCommand("error.notANumber", { var: "meetupID" }));
         }
 
         const meetup: MeetupRow = await assertMeetupIDIsValid(meetupID);

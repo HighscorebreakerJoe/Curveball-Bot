@@ -6,12 +6,12 @@ import {
     APIRole,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
-    Role
+    Role,
 } from "discord.js";
-import {tCommand} from "../i18n";
-import {modalsMap} from "../map/modalsMap";
-import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
-import {AbstractCommand} from "./AbstractCommand";
+import { tCommand } from "../i18n";
+import { modalsMap } from "../map/modalsMap";
+import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
+import { AbstractCommand } from "./AbstractCommand";
 
 export class MeetupCommand extends AbstractCommand {
     name: string = "meetup";
@@ -26,20 +26,20 @@ export class MeetupCommand extends AbstractCommand {
                 name: "role1",
                 description: tCommand("meetup.option.role1Description"),
                 type: ApplicationCommandOptionType.Role,
-                required: false
+                required: false,
             },
             {
                 name: "role2",
                 description: tCommand("meetup.option.role2Description"),
                 type: ApplicationCommandOptionType.Role,
-                required: false
+                required: false,
             },
             {
                 name: "role3",
                 description: tCommand("meetup.option.role3Description"),
                 type: ApplicationCommandOptionType.Role,
-                required: false
-            }
+                required: false,
+            },
         ];
     }
 
@@ -61,8 +61,8 @@ export class MeetupCommand extends AbstractCommand {
         this.sanitizedInputs = {
             role1: role1,
             role2: role2,
-            role3: role3
-        }
+            role3: role3,
+        };
     }
 
     protected async run(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -76,9 +76,9 @@ export class MeetupCommand extends AbstractCommand {
         await createMeetupModal.execute(interaction);
     }
 
-    private checkRole(role: Role| APIRole | null): void{
+    private checkRole(role: Role | APIRole | null): void {
         if (role && !role.mentionable) {
-            throw new Error(tCommand("meetup.error.roleNotMentionable", {roleID: role.id}));
+            throw new Error(tCommand("meetup.error.roleNotMentionable", { roleID: role.id }));
         }
     }
 }

@@ -1,8 +1,8 @@
-import {Client, Events, Message, OmitPartialGroupDMChannel, PartialMessage} from "discord.js";
-import {getMeetupInfoChannel} from "../cache/meetupChannels";
-import {deleteMeetupsByMeetupIDs, getMeetupByMessageID, MeetupRow} from "../database/table/Meetup";
-import {tCommon} from "../i18n";
-import {delay} from "../util/delay";
+import { Client, Events, Message, OmitPartialGroupDMChannel, PartialMessage } from "discord.js";
+import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { deleteMeetupsByMeetupIDs, getMeetupByMessageID, MeetupRow, } from "../database/table/Meetup";
+import { tCommon } from "../i18n";
+import { delay } from "../util/delay";
 
 /**
  * Event handler, when a message is deleted.
@@ -10,26 +10,31 @@ import {delay} from "../util/delay";
  */
 
 export default function onMessageDelete(client: Client): void {
-    client.on(Events.MessageDelete, async (message: OmitPartialGroupDMChannel<Message | PartialMessage>): Promise<void> => {
-        if(message.channel.id == getMeetupInfoChannel().id){
-            await handleMeetupMessage(message);
-        }
-    });
+    client.on(
+        Events.MessageDelete,
+        async (message: OmitPartialGroupDMChannel<Message | PartialMessage>): Promise<void> => {
+            if (message.channel.id == getMeetupInfoChannel().id) {
+                await handleMeetupMessage(message);
+            }
+        },
+    );
 }
 
-async function handleMeetupMessage(message: OmitPartialGroupDMChannel<Message | PartialMessage>): Promise<void>{
+async function handleMeetupMessage(
+    message: OmitPartialGroupDMChannel<Message | PartialMessage>,
+): Promise<void> {
     //wait a bit because related meetup may be already deleted by a cleanup action
     await delay(500);
 
-    const meetup: MeetupRow|undefined = await getMeetupByMessageID(message.id);
+    const meetup: MeetupRow | undefined = await getMeetupByMessageID(message.id);
 
-    if(!meetup){
+    if (!meetup) {
         return;
     }
 
-    try{
+    try {
         await deleteMeetupsByMeetupIDs([meetup.meetupID]);
-    }catch (error){
+    } catch (error) {
         console.error(tCommon("error.meetupDeleteError"), error);
     }
 }

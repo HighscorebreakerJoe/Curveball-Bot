@@ -1,7 +1,7 @@
-import {hyperlink, time, TimestampStyles} from "discord.js";
-import {db} from "../database/Database";
+import { hyperlink, time, TimestampStyles } from "discord.js";
+import { db } from "../database/Database";
 import env from "../env";
-import {tMeetup} from "../i18n";
+import { tMeetup } from "../i18n";
 
 /**
  * Generates message listing all currently available meetups from now on
@@ -18,13 +18,13 @@ export async function generateMeetupListMessage(): Promise<string> {
 
     const lines: string[] = [];
 
-    let currentDateHeader: string|null = null;
+    let currentDateHeader: string | null = null;
 
-    for(const meetup of allUpcomingMeetups){
+    for (const meetup of allUpcomingMeetups) {
         const meetupDate = new Date(meetup.time);
         const dateHeader: string = meetupDate.toLocaleDateString("de-DE");
 
-        if(dateHeader !== currentDateHeader){
+        if (dateHeader !== currentDateHeader) {
             currentDateHeader = dateHeader;
             lines.push(`# 📅 ${currentDateHeader} \n`);
         }
@@ -41,7 +41,10 @@ export async function generateMeetupListMessage(): Promise<string> {
         lines.push("🕑 " + time(meetupDate, TimestampStyles.ShortTime));
         lines.push("⏳ " + time(meetupDate, TimestampStyles.RelativeTime));
         lines.push("➡️ " + hyperlink(tMeetup("list.toMeetup"), messageLink));
-        lines.push("🗨️ " + hyperlink(tMeetup("list.toDiscussion", {meetupID: meetup.meetupID}), threadLink));
+        lines.push(
+            "🗨️ " +
+                hyperlink(tMeetup("list.toDiscussion", { meetupID: meetup.meetupID }), threadLink),
+        );
     }
 
     return lines.join("\n");

@@ -1,18 +1,22 @@
-import {TextChannel} from "discord.js";
-import {client} from "../client";
+import { TextChannel } from "discord.js";
+import { client } from "../client";
 import env from "../env";
-import {tSetup} from "../i18n";
+import { tSetup } from "../i18n";
 
 const meetupChannels = new Map<string, TextChannel>();
 
 export async function loadMeetupChannels() {
-    const meetupInfoChannel = await client.channels.fetch(env.MEETUP_INFO_CHANNEL_ID) as TextChannel;
+    const meetupInfoChannel = (await client.channels.fetch(
+        env.MEETUP_INFO_CHANNEL_ID,
+    )) as TextChannel;
 
     if (!meetupInfoChannel || !meetupInfoChannel.isTextBased()) {
         throw new Error(tSetup("error.invalidInfoChannel"));
     }
 
-    const meetupListChannel = await client.channels.fetch(env.MEETUP_LIST_CHANNEL_ID) as TextChannel;
+    const meetupListChannel = (await client.channels.fetch(
+        env.MEETUP_LIST_CHANNEL_ID,
+    )) as TextChannel;
 
     if (!meetupListChannel || !meetupListChannel.isTextBased()) {
         throw new Error(tSetup("error.invalidListChannel"));

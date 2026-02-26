@@ -5,15 +5,15 @@ import {
     Events,
     Interaction,
     MessageFlags,
-    ModalSubmitInteraction
+    ModalSubmitInteraction,
 } from "discord.js";
-import {AbstractButton} from "../button/AbstractButton";
-import {AbstractCommand} from "../command/AbstractCommand";
-import {dynamicIdRegExp} from "../constant/dynamicIdRegExp";
-import {buttonsMap} from "../map/buttonsMap";
+import { AbstractButton } from "../button/AbstractButton";
+import { AbstractCommand } from "../command/AbstractCommand";
+import { dynamicIdRegExp } from "../constant/dynamicIdRegExp";
+import { buttonsMap } from "../map/buttonsMap";
 import commandsMap from "../map/commandsMap";
-import {modalSubmitsMap} from "../map/modalSubmitsMap";
-import {AbstractModalSubmit} from "../modal/submit/AbstractModalSubmit";
+import { modalSubmitsMap } from "../map/modalSubmitsMap";
+import { AbstractModalSubmit } from "../modal/submit/AbstractModalSubmit";
 
 export default function onInteractionCreate(client: Client): void {
     client.on(Events.InteractionCreate, async (interaction: Interaction): Promise<void> => {
@@ -28,14 +28,17 @@ export default function onInteractionCreate(client: Client): void {
         } catch (error) {
             console.error(error);
             if (interaction.isRepliable()) {
-                await interaction.reply({ content: "Fehler beim Verarbeiten der Interaktion", flags: MessageFlags.Ephemeral });
+                await interaction.reply({
+                    content: "Fehler beim Verarbeiten der Interaktion",
+                    flags: MessageFlags.Ephemeral,
+                });
             }
         }
-    })
+    });
 }
 
 async function handleCommand(interaction: ChatInputCommandInteraction): Promise<void> {
-    const command: AbstractCommand|undefined = commandsMap.get(interaction.commandName);
+    const command: AbstractCommand | undefined = commandsMap.get(interaction.commandName);
     if (!command) return;
 
     try {
@@ -43,7 +46,10 @@ async function handleCommand(interaction: ChatInputCommandInteraction): Promise<
     } catch (error) {
         console.error(error);
         if (interaction.isRepliable()) {
-            await interaction.reply({ content: "Fehler beim Ausführen des Befehls", flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: "Fehler beim Ausführen des Befehls",
+                flags: MessageFlags.Ephemeral,
+            });
         }
     }
 }
@@ -51,11 +57,11 @@ async function handleCommand(interaction: ChatInputCommandInteraction): Promise<
 async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<void> {
     let customId: string = interaction.customId;
 
-    if(dynamicIdRegExp.test(customId)){
+    if (dynamicIdRegExp.test(customId)) {
         customId = customId.replace(dynamicIdRegExp, "$1:{d}");
     }
 
-    const ModalSubmit: { new(): AbstractModalSubmit } | undefined = modalSubmitsMap.get(customId);
+    const ModalSubmit: { new (): AbstractModalSubmit } | undefined = modalSubmitsMap.get(customId);
     if (!ModalSubmit) {
         return;
     }
@@ -66,7 +72,10 @@ async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<v
     } catch (error) {
         console.error(error);
         if (interaction.isRepliable()) {
-            await interaction.reply({ content: "Fehler beim Verarbeiten des Modals", flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: "Fehler beim Verarbeiten des Modals",
+                flags: MessageFlags.Ephemeral,
+            });
         }
     }
 }
@@ -74,11 +83,11 @@ async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<v
 async function handleButton(interaction: ButtonInteraction): Promise<void> {
     let customId: string = interaction.customId;
 
-    if(dynamicIdRegExp.test(customId)){
+    if (dynamicIdRegExp.test(customId)) {
         customId = customId.replace(dynamicIdRegExp, "$1:{d}");
     }
 
-    const Button: { new(): AbstractButton } | undefined = buttonsMap.get(customId);
+    const Button: { new (): AbstractButton } | undefined = buttonsMap.get(customId);
 
     if (!Button) {
         return;
@@ -90,7 +99,10 @@ async function handleButton(interaction: ButtonInteraction): Promise<void> {
     } catch (error) {
         console.error(error);
         if (interaction.isRepliable()) {
-            await interaction.reply({ content: "Fehler beim Ausführen der Buttonfunktion", flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: "Fehler beim Ausführen der Buttonfunktion",
+                flags: MessageFlags.Ephemeral,
+            });
         }
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Class for handling "remote" buttonpress in meetup info embeds
  */
-import {ButtonInteraction} from "discord.js";
-import {db} from "../database/Database";
-import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
-import {MeetupAddParticipantButton} from "./MeetupAddParticipantButton";
+import { ButtonInteraction } from "discord.js";
+import { db } from "../database/Database";
+import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
+import { MeetupAddParticipantButton } from "./MeetupAddParticipantButton";
 
-export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton{
+export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     customId: string = "meetup_remote";
     defaultRemoteState: boolean = true;
 
@@ -26,10 +26,10 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton{
         await db
             .updateTable("meetup_participant")
             .set({
-                remote: !meetupParticipant.remote
+                remote: !meetupParticipant.remote,
             })
-            .where("meetupID" , "=", meetupParticipant.meetupID)
-            .where("userID" , "=", meetupParticipant.userID)
+            .where("meetupID", "=", meetupParticipant.meetupID)
+            .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
     }
 }

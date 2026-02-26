@@ -1,13 +1,13 @@
 /**
  * Command for cleaning up meetup data and channels
  */
-import {APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags} from "discord.js";
-import {tCommand} from "../i18n";
-import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
-import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
-import {cleanupMeetupData} from "../util/cleanupMeetupData";
-import {postSuccess} from "../util/postEmbeds";
-import {AbstractCommand} from "./AbstractCommand";
+import { APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags } from "discord.js";
+import { tCommand } from "../i18n";
+import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
+import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
+import { cleanupMeetupData } from "../util/cleanupMeetupData";
+import { postSuccess } from "../util/postEmbeds";
+import { AbstractCommand } from "./AbstractCommand";
 
 export class MeetupCleanUpCommand extends AbstractCommand {
     name: string = "meetup_cleanup";

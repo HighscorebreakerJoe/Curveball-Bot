@@ -4,41 +4,59 @@ import {
     ColorResolvable,
     EmbedBuilder,
     MessageFlags,
-    ModalSubmitInteraction
+    ModalSubmitInteraction,
 } from "discord.js";
-import {tCommon} from "../i18n";
+import { tCommon } from "../i18n";
 
 /**
  * Posts success message to user
  */
-export async function postSuccess(interaction: ChatInputCommandInteraction|ModalSubmitInteraction|ButtonInteraction, message: string): Promise<void> {
-    return await postEmbedMessage(interaction, message, tCommon("successDefaultEmbedTitle"), 0x00ff00);
+export async function postSuccess(
+    interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
+    message: string,
+): Promise<void> {
+    return await postEmbedMessage(
+        interaction,
+        message,
+        tCommon("successDefaultEmbedTitle"),
+        0x00ff00,
+    );
 }
 
 /**
  * Posts error message to user
  */
-export async function postError(interaction: ChatInputCommandInteraction|ModalSubmitInteraction|ButtonInteraction, message: string): Promise<void> {
-    return await postEmbedMessage(interaction, message, tCommon("errorDefaultEmbedTitle"), 0xff0000);
+export async function postError(
+    interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
+    message: string,
+): Promise<void> {
+    return await postEmbedMessage(
+        interaction,
+        message,
+        tCommon("errorDefaultEmbedTitle"),
+        0xff0000,
+    );
 }
 
 /**
  * Posts embedded message to user
  */
-export async function postEmbedMessage(interaction: ChatInputCommandInteraction|ModalSubmitInteraction|ButtonInteraction, message: string, title: string, color: ColorResolvable | null): Promise<void>{
-    const embed = new EmbedBuilder()
-        .setTitle(title)
-        .setDescription(message)
-        .setColor(color);
+export async function postEmbedMessage(
+    interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
+    message: string,
+    title: string,
+    color: ColorResolvable | null,
+): Promise<void> {
+    const embed = new EmbedBuilder().setTitle(title).setDescription(message).setColor(color);
 
     if (interaction.replied || interaction.deferred) {
         await interaction.editReply({
-            embeds: [embed]
+            embeds: [embed],
         });
     } else {
         await interaction.reply({
             embeds: [embed],
-            flags: MessageFlags.Ephemeral
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

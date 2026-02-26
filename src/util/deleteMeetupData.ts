@@ -1,13 +1,17 @@
-import {getMeetupInfoChannel} from "../cache/meetupChannels";
-import {deleteMeetupsByMeetupIDs, getMeetupsByMeetupIDs, MeetupRow} from "../database/table/Meetup";
-import {delay} from "./delay";
-import {resetMeetupListChannel} from "./resetMeetupListChannel";
-import {splitArray} from "./splitArray";
+import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import {
+    deleteMeetupsByMeetupIDs,
+    getMeetupsByMeetupIDs,
+    MeetupRow,
+} from "../database/table/Meetup";
+import { delay } from "./delay";
+import { resetMeetupListChannel } from "./resetMeetupListChannel";
+import { splitArray } from "./splitArray";
 
 type DeleteData = {
-    lessThanTwoWeeks: MeetupRow[],
-    moreThanTwoWeeks: MeetupRow[]
-}
+    lessThanTwoWeeks: MeetupRow[];
+    moreThanTwoWeeks: MeetupRow[];
+};
 
 /**
  * Function for deleting meetup-channels and data
@@ -18,8 +22,8 @@ export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
 
     const deleteStruct: DeleteData = {
         lessThanTwoWeeks: [],
-        moreThanTwoWeeks: []
-    }
+        moreThanTwoWeeks: [],
+    };
 
     const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
@@ -27,15 +31,15 @@ export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
     const twoWeeksAgo = new Date(dateNow);
     twoWeeksAgo.setDate(dateNow.getDate() - 14);
 
-    for (const toDeleteMeetup of toDeleteMeetups){
+    for (const toDeleteMeetup of toDeleteMeetups) {
         sortInDeleteStruct(deleteStruct, toDeleteMeetup, twoWeeksAgo);
     }
 
-    if(deleteStruct.lessThanTwoWeeks.length > 0){
+    if (deleteStruct.lessThanTwoWeeks.length > 0) {
         await deleteBulk(deleteStruct.lessThanTwoWeeks);
     }
 
-    if(deleteStruct.moreThanTwoWeeks.length > 0){
+    if (deleteStruct.moreThanTwoWeeks.length > 0) {
         await deleteManually(deleteStruct.moreThanTwoWeeks);
     }
 
@@ -54,7 +58,7 @@ async function deleteBulk(meetups: MeetupRow[]) {
     const deletedMessageIDs = new Set<string>();
 
     // bulk delete all message chunks
-    for(const messageIDChunk of messageIDChunks){
+    for (const messageIDChunk of messageIDChunks) {
         const deleted = await getMeetupInfoChannel().bulkDelete(messageIDChunk, true);
         for (const messageID of deleted.keys()) {
             deletedMessageIDs.add(messageID);
@@ -80,23 +84,25 @@ async function deleteManually(meetups: MeetupRow[]) {
     const toDeleteMessages = [];
     const failedMessageIDs = new Set<string>();
 
-    for(const messageID of messageIDs){
-        const message = await getMeetupInfoChannel().messages.fetch(messageID).catch(() => {
-            failedMessageIDs.add(messageID)
-            return null
-        });
+    for (const messageID of messageIDs) {
+        const message = await getMeetupInfoChannel()
+            .messages.fetch(messageID)
+            .catch(() => {
+                failedMessageIDs.add(messageID);
+                return null;
+            });
 
-        if(!message) {
+        if (!message) {
             continue;
         }
 
-        if(message) {
-            toDeleteMessages.push(message)
+        if (message) {
+            toDeleteMessages.push(message);
         }
     }
 
     // delete messages one by one without reaching rate limit
-    for(const toDeleteMessage of toDeleteMessages){
+    for (const toDeleteMessage of toDeleteMessages) {
         await toDeleteMessage.delete().catch(() => {
             failedMessageIDs.add(toDeleteMessage.id);
             return null;
@@ -113,8 +119,14 @@ async function deleteManually(meetups: MeetupRow[]) {
     await deleteMeetupsByMeetupIDs(toDeleteMeetupIDs);
 }
 
-function sortInDeleteStruct(deleteStruct: DeleteData, toDeleteMeetup: MeetupRow, limitDate: Date): void {
-    const isLessThanTwoWeeks: boolean = !!(toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate);
+function sortInDeleteStruct(
+    deleteStruct: DeleteData,
+    toDeleteMeetup: MeetupRow,
+    limitDate: Date,
+): void {
+    const isLessThanTwoWeeks: boolean = !!(
+        toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate
+    );
 
     if (isLessThanTwoWeeks) {
         deleteStruct.lessThanTwoWeeks.push(toDeleteMeetup);

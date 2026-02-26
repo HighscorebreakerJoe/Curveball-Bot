@@ -1,16 +1,14 @@
-import {db} from "../database/Database";
-import {tSetup} from "../i18n";
+import { db } from "../database/Database";
+import { tSetup } from "../i18n";
 
 const meetupAllowedMentionsRoles = new Set<string>();
 
 export async function loadMeetupAllowedMentionsRoles() {
-    const rows = await db.selectFrom("meetup_allowed_mentions_role")
-        .select("roleID")
-        .execute();
+    const rows = await db.selectFrom("meetup_allowed_mentions_role").select("roleID").execute();
 
     meetupAllowedMentionsRoles.clear();
 
-    for (const row of rows){
+    for (const row of rows) {
         meetupAllowedMentionsRoles.add(row.roleID);
     }
 
