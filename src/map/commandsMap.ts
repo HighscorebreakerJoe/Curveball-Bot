@@ -5,17 +5,17 @@ import { MeetupCommand } from "../command/MeetupCommand";
 import { MeetupRemoveMentionRoleCommand } from "../command/MeetupRemoveMentionRole";
 import { PollCommand } from "../command/PollCommand";
 
-const commands: AbstractCommand[] = [
-    new MeetupCommand(),
-    new MeetupAddMentionRoleCommand(),
-    new MeetupRemoveMentionRoleCommand(),
-    new MeetupCleanUpCommand(),
-    new PollCommand(),
+const commandClasses: Array<new () => AbstractCommand> = [
+    MeetupCommand,
+    MeetupAddMentionRoleCommand,
+    MeetupRemoveMentionRoleCommand,
+    MeetupCleanUpCommand,
+    PollCommand,
 ];
 
-export const commandsMap: Map<string, AbstractCommand> = new Map();
-for (const cmd of commands) {
-    commandsMap.set(cmd.name, cmd);
-}
+export const commandsMap = new Map<string, new () => AbstractCommand>();
 
-export default commandsMap;
+for (const CommandClass of commandClasses) {
+    const tmpInstance = new CommandClass();
+    commandsMap.set(tmpInstance.name, CommandClass);
+}

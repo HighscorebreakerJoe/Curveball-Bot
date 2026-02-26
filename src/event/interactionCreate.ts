@@ -8,10 +8,9 @@ import {
     ModalSubmitInteraction,
 } from "discord.js";
 import { AbstractButton } from "../button/AbstractButton";
-import { AbstractCommand } from "../command/AbstractCommand";
 import { dynamicIdRegExp } from "../constant/dynamicIdRegExp";
 import { buttonsMap } from "../map/buttonsMap";
-import commandsMap from "../map/commandsMap";
+import { commandsMap } from "../map/commandsMap";
 import { modalSubmitsMap } from "../map/modalSubmitsMap";
 import { AbstractModalSubmit } from "../modal/submit/AbstractModalSubmit";
 
@@ -38,11 +37,15 @@ export default function onInteractionCreate(client: Client): void {
 }
 
 async function handleCommand(interaction: ChatInputCommandInteraction): Promise<void> {
-    const command: AbstractCommand | undefined = commandsMap.get(interaction.commandName);
-    if (!command) return;
+    const command = commandsMap.get(interaction.commandName);
+
+    if (!command) {
+        return;
+    }
 
     try {
-        await command.execute(interaction);
+        const commandInstance = new command();
+        await commandInstance.execute(interaction);
     } catch (error) {
         console.error(error);
         if (interaction.isRepliable()) {
