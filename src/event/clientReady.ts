@@ -13,7 +13,7 @@ import { setupDailyCleanupCronjob } from "../cronjob/dailyCleanup";
 import { setupHourlyCleanupCronjob } from "../cronjob/hourlyCleanup";
 import env from "../env";
 import { tSetup } from "../i18n";
-import commandsMap from "../map/commandsMap";
+import { commandsMap } from "../map/commandsMap";
 
 export default function onClientReady(client: Client): void {
     client.on(Events.ClientReady, async () => {
@@ -43,7 +43,8 @@ export default function onClientReady(client: Client): void {
         const commandJSONs: RESTPostAPIApplicationCommandsJSONBody[] = [];
 
         for (const command of commandsMap.values()) {
-            commandJSONs.push(command.buildSlashCommandJSON());
+            const tmpInstance = new command();
+            commandJSONs.push(tmpInstance.buildSlashCommandJSON());
         }
 
         const rest: REST = new REST({ version: "10" }).setToken(env.BOT_TOKEN);
