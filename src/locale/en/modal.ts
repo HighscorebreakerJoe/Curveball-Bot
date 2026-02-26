@@ -13,21 +13,21 @@ const modal: TranslationObject = {
 
         field: {
             pokemon: "Pokémon",
-            pokemonPlaceholder: "i.e. Psyduck",
+            pokemonPlaceholder: "e.g. Psyduck",
 
             location: "Location",
-            locationPlaceholder: "i.e. a gym",
+            locationPlaceholder: "e.g. a gym",
 
             time: "Time (HH:mm)",
-            timePlaceholder: "i.e. 13:37",
+            timePlaceholder: "e.g. 13:37",
 
             date: "Date (DD.MM)",
-            datePlaceholder: "i.e. 24.12",
+            datePlaceholder: "e.g. 24.12",
 
             note: "Note",
             notePlaceholder:
                 "Additional information/notes to your meetup , " +
-                "i.e. the associated event (raid-hour etc.)",
+                "e.g. the associated event (raid-hour etc.)",
         },
 
         error: {
