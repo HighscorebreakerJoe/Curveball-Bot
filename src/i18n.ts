@@ -1,10 +1,19 @@
-import i18next, {i18n} from "i18next";
+import i18next, { i18n } from "i18next";
 import * as fs from "node:fs";
 import path from "path";
 import env from "./env";
 
-const namespaces: string[] = ["button" ,"command", "common", "cronjob", "meetup", "modal", "permission", "setup"];
-type Namespace = typeof namespaces[number];
+const namespaces: string[] = [
+    "button",
+    "command",
+    "common",
+    "cronjob",
+    "meetup",
+    "modal",
+    "permission",
+    "setup",
+];
+type Namespace = (typeof namespaces)[number];
 type InitResource = Record<string, Record<string, any>>;
 type translationParams = Record<string, string | number | boolean>;
 
@@ -13,74 +22,73 @@ export interface TranslationObject {
 }
 
 export async function initI18n(): Promise<i18n> {
-    await i18next
-        .init({
-            lng: env.LANGUAGE,
-            fallbackLng: "en",
+    await i18next.init({
+        lng: env.LANGUAGE,
+        fallbackLng: "en",
 
-            ns: namespaces,
-            defaultNS: "common",
+        ns: namespaces,
+        defaultNS: "common",
 
-            debug: env.ENABLE_I18NEXT_DEBUG,
-            showSupportNotice: false,
+        debug: env.ENABLE_I18NEXT_DEBUG,
+        showSupportNotice: false,
 
-            resources: getLocaleResources(),
-            interpolation: {
-                escapeValue: false
-            }
-        });
+        resources: getLocaleResources(),
+        interpolation: {
+            escapeValue: false,
+        },
+    });
 
     return i18next;
 }
 
-export function t(key: string, namespace: string = "common", params?: translationParams): string{
-    return i18next.t(key,{
+export function t(key: string, namespace: string = "common", params?: translationParams): string {
+    return i18next.t(key, {
         ns: namespace,
-        ...params
-    })
+        ...params,
+    });
 }
 
-export function tButton(key: string, params?: translationParams): string{
+export function tButton(key: string, params?: translationParams): string {
     return t(key, "button", params);
 }
 
-export function tCommand(key: string, params?: translationParams): string{
+export function tCommand(key: string, params?: translationParams): string {
     return t(key, "command", params);
 }
 
-export function tCommon(key: string, params?: translationParams): string{
+export function tCommon(key: string, params?: translationParams): string {
     return t(key, "common", params);
 }
 
-export function tCronjob(key: string, params?: translationParams): string{
+export function tCronjob(key: string, params?: translationParams): string {
     return t(key, "cronjob", params);
 }
 
-export function tMeetup(key: string, params?: translationParams): string{
+export function tMeetup(key: string, params?: translationParams): string {
     return t(key, "meetup", params);
 }
 
-export function tModal(key: string, params?: translationParams): string{
+export function tModal(key: string, params?: translationParams): string {
     return t(key, "modal", params);
 }
 
-export function tPermission(key: string, params?: translationParams): string{
+export function tPermission(key: string, params?: translationParams): string {
     return t(key, "permission", params);
 }
 
-export function tSetup(key: string, params?: translationParams): string{
+export function tSetup(key: string, params?: translationParams): string {
     return t(key, "setup", params);
 }
 
-function getLocaleResources(): InitResource{
+function getLocaleResources(): InitResource {
     const resources: InitResource = {};
 
     const localeDir: string = path.join(__dirname, "locale");
 
     //get all language files from locale folder
-    for(const lang of  fs.readdirSync(localeDir)){
+    for (const lang of fs.readdirSync(localeDir)) {
         const langDir: string = path.join(localeDir, lang);
-        if (!fs.statSync(langDir).isDirectory()){
+        if (!fs.statSync(langDir).isDirectory()) {
             continue;
         }
 
@@ -88,7 +96,7 @@ function getLocaleResources(): InitResource{
 
         for (const name of namespaces) {
             const file: string = path.join(langDir, `${name}.js`);
-            if (!fs.existsSync(file)){
+            if (!fs.existsSync(file)) {
                 continue;
             }
 

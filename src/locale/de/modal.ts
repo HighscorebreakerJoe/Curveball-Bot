@@ -1,11 +1,11 @@
-import {TranslationObject} from "../../i18n";
+import { TranslationObject } from "../../i18n";
 
 const modal: TranslationObject = {
     global: {
         error: {
             invalidInteractionType: "Falscher Interaktionstyp",
-            invalidCommand: "Ungültiges Kommando {{commandName}}"
-        }
+            invalidCommand: "Ungültiges Kommando {{commandName}}",
+        },
     },
 
     meetupCreate: {
@@ -25,12 +25,13 @@ const modal: TranslationObject = {
             datePlaceholder: "z.B. 24.12",
 
             note: "Anmerkungen",
-            notePlaceholder: "Zusätzliche Infos/Anmerkungen zu deinem Meetup , " +
+            notePlaceholder:
+                "Zusätzliche Infos/Anmerkungen zu deinem Meetup , " +
                 "wie z.B. das zugehörige Event (Raid-Stunde etc.)",
         },
 
         error: {
-            invalidRole: "Ungültige Rolle mit der RoleID: {{roleID}}"
+            invalidRole: "Ungültige Rolle mit der RoleID: {{roleID}}",
         },
 
         submit: {
@@ -42,14 +43,15 @@ const modal: TranslationObject = {
                 dateEmpty: "Du hast vergessen, ein Datum anzugeben.",
                 dateWrongFormat: "Das Datum muss dem Format TT.MM entsprechen.",
                 dateInvalid: "Ungültiges Datum eingegeben.",
-                dateInThePast: "Deine eingetragene Zeit liegt in der Vergangenheit. Wir können nicht Zeitreisen..."
-            }
-        }
+                dateInThePast:
+                    "Deine eingetragene Zeit liegt in der Vergangenheit. Wir können nicht Zeitreisen...",
+            },
+        },
     },
 
     meetupEdit: {
-        title: "Meetup bearbeiten"
-    }
-}
+        title: "Meetup bearbeiten",
+    },
+};
 
 export default modal;

@@ -5,7 +5,7 @@
 export function splitArray<T>(array: T[], size = 100): T[][] {
     const chunks: T[][] = [];
 
-    if(size == 0){
+    if (size == 0) {
         return chunks;
     }
 

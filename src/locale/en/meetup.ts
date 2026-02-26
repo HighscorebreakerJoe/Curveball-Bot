@@ -1,7 +1,7 @@
-import {TranslationObject} from "../../i18n";
+import { TranslationObject } from "../../i18n";
 
 const meetup: TranslationObject = {
-    info : {
+    info: {
         titleRaidFrom: "Raid from",
         threadTitle: "Meetup #{{meetupID}}: Discussion",
         threadDefaultCreateReason: "Created automatically",
@@ -29,19 +29,19 @@ const meetup: TranslationObject = {
         completeListThreadInfo: "Complete participant list in thread",
 
         persons: "Persons:",
-        personsTotal: "Persons total:"
+        personsTotal: "Persons total:",
     },
 
     update: {
         title: "Update!",
         embedTitle: "This meetup got an update!",
-        embedDescription: "Following changes to this meetup have been made:"
+        embedDescription: "Following changes to this meetup have been made:",
     },
 
     list: {
         toMeetup: "To meetup",
         toDiscussion: "To discussion",
-    }
-}
+    },
+};
 
 export default meetup;

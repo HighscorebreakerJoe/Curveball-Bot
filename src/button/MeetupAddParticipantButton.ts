@@ -1,16 +1,16 @@
 /**
  * Class for handling "Add participant" buttonpress in meetup info embeds
  */
-import {ButtonInteraction} from "discord.js";
-import {db} from "../database/Database";
-import {MeetupRow} from "../database/table/Meetup";
-import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
-import {tButton} from "../i18n";
-import {getParticipantData} from "../util/createMeetupInfoEmbed";
-import {ParticipantData} from "../util/editMeetupInfoEmbed";
-import {AbstractParticipantButton} from "./AbstractParticipantButton";
+import { ButtonInteraction } from "discord.js";
+import { db } from "../database/Database";
+import { MeetupRow } from "../database/table/Meetup";
+import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
+import { tButton } from "../i18n";
+import { getParticipantData } from "../util/createMeetupInfoEmbed";
+import { ParticipantData } from "../util/editMeetupInfoEmbed";
+import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
-export class MeetupAddParticipantButton extends AbstractParticipantButton{
+export class MeetupAddParticipantButton extends AbstractParticipantButton {
     customId: string = "meetup_add_participant";
     protected defaultUnsureState: boolean = false;
     protected defaultRemoteState: boolean = false;
@@ -24,7 +24,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton{
         //check if this user has too many participants
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
-        if(meetupParticipant && meetupParticipant.participants >= 10){
+        if (meetupParticipant && meetupParticipant.participants >= 10) {
             throw new Error(tButton("meetupAddParticipant.error.maxParticipantsReached"));
         }
     }
@@ -38,7 +38,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton{
         const meetup = this.context.meetup as MeetupRow;
 
         //check if meetup participant entry for this user and meetup even exist
-        if(!this.context.meetupParticipant){
+        if (!this.context.meetupParticipant) {
             await this.handleCreateNew(interaction.user.id);
         } else {
             await this.handleUpdateExisting(true);
@@ -64,7 +64,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton{
                 userID: userID,
                 participants: 1,
                 unsure: this.defaultUnsureState,
-                remote: this.defaultRemoteState
+                remote: this.defaultRemoteState,
             })
             .executeTakeFirstOrThrow();
     }

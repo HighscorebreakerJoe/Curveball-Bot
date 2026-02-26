@@ -1,4 +1,4 @@
-import {dynamicIdRegExp} from "../constant/dynamicIdRegExp";
+import { dynamicIdRegExp } from "../constant/dynamicIdRegExp";
 
 export function getDynamicData(customId: string): string {
     let dynamicData: string = "";

@@ -5,11 +5,10 @@
 import {
     APIApplicationCommandOption,
     ChatInputCommandInteraction,
-    Locale,
-    RESTPostAPIApplicationCommandsJSONBody
+    RESTPostAPIApplicationCommandsJSONBody,
 } from "discord.js";
-import {tCommon} from "../i18n";
-import {postError} from "../util/postEmbeds";
+import { tCommon } from "../i18n";
+import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
     public readonly name!: string;
@@ -23,17 +22,17 @@ export abstract class AbstractCommand {
     /**
      * Executes command after permissions were checked and options were verified
      */
-    public async execute(interaction: ChatInputCommandInteraction): Promise<void>{
-        try{
+    public async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+        try {
             await this.checkPermissions(interaction);
-            if(this.options.length){
+            if (this.options.length) {
                 await this.checkOptions(interaction);
             }
             this.run(interaction);
-        }catch (error){
+        } catch (error) {
             let errorMessage: string = tCommon("error.unknown");
 
-            if (error instanceof Error){
+            if (error instanceof Error) {
                 errorMessage = error.message;
             }
 
@@ -48,11 +47,11 @@ export abstract class AbstractCommand {
         //base properties
         const command: RESTPostAPIApplicationCommandsJSONBody = {
             name: this.name,
-            description: this.description
-        }
+            description: this.description,
+        };
 
         //options
-        if(this.options && this.options.length > 0){
+        if (this.options && this.options.length > 0) {
             command.options = this.options;
         }
 
@@ -72,5 +71,5 @@ export abstract class AbstractCommand {
     /**
      * Runs actual command
      */
-    protected abstract run(interaction: ChatInputCommandInteraction): void
+    protected abstract run(interaction: ChatInputCommandInteraction): void;
 }

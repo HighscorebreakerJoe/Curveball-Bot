@@ -5,15 +5,15 @@ import {
     APIApplicationCommandOption,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
-    MessageFlags
+    MessageFlags,
 } from "discord.js";
-import {addRole} from "../cache/meetupAllowedMentionsRoles";
-import {db} from "../database/Database";
-import {tCommand} from "../i18n";
-import {assertMeetupCreateChannelUsed} from "../permission/assertMeetupCreateChannelUsed";
-import {assertUserHasMeetupConfigRole} from "../permission/assertUserHasMeetupConfigRole";
-import {postSuccess} from "../util/postEmbeds";
-import {AbstractCommand} from "./AbstractCommand";
+import { addRole } from "../cache/meetupAllowedMentionsRoles";
+import { db } from "../database/Database";
+import { tCommand } from "../i18n";
+import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
+import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
+import { postSuccess } from "../util/postEmbeds";
+import { AbstractCommand } from "./AbstractCommand";
 
 export class MeetupAddMentionRoleCommand extends AbstractCommand {
     name: string = "meetup_add_mention_role";
@@ -28,8 +28,8 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
                 name: "role",
                 description: tCommand("meetupAddMention.option.roleDescription"),
                 type: ApplicationCommandOptionType.Role,
-                required: true
-            }
+                required: true,
+            },
         ];
     }
 
@@ -47,8 +47,8 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         }
 
         this.sanitizedInputs = {
-            role
-        }
+            role,
+        };
 
         await this.checkInList(role.id);
     }
@@ -59,10 +59,11 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         const { role } = this.sanitizedInputs;
 
-        await db.insertInto("meetup_allowed_mentions_role")
+        await db
+            .insertInto("meetup_allowed_mentions_role")
             .values({
                 roleID: role.id,
-                userID: interaction.user.id
+                userID: interaction.user.id,
             })
             .execute();
 
@@ -72,15 +73,18 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         await postSuccess(interaction, `Die Rolle <@&${role.id}> ist nun in Meetups erwähnbar`);
     }
 
-    protected async checkInList(roleID: string): Promise<void>{
+    protected async checkInList(roleID: string): Promise<void> {
         //check if role is in list
-        const result = await db.selectFrom("meetup_allowed_mentions_role")
+        const result = await db
+            .selectFrom("meetup_allowed_mentions_role")
             .select("roleID")
             .where("roleID", "=", roleID)
             .execute();
 
         if (result.length) {
-            throw new Error(tCommand("meetupAddMention.error.roleAlreadyAdded", {roleID: roleID}));
+            throw new Error(
+                tCommand("meetupAddMention.error.roleAlreadyAdded", { roleID: roleID }),
+            );
         }
     }
 }

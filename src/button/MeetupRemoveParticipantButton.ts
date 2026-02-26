@@ -1,16 +1,16 @@
 /**
  * Class for handling "Remove participant" buttonpress in meetup info embeds
  */
-import {ButtonInteraction} from "discord.js";
-import {db} from "../database/Database";
-import {MeetupRow} from "../database/table/Meetup";
-import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
-import {tButton} from "../i18n";
-import {getParticipantData} from "../util/createMeetupInfoEmbed";
-import {ParticipantData} from "../util/editMeetupInfoEmbed";
-import {AbstractParticipantButton} from "./AbstractParticipantButton";
+import { ButtonInteraction } from "discord.js";
+import { db } from "../database/Database";
+import { MeetupRow } from "../database/table/Meetup";
+import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
+import { tButton } from "../i18n";
+import { getParticipantData } from "../util/createMeetupInfoEmbed";
+import { ParticipantData } from "../util/editMeetupInfoEmbed";
+import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
-export class MeetupRemoveParticipantButton extends AbstractParticipantButton{
+export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
     customId: string = "meetup_remove_participant";
 
     /**
@@ -22,8 +22,8 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton{
         //check if this user is participant
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
-        if(!meetupParticipant){
-            throw new Error(tButton("meetupRemoveParticipant.notParticipant"))
+        if (!meetupParticipant) {
+            throw new Error(tButton("meetupRemoveParticipant.notParticipant"));
         }
     }
 
@@ -37,7 +37,7 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton{
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         //check if meetup participant entry for this user and meetup even exist
-        if(meetupParticipant.participants <= 1){
+        if (meetupParticipant.participants <= 1) {
             await this.handleRemoveExisting();
         } else {
             await this.handleUpdateExisting(false);
@@ -58,8 +58,8 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton{
 
         await db
             .deleteFrom("meetup_participant")
-            .where("meetupID" , "=", meetupParticipant.meetupID)
-            .where("userID" , "=", meetupParticipant.userID)
+            .where("meetupID", "=", meetupParticipant.meetupID)
+            .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
     }
 }

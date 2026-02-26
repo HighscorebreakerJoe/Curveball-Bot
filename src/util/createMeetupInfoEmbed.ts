@@ -1,29 +1,39 @@
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, time, TimestampStyles} from "discord.js";
-import {getGuild} from "../cache/guild";
-import {db} from "../database/Database";
-import {tCommon, tMeetup} from "../i18n";
-import {ParticipantData} from "./editMeetupInfoEmbed";
-import {printParticipantData} from "./printParticipantData";
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    time,
+    TimestampStyles,
+} from "discord.js";
+import { getGuild } from "../cache/guild";
+import { db } from "../database/Database";
+import { tCommon, tMeetup } from "../i18n";
+import { ParticipantData } from "./editMeetupInfoEmbed";
+import { printParticipantData } from "./printParticipantData";
 
 export interface CreateMeetupEmbedOptions {
     embedTitle: string;
     authorName: string;
     authorIconURL: string;
-    pokemon: string,
-    location: string,
-    toSaveDate: Date,
-    note: string,
+    pokemon: string;
+    location: string;
+    toSaveDate: Date;
+    note: string;
     meetupCreatorParticipant: ParticipantData;
     meetupID: number;
 }
 
 export interface CreateMeetupInfoEmbedReturn {
-    embed: EmbedBuilder,
-    components: ActionRowBuilder<ButtonBuilder>[]
+    embed: EmbedBuilder;
+    components: ActionRowBuilder<ButtonBuilder>[];
 }
 
-export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): CreateMeetupInfoEmbedReturn{
-    const { embedTitle,
+export function createMeetupInfoEmbed(
+    options: CreateMeetupEmbedOptions,
+): CreateMeetupInfoEmbedReturn {
+    const {
+        embedTitle,
         authorName,
         authorIconURL,
         pokemon,
@@ -31,7 +41,7 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
         toSaveDate,
         meetupID,
         meetupCreatorParticipant,
-        note
+        note,
     } = options;
 
     const embed: EmbedBuilder = new EmbedBuilder()
@@ -39,30 +49,40 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
         .setColor(0xf4d7a1)
         .setAuthor({
             name: authorName,
-            iconURL: authorIconURL
+            iconURL: authorIconURL,
         })
         .addFields(
             {
-                name: "👾 " + tMeetup("info.pokemon"), value: pokemon
+                name: "👾 " + tMeetup("info.pokemon"),
+                value: pokemon,
             },
             {
-                name: "📍 " + tMeetup("info.location"), value: location
+                name: "📍 " + tMeetup("info.location"),
+                value: location,
             },
             {
-                name: "📅 " + tMeetup("info.dateTime"), value: time(toSaveDate, TimestampStyles.LongDateShortTime), inline: true
+                name: "📅 " + tMeetup("info.dateTime"),
+                value: time(toSaveDate, TimestampStyles.LongDateShortTime),
+                inline: true,
             },
             {
-                name: "⏳ " + tMeetup("info.remainingTime"), value: time(toSaveDate, TimestampStyles.RelativeTime), inline: true
+                name: "⏳ " + tMeetup("info.remainingTime"),
+                value: time(toSaveDate, TimestampStyles.RelativeTime),
+                inline: true,
             },
             {
-                name: "📝 " + tMeetup("info.note"), value: (note.length ? note: "-")
+                name: "📝 " + tMeetup("info.note"),
+                value: note.length ? note : "-",
             },
             {
-                name: "✅ " + tMeetup("info.participants"), value: (meetupCreatorParticipant ? printParticipantData(meetupCreatorParticipant, true): "")
-            }
+                name: "✅ " + tMeetup("info.participants"),
+                value: meetupCreatorParticipant
+                    ? printParticipantData(meetupCreatorParticipant, true)
+                    : "",
+            },
         )
         .setFooter({
-            text: tMeetup("info.footerText", {meetupID: meetupID})
+            text: tMeetup("info.footerText", { meetupID: meetupID }),
         });
 
     const addParticipantButton: ButtonBuilder = new ButtonBuilder()
@@ -101,25 +121,22 @@ export function createMeetupInfoEmbed(options: CreateMeetupEmbedOptions): Create
         .setEmoji("🗑️")
         .setStyle(ButtonStyle.Secondary);
 
-    const participantButtonRow: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        addParticipantButton,
-        removeParticipantButton
-    );
+    const participantButtonRow: ActionRowBuilder<ButtonBuilder> =
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+            addParticipantButton,
+            removeParticipantButton,
+        );
 
-    const stateButtonRow: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        unsureButton,
-        remoteButton
-    );
+    const stateButtonRow: ActionRowBuilder<ButtonBuilder> =
+        new ActionRowBuilder<ButtonBuilder>().addComponents(unsureButton, remoteButton);
 
-    const authorButtonRow: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        editButton,
-        deleteButton
-    );
+    const authorButtonRow: ActionRowBuilder<ButtonBuilder> =
+        new ActionRowBuilder<ButtonBuilder>().addComponents(editButton, deleteButton);
 
     return {
         embed: embed,
-        components: [participantButtonRow, stateButtonRow, authorButtonRow]
-    }
+        components: [participantButtonRow, stateButtonRow, authorButtonRow],
+    };
 }
 
 export async function getParticipantData(meetupID: number): Promise<ParticipantData[]> {
@@ -140,10 +157,10 @@ export async function getParticipantData(meetupID: number): Promise<ParticipantD
 
         participantData.push({
             userID: row.userID,
-            nickname: (member && member.displayName ? member.displayName : tCommon("unknown")),
+            nickname: member && member.displayName ? member.displayName : tCommon("unknown"),
             participants: row.participants,
             unsure: row.unsure,
-            remote: row.remote
+            remote: row.remote,
         });
     }
 

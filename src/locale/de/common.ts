@@ -1,4 +1,4 @@
-import {TranslationObject} from "../../i18n";
+import { TranslationObject } from "../../i18n";
 
 const common: TranslationObject = {
     edit: "Bearbeiten",
@@ -8,11 +8,11 @@ const common: TranslationObject = {
     successDefaultEmbedTitle: "Hurra!",
     errorDefaultEmbedTitle: "Fehler...",
 
-    error : {
+    error: {
         unknown: "Unbekannter Fehler",
         notANumber: "Wert ist keine gültige Zahl: {{var}}",
-        linkDetected: "Hey, bitte keine Links posten!"
-    }
-}
+        linkDetected: "Hey, bitte keine Links posten!",
+    },
+};
 
 export default common;

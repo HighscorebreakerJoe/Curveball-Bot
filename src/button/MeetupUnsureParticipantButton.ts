@@ -1,12 +1,12 @@
 /**
  * Class for handling "unsure" buttonpress in meetup info embeds
  */
-import {ButtonInteraction} from "discord.js";
-import {db} from "../database/Database";
-import {MeetupParticipantRow} from "../database/table/MeetupParticipant";
-import {MeetupAddParticipantButton} from "./MeetupAddParticipantButton";
+import { ButtonInteraction } from "discord.js";
+import { db } from "../database/Database";
+import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
+import { MeetupAddParticipantButton } from "./MeetupAddParticipantButton";
 
-export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton{
+export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
     customId: string = "meetup_unsure";
     defaultUnsureState: boolean = true;
 
@@ -26,10 +26,10 @@ export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton{
         await db
             .updateTable("meetup_participant")
             .set({
-                unsure: !meetupParticipant.unsure
+                unsure: !meetupParticipant.unsure,
             })
-            .where("meetupID" , "=", meetupParticipant.meetupID)
-            .where("userID" , "=", meetupParticipant.userID)
+            .where("meetupID", "=", meetupParticipant.meetupID)
+            .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
     }
 }

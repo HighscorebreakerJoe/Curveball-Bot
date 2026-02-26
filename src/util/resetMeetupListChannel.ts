@@ -1,6 +1,6 @@
-import {getMeetupListChannel} from "../cache/meetupChannels";
-import {generateMeetupListMessage} from "./generareMeetupListMessage";
-import {sendChunkedMessages} from "./sendChunkedMessages";
+import { getMeetupListChannel } from "../cache/meetupChannels";
+import { generateMeetupListMessage } from "./generareMeetupListMessage";
+import { sendChunkedMessages } from "./sendChunkedMessages";
 
 /**
  * Generates message listing all currently available meetups from now on
@@ -12,7 +12,7 @@ export async function resetMeetupListChannel(): Promise<void> {
 
     //post new list
     const meetupListMessage: string = await generateMeetupListMessage();
-    if(meetupListMessage.length > 0){
+    if (meetupListMessage.length > 0) {
         await sendChunkedMessages(meetupListMessage, getMeetupListChannel());
     }
 }

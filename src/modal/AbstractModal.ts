@@ -1,8 +1,8 @@
 /**
  * Base class for all modals for Curveball Bot. Handles building modals and its user inputs
  */
-import {ButtonInteraction, ChatInputCommandInteraction, ModalBuilder} from "discord.js";
-import {postError} from "../util/postEmbeds";
+import { ButtonInteraction, ChatInputCommandInteraction, ModalBuilder } from "discord.js";
+import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractModal {
     public readonly customId!: string;
@@ -12,17 +12,19 @@ export abstract class AbstractModal {
     /**
      * Prepares and displays modal
      */
-    public async execute(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void>{
-        try{
+    public async execute(
+        interaction: ChatInputCommandInteraction | ButtonInteraction,
+    ): Promise<void> {
+        try {
             await this.checkPermissions(interaction);
             this.setSubmitCustomId();
             const modal: ModalBuilder = this.buildModal();
             await this.preShowModal(interaction);
             await interaction.showModal(modal);
-        }catch (error){
+        } catch (error) {
             let errorMessage: string = "Unbekannter Fehler";
 
-            if (error instanceof Error){
+            if (error instanceof Error) {
                 errorMessage = error.message;
             }
 
@@ -35,7 +37,7 @@ export abstract class AbstractModal {
      */
     public setAdditionalData(additionalData: Record<string, any>): void {
         this.additionalData = additionalData;
-    };
+    }
 
     /**
      * Builds modal including input fields
@@ -52,10 +54,14 @@ export abstract class AbstractModal {
     /**
      * Runs before modal is shown
      */
-    protected async preShowModal(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {}
+    protected async preShowModal(
+        interaction: ChatInputCommandInteraction | ButtonInteraction,
+    ): Promise<void> {}
 
     /**
      * Checks if current user is allowed to use and submit this modal
      */
-    protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {}
+    protected async checkPermissions(
+        interaction: ChatInputCommandInteraction | ButtonInteraction,
+    ): Promise<void> {}
 }

@@ -1,9 +1,8 @@
 /**
  * Alias for meetup command
  */
-import {Locale} from "discord.js";
-import {tCommand} from "../i18n";
-import {MeetupCommand} from "./MeetupCommand";
+import { tCommand } from "../i18n";
+import { MeetupCommand } from "./MeetupCommand";
 
 export class PollCommand extends MeetupCommand {
     name: string = "poll";

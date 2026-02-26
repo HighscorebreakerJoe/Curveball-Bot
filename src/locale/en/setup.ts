@@ -1,9 +1,9 @@
-import {TranslationObject} from "../../i18n";
+import { TranslationObject } from "../../i18n";
 
 const setup: TranslationObject = {
     client: {
         activity: "Pokémon GO",
-        loginMessage: "Logged in as: {{tag}}"
+        loginMessage: "Logged in as: {{tag}}",
     },
 
     step: {
@@ -16,10 +16,10 @@ const setup: TranslationObject = {
         noDatabaseMigrationsFound: "No new database migrations found.",
         databaseMigrationsSuccess: "Migration executed successfully: {{migrationName}}",
         registeredCommands: "Registered Commands.",
-        complete: "Setup complete. Ready to GO!"
+        complete: "Setup complete. Ready to GO!",
     },
 
-    error : {
+    error: {
         loginFailed: "Login failed.",
         invalidGuild: "Invalid guild.",
         invalidInfoChannel: "Meetup info channel is invalid.",
@@ -27,8 +27,8 @@ const setup: TranslationObject = {
         guildNotLoaded: "Guild is not loaded yet.",
         databaseMigrationFailed: "Migration failed:",
         executeDatabaseMigrationFailed: "Failed to execute migration: {{migrationName}}",
-        registerCommands: "Error registering commands:"
-    }
-}
+        registerCommands: "Error registering commands:",
+    },
+};
 
 export default setup;

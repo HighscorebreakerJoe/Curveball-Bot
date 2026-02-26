@@ -9,16 +9,16 @@ import {
     EmbedBuilder,
     hyperlink,
     time,
-    TimestampStyles
+    TimestampStyles,
 } from "discord.js";
-import {MeetupRow} from "../database/table/Meetup";
+import { MeetupRow } from "../database/table/Meetup";
 import env from "../env";
-import {tButton, tMeetup} from "../i18n";
-import {assertMessageHasValidMeetup} from "../permission/assertMessageHasValidMeetup";
-import {assertUserIsMeetupCreatorOrConfig} from "../permission/assertUserIsMeetupCreatorOrConfig";
-import {AbstractButton} from "./AbstractButton";
+import { tButton, tMeetup } from "../i18n";
+import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValidMeetup";
+import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
+import { AbstractButton } from "./AbstractButton";
 
-export class MeetupDeleteButton extends AbstractButton{
+export class MeetupDeleteButton extends AbstractButton {
     customId: string = "meetup_delete:{d}";
     protected context: Record<string, unknown> = {};
 
@@ -27,7 +27,7 @@ export class MeetupDeleteButton extends AbstractButton{
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         const messageID: string = interaction.message.id;
-        const meetup: MeetupRow = await  assertMessageHasValidMeetup(messageID);
+        const meetup: MeetupRow = await assertMessageHasValidMeetup(messageID);
 
         await assertUserIsMeetupCreatorOrConfig(interaction, meetup, true);
 
@@ -42,7 +42,8 @@ export class MeetupDeleteButton extends AbstractButton{
         const meetup = this.context.meetup as MeetupRow;
 
         const messageLink = `https://discord.com/channels/${env.GUILD_ID}/${env.MEETUP_INFO_CHANNEL_ID}/${meetup.messageID}`;
-        const messageDescription: string = tButton("meetupDelete.confirmEmbedDescription") +
+        const messageDescription: string =
+            tButton("meetupDelete.confirmEmbedDescription") +
             "\n\n" +
             hyperlink(tMeetup("list.toMeetup"), messageLink) +
             "\n";
@@ -53,17 +54,20 @@ export class MeetupDeleteButton extends AbstractButton{
             .setColor(0xff0000)
             .addFields(
                 {
-                    name: "👾 " + tMeetup("info.pokemon"), value: meetup.pokemon
+                    name: "👾 " + tMeetup("info.pokemon"),
+                    value: meetup.pokemon,
                 },
                 {
-                    name: "📍 " + tMeetup("info.location"), value: meetup.location
+                    name: "📍 " + tMeetup("info.location"),
+                    value: meetup.location,
                 },
                 {
-                    name: "📅 " + tMeetup("info.dateTime"), value: time(meetup.time, TimestampStyles.LongDateShortTime)
-                }
+                    name: "📅 " + tMeetup("info.dateTime"),
+                    value: time(meetup.time, TimestampStyles.LongDateShortTime),
+                },
             )
             .setFooter({
-                text: tMeetup("info.footerText", {meetupID: meetup.meetupID})
+                text: tMeetup("info.footerText", { meetupID: meetup.meetupID }),
             });
 
         //dm user
@@ -79,13 +83,15 @@ export class MeetupDeleteButton extends AbstractButton{
             .setEmoji("😶‍🌫️")
             .setStyle(ButtonStyle.Success);
 
-        const meetupDeleteButtonRow: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            meetupDeleteConfirmButton, meetupDeleteCancelButton
-        );
+        const meetupDeleteButtonRow: ActionRowBuilder<ButtonBuilder> =
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+                meetupDeleteConfirmButton,
+                meetupDeleteCancelButton,
+            );
 
         await interaction.user.send({
             embeds: [embed],
-            components: [meetupDeleteButtonRow]
+            components: [meetupDeleteButtonRow],
         });
     }
 }

@@ -1,9 +1,9 @@
-import {Kysely, MysqlDialect} from "kysely";
+import { Kysely, MysqlDialect } from "kysely";
 import mysql from "mysql2";
 import env from "../env";
-import {Meetup} from "./table/Meetup";
-import {MeetupAllowedMentionsRole} from "./table/MeetupAllowedMentionsRole";
-import {MeetupParticipant} from "./table/MeetupParticipant";
+import { Meetup } from "./table/Meetup";
+import { MeetupAllowedMentionsRole } from "./table/MeetupAllowedMentionsRole";
+import { MeetupParticipant } from "./table/MeetupParticipant";
 
 export interface Database {
     meetup: Meetup;
@@ -18,7 +18,7 @@ export const db = new Kysely<Database>({
             user: env.DB_USERNAME,
             port: Number(env.DB_PORT),
             password: env.DB_PASSWORD,
-            database: env.DB_DATABASE
-        })
-    })
+            database: env.DB_DATABASE,
+        }),
+    }),
 });

@@ -4,66 +4,71 @@ import {
     ChatInputCommandInteraction,
     ModalBuilder,
     TextInputBuilder,
-    TextInputStyle
+    TextInputStyle,
 } from "discord.js";
-import {db} from "../database/Database";
-import {MeetupAllowedMentionsRoleRow} from "../database/table/MeetupAllowedMentionsRole";
-import {tModal} from "../i18n";
-import {AbstractModal} from "./AbstractModal";
+import { db } from "../database/Database";
+import { MeetupAllowedMentionsRoleRow } from "../database/table/MeetupAllowedMentionsRole";
+import { tModal } from "../i18n";
+import { AbstractModal } from "./AbstractModal";
 
 /**
  * Displays Create Meetup Modal
  */
 
-export class MeetupCreateModal extends AbstractModal{
+export class MeetupCreateModal extends AbstractModal {
     customId: string = "meetup_create";
 
     protected get modalTitle(): string {
         return tModal("meetupCreate.title");
-    };
+    }
 
     private allowedCommands: string[] = ["meetup", "poll"];
 
-    protected async checkPermissions(interaction: ChatInputCommandInteraction|ButtonInteraction): Promise<void> {
+    protected async checkPermissions(
+        interaction: ChatInputCommandInteraction | ButtonInteraction,
+    ): Promise<void> {
         //check interaction type
-        if(!interaction.isCommand()){
+        if (!interaction.isCommand()) {
             throw new Error(tModal("global.error.invalidInteractionType"));
         }
 
         if (!this.allowedCommands.includes(interaction.commandName)) {
-            const interactionName: string = (interaction as ChatInputCommandInteraction).commandName;
-            throw new Error(tModal("global.error.invalidCommand", {commandName: interactionName}));
+            const interactionName: string = (interaction as ChatInputCommandInteraction)
+                .commandName;
+            throw new Error(
+                tModal("global.error.invalidCommand", { commandName: interactionName }),
+            );
         }
 
         //check option roles
         const options = interaction.options;
         const roleIds: string[] = [];
 
-        const role1 = options.getRole('role1');
-        if(role1 && role1.id){
+        const role1 = options.getRole("role1");
+        if (role1 && role1.id) {
             await this.checkRole(role1.id);
             roleIds.push(role1.id);
         }
 
-        const role2 = options.getRole('role2');
-        if(role2 && role2.id){
+        const role2 = options.getRole("role2");
+        if (role2 && role2.id) {
             await this.checkRole(role2.id);
             roleIds.push(role2.id);
         }
 
-        const role3 = options.getRole('role3');
-        if(role3 && role3.id){
+        const role3 = options.getRole("role3");
+        if (role3 && role3.id) {
             await this.checkRole(role3.id);
             roleIds.push(role3.id);
         }
 
         this.setAdditionalData({
-            roleIds: roleIds
+            roleIds: roleIds,
         });
     }
 
     protected setSubmitCustomId() {
-        const roleIdString = this.additionalData.roleIds.join(',');
+        const roleIdString = this.additionalData.roleIds.join(",");
 
         this.submitCustomId = "meetup_create:" + roleIdString;
     }
@@ -73,7 +78,7 @@ export class MeetupCreateModal extends AbstractModal{
             .setCustomId(this.submitCustomId)
             .setTitle(this.modalTitle);
 
-        const{pokemon, location, time, date, note} = this.buildInputs()
+        const { pokemon, location, time, date, note } = this.buildInputs();
 
         const row1 = new ActionRowBuilder<TextInputBuilder>().addComponents(pokemon);
         const row2 = new ActionRowBuilder<TextInputBuilder>().addComponents(location);
@@ -85,7 +90,7 @@ export class MeetupCreateModal extends AbstractModal{
         modal.addComponents(row1, row2, row3, row4, row5);
 
         return modal;
-    };
+    }
 
     protected buildInputs() {
         const pokemon: TextInputBuilder = new TextInputBuilder()
@@ -109,7 +114,7 @@ export class MeetupCreateModal extends AbstractModal{
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
-        const nowDate = new Date;
+        const nowDate = new Date();
         const day: string = String(nowDate.getDate()).padStart(2, "0");
         const month: string = String(nowDate.getMonth() + 1).padStart(2, "0");
         const dateValue: string = `${day}.${month}`;
@@ -134,19 +139,19 @@ export class MeetupCreateModal extends AbstractModal{
             location: location,
             time: time,
             date: date,
-            note: note
-        }
+            note: note,
+        };
     }
 
-    private async checkRole(roleId: string): Promise<void>{
-        const role = await db
+    private async checkRole(roleId: string): Promise<void> {
+        const role = (await db
             .selectFrom("meetup_allowed_mentions_role")
             .selectAll()
             .where("roleID", "=", roleId)
-            .executeTakeFirst() as MeetupAllowedMentionsRoleRow | undefined;
+            .executeTakeFirst()) as MeetupAllowedMentionsRoleRow | undefined;
 
-        if(!role){
-            throw new Error(tModal("meetupCreate.error.invalidRole", {roleID: roleId}))
+        if (!role) {
+            throw new Error(tModal("meetupCreate.error.invalidRole", { roleID: roleId }));
         }
     }
 }
