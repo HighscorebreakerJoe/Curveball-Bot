@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import { AbstractButton } from "../button/AbstractButton";
 import { dynamicIdRegExp } from "../constant/dynamicIdRegExp";
+import { tSetup } from "../i18n";
 import { buttonsMap } from "../map/buttonsMap";
 import { commandsMap } from "../map/commandsMap";
 import { modalSubmitsMap } from "../map/modalSubmitsMap";
@@ -28,7 +29,7 @@ export default function onInteractionCreate(client: Client): void {
             console.error(error);
             if (interaction.isRepliable()) {
                 await interaction.reply({
-                    content: "Fehler beim Verarbeiten der Interaktion",
+                    content: tSetup("error.interactionGeneral"),
                     flags: MessageFlags.Ephemeral,
                 });
             }
@@ -50,7 +51,7 @@ async function handleCommand(interaction: ChatInputCommandInteraction): Promise<
         console.error(error);
         if (interaction.isRepliable()) {
             await interaction.reply({
-                content: "Fehler beim Ausführen des Befehls",
+                content: tSetup("error.interactionCommand"),
                 flags: MessageFlags.Ephemeral,
             });
         }
@@ -76,7 +77,7 @@ async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<v
         console.error(error);
         if (interaction.isRepliable()) {
             await interaction.reply({
-                content: "Fehler beim Verarbeiten des Modals",
+                content: tSetup("error.interactionModal"),
                 flags: MessageFlags.Ephemeral,
             });
         }
@@ -103,7 +104,7 @@ async function handleButton(interaction: ButtonInteraction): Promise<void> {
         console.error(error);
         if (interaction.isRepliable()) {
             await interaction.reply({
-                content: "Fehler beim Ausführen der Buttonfunktion",
+                content: tSetup("error.interactionButton"),
                 flags: MessageFlags.Ephemeral,
             });
         }

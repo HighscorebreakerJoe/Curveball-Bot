@@ -6,6 +6,8 @@ const setup: TranslationObject = {
         loginMessage: "Logged in as: {{tag}}",
     },
 
+    interaction: {},
+
     step: {
         setupGuildCache: "Set up guild cache.",
         setupMentionsRolesCache: "Set up mention roles cache.",
@@ -28,6 +30,10 @@ const setup: TranslationObject = {
         databaseMigrationFailed: "Migration failed:",
         executeDatabaseMigrationFailed: "Failed to execute migration: {{migrationName}}",
         registerCommands: "Error registering commands:",
+        interactionGeneral: "Failed to process interaction.",
+        interactionCommand: "Failed to execute command.",
+        interactionModal: "Failed to process modal.",
+        interactionButton: "Failed to execute button action.",
     },
 };
 
