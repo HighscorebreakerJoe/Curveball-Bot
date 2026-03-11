@@ -1,9 +1,11 @@
+import { getGuild } from "../cache/guild";
 import { getMeetupInfoChannel } from "../cache/meetupChannels";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
     MeetupRow,
 } from "../database/table/Meetup";
+import { tCommon } from "../i18n";
 import { delay } from "./delay";
 import { resetMeetupListChannel } from "./resetMeetupListChannel";
 import { splitArray } from "./splitArray";
@@ -35,25 +37,40 @@ export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
         sortInDeleteStruct(deleteStruct, toDeleteMeetup, twoWeeksAgo);
     }
 
+    const results = [];
+
     if (deleteStruct.lessThanTwoWeeks.length > 0) {
-        await deleteBulk(deleteStruct.lessThanTwoWeeks);
+        results.push(await deleteMessagesBulk(deleteStruct.lessThanTwoWeeks));
     }
 
     if (deleteStruct.moreThanTwoWeeks.length > 0) {
-        await deleteManually(deleteStruct.moreThanTwoWeeks);
+        results.push(await deleteMessagesManually(deleteStruct.moreThanTwoWeeks));
+    }
+
+    const combinedMeetupIDs: number[] = results.flatMap((r) => r.toDeleteMeetupIDs);
+    const combinedRoleIDs: string[] = results.flatMap((r) => r.toDeleteRoleIDs);
+
+    if (combinedMeetupIDs.length) {
+        await deleteMeetupsByMeetupIDs(combinedMeetupIDs);
+    }
+
+    if (combinedRoleIDs.length) {
+        await deleteRoleByRoleIDs(combinedRoleIDs);
     }
 
     //reset meetup list channel
     await resetMeetupListChannel();
 }
 
-async function deleteBulk(meetups: MeetupRow[]) {
+async function deleteMessagesBulk(meetups: MeetupRow[]) {
     //split message IDs in chunks
-    const messageIDs: string[] = meetups
-        .map((meetup: MeetupRow) => meetup.messageID)
-        .filter((messageID): messageID is string => !!messageID);
+    const messageIDs: Set<string> = new Set(
+        meetups
+            .map((meetup: MeetupRow) => meetup.messageID)
+            .filter((messageID): messageID is string => !!messageID),
+    );
 
-    const messageIDChunks: string[][] = splitArray(messageIDs, 100);
+    const messageIDChunks: string[][] = splitArray([...messageIDs], 100);
 
     const deletedMessageIDs = new Set<string>();
 
@@ -67,19 +84,24 @@ async function deleteBulk(meetups: MeetupRow[]) {
         await delay(500);
     }
 
-    //delete meetups
-    const toDeleteMeetupIDs: number[] = meetups
-        .filter((meetup: MeetupRow) => meetup.messageID && deletedMessageIDs.has(meetup.messageID))
-        .map((meetup: MeetupRow) => meetup.meetupID);
+    const excludeMessageIDs = new Set<string>();
 
-    await deleteMeetupsByMeetupIDs(toDeleteMeetupIDs);
+    for (const id of messageIDs) {
+        if (!deletedMessageIDs.has(id)) {
+            excludeMessageIDs.add(id);
+        }
+    }
+
+    return createToDeleteSummary(meetups, excludeMessageIDs);
 }
 
-async function deleteManually(meetups: MeetupRow[]) {
+async function deleteMessagesManually(meetups: MeetupRow[]) {
     //get messages
-    const messageIDs: string[] = meetups
-        .map((meetup: MeetupRow) => meetup.messageID)
-        .filter((messageID): messageID is string => !!messageID);
+    const messageIDs: Set<string> = new Set(
+        meetups
+            .map((meetup: MeetupRow) => meetup.messageID)
+            .filter((messageID): messageID is string => !!messageID),
+    );
 
     const toDeleteMessages = [];
     const failedMessageIDs = new Set<string>();
@@ -111,12 +133,7 @@ async function deleteManually(meetups: MeetupRow[]) {
         await delay(500);
     }
 
-    //delete meetups
-    const toDeleteMeetupIDs: number[] = meetups
-        .filter((meetup: MeetupRow) => meetup.messageID && !failedMessageIDs.has(meetup.messageID))
-        .map((meetup: MeetupRow) => meetup.meetupID);
-
-    await deleteMeetupsByMeetupIDs(toDeleteMeetupIDs);
+    return createToDeleteSummary(meetups, failedMessageIDs);
 }
 
 function sortInDeleteStruct(
@@ -132,5 +149,38 @@ function sortInDeleteStruct(
         deleteStruct.lessThanTwoWeeks.push(toDeleteMeetup);
     } else {
         deleteStruct.moreThanTwoWeeks.push(toDeleteMeetup);
+    }
+}
+
+function createToDeleteSummary(meetups: MeetupRow[], excludeMessageIDs: Set<string>) {
+    const toDeleteMeetupIDs: number[] = [];
+    const toDeleteRoleIDs: string[] = [];
+
+    for (const meetup of meetups) {
+        if (!meetup.messageID || excludeMessageIDs.has(meetup.messageID)) {
+            continue;
+        }
+
+        toDeleteMeetupIDs.push(meetup.meetupID);
+
+        if (meetup.mentionRoleID) {
+            toDeleteRoleIDs.push(meetup.mentionRoleID);
+        }
+    }
+
+    return {
+        toDeleteMeetupIDs: toDeleteMeetupIDs,
+        toDeleteRoleIDs: toDeleteRoleIDs,
+    };
+}
+
+async function deleteRoleByRoleIDs(roleIDs: string[]) {
+    for (const roleID of roleIDs) {
+        try {
+            await getGuild().roles.delete(roleID, tCommon("defaultDeleteReason"));
+            await delay(500);
+        } catch (error) {
+            //console.error(`Failed to delete role ${roleID}`, error);
+        }
     }
 }

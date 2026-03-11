@@ -12,6 +12,7 @@ export interface Meetup {
     messageID: string | null;
     threadID: string | null;
     participantListMessageID: string | null;
+    mentionRoleID: string | null;
     createTime: Generated<Date | null>;
     lastUpdateTime: Generated<Date | null>;
 }

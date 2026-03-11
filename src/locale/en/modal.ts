@@ -32,6 +32,7 @@ const modal: TranslationObject = {
 
         error: {
             invalidRole: "Invalid role with roleID: {{roleID}}",
+            createRole: "Could not create role for meetup {{meetupID}}",
         },
 
         submit: {

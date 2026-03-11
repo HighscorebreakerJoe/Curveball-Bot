@@ -8,8 +8,11 @@ const common: TranslationObject = {
     successDefaultEmbedTitle: "Hooray!",
     errorDefaultEmbedTitle: "Error...",
 
+    defaultCreateReason: "Created automatically",
+    defaultDeleteReason: "Deleted automatically",
+
     error: {
-        unknown: "Unkown error.",
+        unknown: "Unknown error.",
         notANumber: "Value is not a number: {{var}}",
         linkDetected: "Hey, please don't enter any links!",
         meetupDeleteError: "An error occurred while deleting a meetup",
