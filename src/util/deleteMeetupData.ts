@@ -5,7 +5,7 @@ import {
     getMeetupsByMeetupIDs,
     MeetupRow,
 } from "../database/table/Meetup";
-import { tCommon } from "../i18n";
+import { tCommon, tMeetup } from "../i18n";
 import { delay } from "./delay";
 import { resetMeetupListChannel } from "./resetMeetupListChannel";
 import { splitArray } from "./splitArray";
@@ -180,7 +180,7 @@ async function deleteRoleByRoleIDs(roleIDs: string[]) {
             await getGuild().roles.delete(roleID, tCommon("defaultDeleteReason"));
             await delay(500);
         } catch (error) {
-            //console.error(`Failed to delete role ${roleID}`, error);
+            console.error(tMeetup("role.error.delete", { roleID: roleID }), error);
         }
     }
 }

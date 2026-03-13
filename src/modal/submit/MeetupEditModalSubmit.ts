@@ -2,6 +2,7 @@ import {
     EmbedBuilder,
     heading,
     ModalSubmitInteraction,
+    roleMention,
     Snowflake,
     TextThreadChannel,
     time,
@@ -126,18 +127,17 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         //send message pointing out differences
         if (differences.size > 0) {
-            await this.sendDifferencesMessage(differences, message.thread as TextThreadChannel);
+            await this.sendDifferencesMessage(
+                differences,
+                message.thread as TextThreadChannel,
+                meetup.mentionRoleID,
+            );
         }
 
         //reset meetup list channel
         await resetMeetupListChannel();
 
         await interaction.deferUpdate();
-
-        //dm user
-        // await interaction.user.send({
-        //     content: "Dein Kommentar wurde erfolgreich bearbeitet!"
-        // });
     }
 
     private async sendDifferencesMessage(
@@ -150,6 +150,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
             }
         >,
         thread: TextThreadChannel,
+        mentionRoleID: null | string,
     ): Promise<void> {
         const updateEmbed: EmbedBuilder = new EmbedBuilder();
         updateEmbed.setTitle(tMeetup("update.embedTitle"));
@@ -159,7 +160,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         const fields: { name: string; value: string }[] = [];
 
         differences.forEach(
-            (value: { title: string; old: string | Date; new: string | Date }, key: string) => {
+            (value: { title: string; old: string | Date; new: string | Date }): void => {
                 fields.push({
                     name: value.title,
                     value:
@@ -172,8 +173,14 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         updateEmbed.addFields(fields);
 
+        let contentHeading = heading(tMeetup("update.title"));
+
+        if (mentionRoleID) {
+            contentHeading += " " + roleMention(mentionRoleID);
+        }
+
         await thread.send({
-            content: heading(tMeetup("update.title")),
+            content: contentHeading,
             embeds: [updateEmbed],
         });
     }

@@ -10,6 +10,8 @@ const common: TranslationObject = {
 
     defaultCreateReason: "Automatisch erstellt",
     defaultDeleteReason: "Automatisch gelöscht",
+    defaultAssignReason: "Automatisch zugewiesen",
+    defaultRemoveReason: "Automatisch entfernt",
 
     error: {
         unknown: "Unbekannter Fehler",

@@ -17,6 +17,7 @@ import { createMeetupInfoEmbed } from "../../util/createMeetupInfoEmbed";
 import { createParticipantListMessage } from "../../util/createParticipantListMessage";
 import { ParticipantData } from "../../util/editMeetupInfoEmbed";
 import { getDynamicData } from "../../util/getDynamicIDData";
+import { assignRole } from "../../util/assignRole";
 import { postSuccess } from "../../util/postEmbeds";
 import { resetMeetupListChannel } from "../../util/resetMeetupListChannel";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
@@ -247,6 +248,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             })
             .where("meetupID", "=", meetupID)
             .execute();
+
+        //give creator meetup role
+        if (meetupRole) {
+            await assignRole(interaction.user.id, meetupRole.id);
+        }
 
         //reset meetup list channel
         await resetMeetupListChannel();

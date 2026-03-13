@@ -8,6 +8,7 @@ import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
 import { getParticipantData } from "../util/createMeetupInfoEmbed";
 import { ParticipantData } from "../util/editMeetupInfoEmbed";
+import { removeRole } from "../util/removeRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
 export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
@@ -54,6 +55,7 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
      * Removes existing participation entry of this user
      */
     private async handleRemoveExisting(): Promise<void> {
+        const meetup = this.context.meetup as MeetupRow;
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         await db
@@ -61,5 +63,9 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
             .where("meetupID", "=", meetupParticipant.meetupID)
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
+
+        if (meetup.mentionRoleID) {
+            await removeRole(meetupParticipant.userID, meetup.mentionRoleID);
+        }
     }
 }

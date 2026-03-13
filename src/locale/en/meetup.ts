@@ -32,6 +32,14 @@ const meetup: TranslationObject = {
         personsTotal: "Persons total:",
     },
 
+    role: {
+        error: {
+            assignRole: "Failed to assign user {{userID}} the role {{roleID}}",
+            removeRole: "Failed to remove role {{roleID}} from user {{userID}}",
+            delete: "Failed to delete role {{roleID}}",
+        },
+    },
+
     update: {
         title: "Update!",
         embedTitle: "This meetup got an update!",
