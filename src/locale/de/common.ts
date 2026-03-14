@@ -8,6 +8,11 @@ const common: TranslationObject = {
     successDefaultEmbedTitle: "Hurra!",
     errorDefaultEmbedTitle: "Fehler...",
 
+    defaultCreateReason: "Automatisch erstellt",
+    defaultDeleteReason: "Automatisch gelöscht",
+    defaultAssignReason: "Automatisch zugewiesen",
+    defaultRemoveReason: "Automatisch entfernt",
+
     error: {
         unknown: "Unbekannter Fehler",
         notANumber: "Wert ist keine gültige Zahl: {{var}}",

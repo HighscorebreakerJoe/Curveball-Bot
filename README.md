@@ -3,10 +3,10 @@
 Curveball Bot is a free Discord application designed for local Pokémon GO communities,
 whether your community is based in a small town or a large city.
 
-Its main goal is to make it easy for community members to organize meetups for in-game raids and events, 
+Its main goal is to make it easy for community members to organize meetups for in-game raids and events,
 while providing a clear, chronologically ordered overview of all active meetups.
 
-Curveball Bot uses Discord features such as built-in slash commands and modals to make creating and managing meetups 
+Curveball Bot uses Discord features such as built-in slash commands and modals to make creating and managing meetups
 simple and accessible for everyone.
 
 ## 1. Features
@@ -14,26 +14,26 @@ simple and accessible for everyone.
 Currently, Curveball Bot provides following features:
 
 - **Create meetups using slash commands**
-  - The following information can be specified:
-    - **Pokémon:** Which Pokémon will be raided?
-    - **Location:** Where will the meetup take place (e.g. a specific Gym)?
-    - **Time:** When will the meetup start?
-    - **Notes:** Optional field for additional information
-  - Each meetup automatically creates a thread where participants can discuss meetup-related topics 
+    - The following information can be specified:
+        - **Pokémon:** Which Pokémon will be raided?
+        - **Location:** Where will the meetup take place (e.g. a specific Gym)?
+        - **Time:** When will the meetup start?
+        - **Notes:** Optional field for additional information
+    - Each meetup automatically creates a thread where participants can discuss meetup-related topics
 - **Moderator role: Meetup Configurator**
-  - Assign a server role that grants additional meetup-related permissions,
-    such as editing or deleting meetups created by other users
+    - Assign a server role that grants additional meetup-related permissions,
+      such as editing or deleting meetups created by other users
 - **Edit and delete meetups**
-  - When a meetup is edited, Curveball Bot posts a message in the meetup thread describing exactly what has changed
+    - When a meetup is edited, Curveball Bot posts a message in the meetup thread describing exactly what has changed
 - **Meetup overview**
-  - All currently active meetups are listed in a dedicated channel in chronological order 
+    - All currently active meetups are listed in a dedicated channel in chronological order
 - **Participate in meetups**
-  - Each meetup provides interactive buttons to confirm or revoke participation 
-    - You can also indicate whether you are joining as a remote raider or if your participation is uncertain
+    - Each meetup provides interactive buttons to confirm or revoke participation
+        - You can also indicate whether you are joining as a remote raider or if your participation is uncertain
 - **Supported languages**
-  - English
-    - This language will serve as a fallback for any untranslated text
-  - German
+    - English
+        - This language will serve as a fallback for any untranslated text
+    - German
 
 ## 2. Installation
 
@@ -71,7 +71,26 @@ Create the following channels in your Discord server:
 Next, create a role that will be used as the **Meetup Configurator** role.
 Users with this role will be allowed to manage meetups created by others.
 
-### 2.4 Configuration
+### 2.4 Bot permissions
+
+Curveball Bot needs following permissions:
+
+#### Server permissions
+
+Permissions to set in the server settings.
+
+- **Manage Roles**
+    - Needed for creating roles when a meetup is created
+    - Also required to remove them when they are no longer needed (e.g. when the corresponding meetup is deleted)
+
+#### Channel permissions
+
+Permissions that are sufficient to set up meetup-related channels.
+
+- **Manage Threads and Posts**
+    - Needed for editing and deleting meetup-related threads
+
+### 2.5 Configuration
 
 Copy the contents of `.env.example` into a new file called `.env`.
 
@@ -83,7 +102,7 @@ Edit the `.env` file according to the instructions provided in the comments.
 With all preparations done, you're ready to start the bot!
 When the bot starts, it automatically sets up and updates the database by applying any pending migrations.
 
-Start the bot using: 
+Start the bot using:
 `npm run start`
 
 ## Technologies and tools used
@@ -101,8 +120,10 @@ Curveball Bot is licensed under [GNU AGPLv3](LICENSE).
 
 You are welcome to fork, contribute to, and modify the project, but please note the following:
 
-- **Give credit:** If you use this project, simply crediting the Curveball Bot with a link to this [GitHub repository](https://github.com/HighscorebreakerJoe/Curveball-Bot) is sufficient.
-- **Open Source:** If you run a modified version of this bot and offer its services to others over a network (e.g., hosting it for a Discord community), you must make your modified source code available to your users.
+- **Give credit:** If you use this project, simply crediting the Curveball Bot with a link to
+  this [GitHub repository](https://github.com/HighscorebreakerJoe/Curveball-Bot) is sufficient.
+- **Open Source:** If you run a modified version of this bot and offer its services to others over a network (e.g.,
+  hosting it for a Discord community), you must make your modified source code available to your users.
 - **State changes:** If you modify or fork this project, please clearly note what changes were made.
 
 ## Disclaimer

@@ -8,6 +8,7 @@ import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
 import { getParticipantData } from "../util/createMeetupInfoEmbed";
 import { ParticipantData } from "../util/editMeetupInfoEmbed";
+import { assignRole } from "../util/assignRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
 export class MeetupAddParticipantButton extends AbstractParticipantButton {
@@ -67,5 +68,9 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
                 remote: this.defaultRemoteState,
             })
             .executeTakeFirstOrThrow();
+
+        if (meetup.mentionRoleID) {
+            await assignRole(userID, meetup.mentionRoleID);
+        }
     }
 }

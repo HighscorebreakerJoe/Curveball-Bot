@@ -1,5 +1,12 @@
-import { hyperlink, MessageFlags, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
+import {
+    hyperlink,
+    MessageFlags,
+    ModalSubmitFields,
+    ModalSubmitInteraction,
+    Role,
+} from "discord.js";
 import { InsertResult } from "kysely";
+import { getGuild } from "../../cache/guild";
 import { getMeetupAllowedMentionsRoles } from "../../cache/meetupAllowedMentionsRoles";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 import { db } from "../../database/Database";
@@ -10,6 +17,7 @@ import { createMeetupInfoEmbed } from "../../util/createMeetupInfoEmbed";
 import { createParticipantListMessage } from "../../util/createParticipantListMessage";
 import { ParticipantData } from "../../util/editMeetupInfoEmbed";
 import { getDynamicData } from "../../util/getDynamicIDData";
+import { assignRole } from "../../util/assignRole";
 import { postSuccess } from "../../util/postEmbeds";
 import { resetMeetupListChannel } from "../../util/resetMeetupListChannel";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
@@ -226,6 +234,9 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             content: createParticipantListMessage([meetupCreatorParticipant]),
         });
 
+        // create meetup role
+        const meetupRole: Role | null = await this.createMeetupRole(meetupID);
+
         //update meetup
         await db
             .updateTable("meetup")
@@ -233,9 +244,15 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
                 messageID: meetupInfoMessage.id,
                 threadID: meetupInfoThread.id,
                 participantListMessageID: participantListMessage.id,
+                mentionRoleID: meetupRole ? meetupRole.id : null,
             })
             .where("meetupID", "=", meetupID)
             .execute();
+
+        //give creator meetup role
+        if (meetupRole) {
+            await assignRole(interaction.user.id, meetupRole.id);
+        }
 
         //reset meetup list channel
         await resetMeetupListChannel();
@@ -275,5 +292,21 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         }
 
         return toSaveDate;
+    }
+
+    private async createMeetupRole(meetupID: number): Promise<Role | null> {
+        try {
+            return await getGuild().roles.create({
+                name: "Meetup" + meetupID,
+                colors: {
+                    primaryColor: 0xf1c40f,
+                },
+                reason: tCommon("defaultCreateReason"),
+            });
+        } catch (error) {
+            console.error(tModal("meetupCreate.error.createRole", { meetupID: meetupID }), error);
+
+            return null;
+        }
     }
 }
