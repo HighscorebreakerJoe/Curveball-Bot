@@ -43,13 +43,13 @@ export async function getMeetupsByMeetupIDs(meetupIDs: number[]): Promise<Meetup
         .execute()) as MeetupRow[];
 }
 
-export async function getAllMeetupMessageIDs() {
+export async function getAllMeetupMessageIDs(): Promise<string[]> {
     const rows = await db.selectFrom("meetup").select("messageID").execute();
 
     return rows.map((row) => row.messageID).filter((id): id is string => id !== null);
 }
 
-export async function getAllMeetupThreadIDs() {
+export async function getAllMeetupThreadIDs(): Promise<string[]> {
     const rows = await db.selectFrom("meetup").select("threadID").execute();
 
     return rows.map((row) => row.threadID).filter((id): id is string => id !== null);
