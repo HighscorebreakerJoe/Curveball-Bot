@@ -5,8 +5,8 @@ import { APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags 
 import { tCommand } from "../i18n";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
 import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
-import { cleanupMeetupData } from "../util/cleanupMeetupData";
-import { deleteRedundantMeetupThreads } from "../util/deleteRedundantMeetupThreads";
+import { cleanupMeetupData } from "../util/meetup/cleanupMeetupData";
+import { deleteRedundantMeetupThreads } from "../util/meetup/deleteRedundantMeetupThreads";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractCommand } from "./AbstractCommand";
 

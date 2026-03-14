@@ -6,9 +6,9 @@ import {
     time,
     TimestampStyles,
 } from "discord.js";
-import { getGuild } from "../cache/guild";
-import { db } from "../database/Database";
-import { tCommon, tMeetup } from "../i18n";
+import { getGuild } from "../../cache/guild";
+import { db } from "../../database/Database";
+import { tCommon, tMeetup } from "../../i18n";
 import { ParticipantData } from "./editMeetupInfoEmbed";
 import { printParticipantData } from "./printParticipantData";
 

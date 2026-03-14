@@ -1,6 +1,6 @@
-import { db } from "../database/Database";
-import { MeetupRow } from "../database/table/Meetup";
-import env from "../env";
+import { db } from "../../database/Database";
+import { MeetupRow } from "../../database/table/Meetup";
+import env from "../../env";
 import { deleteMeetupData } from "./deleteMeetupData";
 import { resetMeetupListChannel } from "./resetMeetupListChannel";
 

@@ -1,6 +1,6 @@
 import nodeCron from "node-cron";
 import { tCronjob, tSetup } from "../i18n";
-import { deleteRedundantMeetupThreads } from "../util/deleteRedundantMeetupThreads";
+import { deleteRedundantMeetupThreads } from "../util/meetup/deleteRedundantMeetupThreads";
 
 export async function setupDailyCleanupCronjob(): Promise<void> {
     nodeCron.schedule("0 30 0 * * *", cronjob);

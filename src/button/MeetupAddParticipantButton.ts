@@ -6,9 +6,9 @@ import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
-import { getParticipantData } from "../util/createMeetupInfoEmbed";
-import { ParticipantData } from "../util/editMeetupInfoEmbed";
-import { assignRole } from "../util/assignRole";
+import { getParticipantData } from "../util/meetup/createMeetupInfoEmbed";
+import { ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
+import { assignRole } from "../util/role/assignRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
 export class MeetupAddParticipantButton extends AbstractParticipantButton {

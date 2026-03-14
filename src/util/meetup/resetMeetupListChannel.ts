@@ -1,6 +1,6 @@
-import { getMeetupListChannel } from "../cache/meetupChannels";
+import { getMeetupListChannel } from "../../cache/meetupChannels";
 import { generateMeetupListMessage } from "./generareMeetupListMessage";
-import { sendChunkedMessages } from "./sendChunkedMessages";
+import { sendChunkedMessages } from "../sendChunkedMessages";
 
 /**
  * Generates message listing all currently available meetups from now on

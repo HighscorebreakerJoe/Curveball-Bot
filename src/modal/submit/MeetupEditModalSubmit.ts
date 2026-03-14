@@ -15,9 +15,9 @@ import { MeetupRow } from "../../database/table/Meetup";
 import { tMeetup } from "../../i18n";
 import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
-import { editMeetupInfoEmbed } from "../../util/editMeetupInfoEmbed";
+import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
 import { getDynamicData } from "../../util/getDynamicIDData";
-import { resetMeetupListChannel } from "../../util/resetMeetupListChannel";
+import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 
 /**

@@ -1,7 +1,7 @@
 import { hyperlink, time, TimestampStyles } from "discord.js";
-import { db } from "../database/Database";
-import env from "../env";
-import { tMeetup } from "../i18n";
+import { db } from "../../database/Database";
+import env from "../../env";
+import { tMeetup } from "../../i18n";
 
 /**
  * Generates message listing all currently available meetups from now on

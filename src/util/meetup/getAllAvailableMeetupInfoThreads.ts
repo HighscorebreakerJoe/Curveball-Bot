@@ -1,5 +1,5 @@
 import { ThreadChannel } from "discord.js";
-import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 
 export async function getAllAvailableMeetupInfoThreads(): Promise<ThreadChannel[]> {
     const infoChannel = getMeetupInfoChannel();

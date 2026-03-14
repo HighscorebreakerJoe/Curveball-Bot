@@ -1,6 +1,6 @@
 import nodeCron from "node-cron";
 import { tCronjob, tSetup } from "../i18n";
-import { cleanupMeetupData } from "../util/cleanupMeetupData";
+import { cleanupMeetupData } from "../util/meetup/cleanupMeetupData";
 
 export async function setupHourlyCleanupCronjob(): Promise<void> {
     nodeCron.schedule("0 0 * * * *", cronjob);

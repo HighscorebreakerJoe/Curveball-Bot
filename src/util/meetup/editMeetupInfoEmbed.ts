@@ -1,5 +1,5 @@
 import { EmbedBuilder, time, TimestampStyles } from "discord.js";
-import { tMeetup } from "../i18n";
+import { tMeetup } from "../../i18n";
 import { printParticipantData } from "./printParticipantData";
 
 export interface ParticipantData {

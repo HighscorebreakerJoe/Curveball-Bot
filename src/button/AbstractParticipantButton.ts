@@ -6,8 +6,8 @@ import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValidMeetup";
-import { createParticipantListMessage } from "../util/createParticipantListMessage";
-import { editMeetupInfoEmbed, ParticipantData } from "../util/editMeetupInfoEmbed";
+import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
+import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { AbstractButton } from "./AbstractButton";
 
 export abstract class AbstractParticipantButton extends AbstractButton {

@@ -6,7 +6,7 @@ import { MeetupRow } from "../database/table/Meetup";
 import { tButton, tCommand } from "../i18n";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
-import { deleteMeetupData } from "../util/deleteMeetupData";
+import { deleteMeetupData } from "../util/meetup/deleteMeetupData";
 import { getDynamicData } from "../util/getDynamicIDData";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractButton } from "./AbstractButton";

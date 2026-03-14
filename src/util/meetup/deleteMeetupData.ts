@@ -1,14 +1,14 @@
-import { getGuild } from "../cache/guild";
-import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { getGuild } from "../../cache/guild";
+import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
     MeetupRow,
-} from "../database/table/Meetup";
-import { tCommon, tMeetup } from "../i18n";
-import { delay } from "./delay";
+} from "../../database/table/Meetup";
+import { tCommon, tMeetup } from "../../i18n";
+import { delay } from "../delay";
 import { resetMeetupListChannel } from "./resetMeetupListChannel";
-import { splitArray } from "./splitArray";
+import { splitArray } from "../splitArray";
 
 type DeleteData = {
     lessThanTwoWeeks: MeetupRow[];

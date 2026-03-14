@@ -2,8 +2,8 @@
  * Function for removing a role from a user
  */
 import { GuildMember } from "discord.js";
-import { getGuild } from "../cache/guild";
-import { tCommon, tMeetup } from "../i18n";
+import { getGuild } from "../../cache/guild";
+import { tCommon, tMeetup } from "../../i18n";
 
 export async function removeRole(userID: string, roleID: string): Promise<void> {
     try {

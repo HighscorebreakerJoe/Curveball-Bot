@@ -1,5 +1,5 @@
 import { bold, inlineCode } from "discord.js";
-import { tMeetup } from "../i18n";
+import { tMeetup } from "../../i18n";
 import { ParticipantData } from "./editMeetupInfoEmbed";
 import { printParticipantData } from "./printParticipantData";
 

@@ -3,7 +3,7 @@
  */
 export function splitMessage(message: string, maxLength = 2000): string[] {
     const chunks: string[] = [];
-    let current = "";
+    let current: string = "";
 
     for (const line of message.split("\n")) {
         if ((current + line + "\n").length > maxLength) {
