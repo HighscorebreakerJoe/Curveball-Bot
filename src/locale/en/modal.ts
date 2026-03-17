@@ -52,6 +52,43 @@ const modal: TranslationObject = {
     meetupEdit: {
         title: "Edit meetup",
     },
+
+    noticeCreate: {
+        title: "Create new notice",
+
+        field: {
+            title: "Title",
+            titlePlaceholder: "The title of your notice",
+
+            description: "Description",
+            descriptionPlaceholder: "The content of your notice",
+
+            type: "Type",
+            typePlaceholder: "Select the type of your notice",
+
+            typeHint: {
+                label: "Hint",
+                description: "Used for hints - Border color will be blue",
+            },
+
+            typeTutorial: {
+                label: "Tutorial",
+                description: "Used for tutorials - Border color will be orange",
+            },
+        },
+
+        submit: {
+            error: {
+                titleEmpty: "You forgot to enter a title.",
+                descriptionEmpty: "You forgot enter a description.",
+                typeEmpty: "You forgot to specify a type.",
+            },
+        },
+    },
+
+    noticeEdit: {
+        title: "Edit notice",
+    },
 };
 
 export default modal;

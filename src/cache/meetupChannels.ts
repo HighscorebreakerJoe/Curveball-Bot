@@ -22,8 +22,17 @@ export async function loadMeetupChannels() {
         throw new Error(tSetup("error.invalidListChannel"));
     }
 
+    const meetupCreateChannel = (await client.channels.fetch(
+        env.MEETUP_CREATE_CHANNEL_ID,
+    )) as TextChannel;
+
+    if (!meetupCreateChannel || !meetupCreateChannel.isTextBased()) {
+        throw new Error(tSetup("error.invalidCreateChannel"));
+    }
+
     meetupChannels.set("info", meetupInfoChannel);
     meetupChannels.set("list", meetupListChannel);
+    meetupChannels.set("create", meetupCreateChannel);
 
     console.log(tSetup("step.setupMeetupChannelCache"));
 }
@@ -34,4 +43,8 @@ export function getMeetupInfoChannel(): TextChannel {
 
 export function getMeetupListChannel(): TextChannel {
     return meetupChannels.get("list") as TextChannel;
+}
+
+export function getMeetupCreateChannel(): TextChannel {
+    return meetupChannels.get("create") as TextChannel;
 }

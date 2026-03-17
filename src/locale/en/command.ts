@@ -45,6 +45,18 @@ const command: TranslationObject = {
         },
     },
 
+    noticeCreate: {
+        description: "Creates an embed-message in meetup create channel",
+    },
+
+    noticeEdit: {
+        description: "Edits an embed-message from the meetup create channel",
+
+        option: {
+            messageIDDescription: "The ID of the message which embed will be edited",
+        },
+    },
+
     poll: {
         description: "Creates a meetup (Alias for /meetup)",
     },

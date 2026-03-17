@@ -11,6 +11,11 @@ const permission: TranslationObject = {
         noMeetupFoundByMessage: "Kein Meetup mit der folgenden Nachricht-ID gefunden: {{messageID}",
         memberCantExecuteCommand:
             "Du hast nicht die notwendigen Rechte, um dieses Kommando auszuführen.",
+        invalidMessageInMeetupCreate:
+            "Nachricht mit der ID {{messageID}} existiert nicht im Meetup-Erstellen-Kanal.",
+        messageHasNoEmbeds: "Nachricht mit der ID {{messageID}} hat keine Einbettungen.",
+        messageHasMoreThanOneEmbed: "Nachricht mit der {{messageID}} hat mehr als eine Einbettung.",
+        messageNotPostedByBot: "Nachricht mit der {{messageID}} wurde nicht vom Bot verfasst.",
     },
 };
 
