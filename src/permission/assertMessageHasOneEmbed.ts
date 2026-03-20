@@ -1,8 +1,9 @@
+import { Message } from "discord.js";
+import { tPermission } from "../i18n";
+
 /**
  * Checks if message has exactly one embed
  */
-import { Message } from "discord.js";
-import { tPermission } from "../i18n";
 
 export function assertMessageHasOneEmbed(message: Message): void {
     if (!message.embeds.length) {

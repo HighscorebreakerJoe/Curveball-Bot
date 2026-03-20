@@ -7,6 +7,7 @@ import { resetMeetupListChannel } from "./resetMeetupListChannel";
 /**
  * Cleans up meetup-data and -channels. Used by cleanup-cronjob and command.
  */
+
 export async function cleanupMeetupData(): Promise<void> {
     await deleteOldMeetups();
 }

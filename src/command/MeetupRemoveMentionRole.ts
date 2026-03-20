@@ -1,6 +1,3 @@
-/**
- * Command for removing roles from the allowed mention roles whitelist
- */
 import {
     APIApplicationCommandOption,
     ApplicationCommandOptionType,
@@ -12,6 +9,10 @@ import { db } from "../database/Database";
 import { tCommand } from "../i18n";
 import { postSuccess } from "../util/postEmbeds";
 import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRole";
+
+/**
+ * Command for removing roles from the allowed mention roles whitelist
+ */
 
 export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand {
     name: string = "meetup_remove_mention_role";

@@ -1,10 +1,11 @@
-/**
- * Class for handling "remote" buttonpress in meetup info embeds
- */
 import { ButtonInteraction } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { MeetupAddParticipantButton } from "./MeetupAddParticipantButton";
+
+/**
+ * Class for handling "remote" buttonpress in meetup info embeds
+ */
 
 export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     customId: string = "meetup_remote";

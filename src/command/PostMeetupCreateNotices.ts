@@ -1,12 +1,13 @@
-/**
- * Command for posting default meetup create notices
- */
 import { APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import { tCommand } from "../i18n";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
 import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
 import { postMeetupCreateNotices } from "../util/meetup/postMeetupCreateNotices";
 import { AbstractCommand } from "./AbstractCommand";
+
+/**
+ * Command for posting default meetup create notices
+ */
 
 export class PostMeetupCreateNoticesCommand extends AbstractCommand {
     name: string = "post_meetup_create_notices";

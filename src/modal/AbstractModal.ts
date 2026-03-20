@@ -1,8 +1,9 @@
+import { ButtonInteraction, ChatInputCommandInteraction, ModalBuilder } from "discord.js";
+import { postError } from "../util/postEmbeds";
+
 /**
  * Base class for all modals for Curveball Bot. Handles building modals and its user inputs
  */
-import { ButtonInteraction, ChatInputCommandInteraction, ModalBuilder } from "discord.js";
-import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractModal {
     public readonly customId!: string;

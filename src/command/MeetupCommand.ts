@@ -1,6 +1,3 @@
-/**
- * Command for creating meetups
- */
 import {
     APIApplicationCommandOption,
     APIRole,
@@ -12,6 +9,10 @@ import { tCommand } from "../i18n";
 import { modalsMap } from "../map/modalsMap";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
 import { AbstractCommand } from "./AbstractCommand";
+
+/**
+ * Command for creating meetups
+ */
 
 export class MeetupCommand extends AbstractCommand {
     name: string = "meetup";

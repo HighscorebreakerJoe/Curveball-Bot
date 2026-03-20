@@ -1,6 +1,3 @@
-/**
- * Command for cleaning up meetup data and channels
- */
 import { APIApplicationCommandOption, ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import { tCommand } from "../i18n";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
@@ -9,6 +6,10 @@ import { cleanupMeetupData } from "../util/meetup/cleanupMeetupData";
 import { deleteRedundantMeetupThreads } from "../util/meetup/deleteRedundantMeetupThreads";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractCommand } from "./AbstractCommand";
+
+/**
+ * Command for cleaning up meetup data and channels
+ */
 
 export class MeetupCleanUpCommand extends AbstractCommand {
     name: string = "meetup_cleanup";

@@ -1,9 +1,10 @@
-/**
- * Base class for all buttons for Curveball Bot. Handles buttons when activated.
- */
 import { ButtonInteraction } from "discord.js";
 import { tCommon } from "../i18n";
 import { postError } from "../util/postEmbeds";
+
+/**
+ * Base class for all buttons for Curveball Bot. Handles buttons when activated.
+ */
 
 export abstract class AbstractButton {
     public readonly customId!: string;

@@ -4,6 +4,7 @@ import { ParticipantData } from "./editMeetupInfoEmbed";
 /**
  * Prints participant data for meetup embed
  */
+
 export function printParticipantData(
     data: ParticipantData,
     asList = false,

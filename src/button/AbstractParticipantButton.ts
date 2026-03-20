@@ -1,6 +1,3 @@
-/**
- * Abstract Class for handling participant buttons
- */
 import { ButtonInteraction, EmbedBuilder } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
@@ -9,6 +6,10 @@ import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValid
 import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
 import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { AbstractButton } from "./AbstractButton";
+
+/**
+ * Abstract Class for handling participant buttons
+ */
 
 export abstract class AbstractParticipantButton extends AbstractButton {
     protected context: Record<string, unknown> = {};

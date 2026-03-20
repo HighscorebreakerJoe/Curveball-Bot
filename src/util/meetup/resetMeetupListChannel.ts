@@ -1,10 +1,11 @@
 import { getMeetupListChannel } from "../../cache/meetupChannels";
-import { generateMeetupListMessage } from "./generareMeetupListMessage";
 import { sendChunkedMessages } from "../sendChunkedMessages";
+import { generateMeetupListMessage } from "./generareMeetupListMessage";
 
 /**
  * Generates message listing all currently available meetups from now on
  */
+
 export async function resetMeetupListChannel(): Promise<void> {
     //clear meetup list channel
     const messages = await getMeetupListChannel().messages.fetch({ limit: 100 });
