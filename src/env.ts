@@ -10,6 +10,7 @@ declare type envStruct = {
     MEETUP_CREATE_CHANNEL_ID: string;
     MEETUP_INFO_CHANNEL_ID: string;
     MEETUP_LIST_CHANNEL_ID: string;
+    MEETUP_CREATE_DISABLE_DEFAULT_NOTICES: boolean;
     MEETUP_DELETE_LIMIT_HOURS: number;
     DB_HOST: string;
     DB_PORT: string;
@@ -29,6 +30,8 @@ const env: envStruct = {
     MEETUP_CREATE_CHANNEL_ID: process.env.MEETUP_CREATE_CHANNEL_ID || "",
     MEETUP_INFO_CHANNEL_ID: process.env.MEETUP_INFO_CHANNEL_ID || "",
     MEETUP_LIST_CHANNEL_ID: process.env.MEETUP_LIST_CHANNEL_ID || "",
+    MEETUP_CREATE_DISABLE_DEFAULT_NOTICES:
+        process.env.MEETUP_CREATE_DISABLE_DEFAULT_NOTICES === "true",
     MEETUP_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MEETUP_DELETE_LIMIT_HOURS),
     DB_HOST: process.env.DB_HOST || "",
     DB_PORT: process.env.DB_PORT || "",

@@ -39,6 +39,17 @@ export async function postError(
 }
 
 /**
+ * prepares embedded message without sending it
+ */
+export function prepareEmbedMessage(
+    message: string,
+    title: string,
+    color: ColorResolvable | null,
+): EmbedBuilder {
+    return new EmbedBuilder().setTitle(title).setDescription(message).setColor(color);
+}
+
+/**
  * Posts embedded message to user
  */
 export async function postEmbedMessage(
@@ -47,7 +58,7 @@ export async function postEmbedMessage(
     title: string,
     color: ColorResolvable | null,
 ): Promise<void> {
-    const embed = new EmbedBuilder().setTitle(title).setDescription(message).setColor(color);
+    const embed = prepareEmbedMessage(message, title, color);
 
     if (interaction.replied || interaction.deferred) {
         await interaction.editReply({

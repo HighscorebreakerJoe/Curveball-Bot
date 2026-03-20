@@ -1,11 +1,13 @@
 /**
  * Checks if user has meetup configurator role
  */
-import { ChatInputCommandInteraction, GuildMember } from "discord.js";
+import { ChatInputCommandInteraction, GuildMember, ModalSubmitInteraction } from "discord.js";
 import env from "../env";
 import { tPermission } from "../i18n";
 
-export function assertUserHasMeetupConfigRole(interaction: ChatInputCommandInteraction): void {
+export function assertUserHasMeetupConfigRole(
+    interaction: ChatInputCommandInteraction | ModalSubmitInteraction,
+): void {
     const meetupConfigRoleID = env.MEETUP_CONFIGURATOR_ROLE_ID;
     const member = interaction.member as GuildMember;
 

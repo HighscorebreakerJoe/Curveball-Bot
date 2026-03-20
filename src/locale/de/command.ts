@@ -47,8 +47,24 @@ const command: TranslationObject = {
         },
     },
 
+    noticeCreate: {
+        description: "Erstellt eine eingebettete Nachricht im Meetup-Erstellen-Kanal",
+    },
+
+    noticeEdit: {
+        description: "Bearbeitet eine eingebettete Nachricht vom Meetup-Erstellen-Kanal",
+
+        option: {
+            messageIDDescription: "Die ID der Nachricht, deren Einbettung bearbeitet wird.",
+        },
+    },
+
     poll: {
         description: "Erstellt ein Meetup (Alias für /meetup)",
+    },
+
+    postMeetupCreateNotices: {
+        description: "Verfasst die Standardhinweise im Meetup-Erstellungskanal",
     },
 };
 
