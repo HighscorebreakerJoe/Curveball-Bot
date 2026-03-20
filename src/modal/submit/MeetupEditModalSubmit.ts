@@ -18,6 +18,7 @@ import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIs
 import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
+import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 
 /**
@@ -152,10 +153,11 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         thread: TextThreadChannel,
         mentionRoleID: null | string,
     ): Promise<void> {
-        const updateEmbed: EmbedBuilder = new EmbedBuilder();
-        updateEmbed.setTitle(tMeetup("update.embedTitle"));
-        updateEmbed.setDescription(tMeetup("update.embedDescription"));
-        updateEmbed.setColor(0xff0000);
+        const updateEmbed: EmbedBuilder = prepareEmbedMessage(
+            tMeetup("update.embedDescription"),
+            tMeetup("update.embedTitle"),
+            0xff0000,
+        );
 
         const fields: { name: string; value: string }[] = [];
 

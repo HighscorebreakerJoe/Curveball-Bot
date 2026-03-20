@@ -3,6 +3,7 @@ import { getMeetupCreateChannel } from "../../cache/meetupChannels";
 import { tModal } from "../../i18n";
 import { noticeTypeMap } from "../../map/noticeTypeMap";
 import { assertUserHasMeetupConfigRole } from "../../permission/assertUserHasMeetupConfigRole";
+import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
 
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
@@ -71,10 +72,7 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
         }
 
         //post embed
-        const embed: EmbedBuilder = new EmbedBuilder()
-            .setTitle(title)
-            .setColor(color)
-            .setDescription(description);
+        const embed: EmbedBuilder = prepareEmbedMessage(description, title, color);
 
         await getMeetupCreateChannel().send({
             embeds: [embed],

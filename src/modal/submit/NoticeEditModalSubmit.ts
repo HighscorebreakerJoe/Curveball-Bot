@@ -5,6 +5,7 @@ import { assertMessagePostedByBot } from "../../permission/assertMessagePostedBy
 import { assertUserHasMeetupConfigRole } from "../../permission/assertUserHasMeetupConfigRole";
 import { assertValidMessageInMeetupCreateChannel } from "../../permission/assertValidMessageInMeetupCreateChannel";
 import { getDynamicData } from "../../util/getDynamicIDData";
+import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { NoticeCreateModalSubmit } from "./NoticeCreateModalSubmit";
 
 /**
@@ -43,10 +44,7 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
             color = noticeTypeMap.get("tutorial")!;
         }
 
-        const newEmbed: EmbedBuilder = new EmbedBuilder()
-            .setTitle(title)
-            .setColor(color)
-            .setDescription(description);
+        const newEmbed: EmbedBuilder = prepareEmbedMessage(description, title, color);
 
         message.edit({
             embeds: [newEmbed],
