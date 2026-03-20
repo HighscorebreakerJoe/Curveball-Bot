@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
+import { ButtonInteraction, ChatInputCommandInteraction, TextInputBuilder } from "discord.js";
 import { MeetupRow } from "../database/table/Meetup";
 import { tModal } from "../i18n";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
@@ -43,14 +43,18 @@ export class MeetupEditModal extends MeetupCreateModal {
         const meetup = this.additionalData.meetup as MeetupRow;
 
         //set values
-        pokemon.setValue(meetup.pokemon);
-        location.setValue(meetup.location);
+        const pokemonInput = pokemon.data.component as TextInputBuilder;
+        pokemonInput.setValue(meetup.pokemon);
+
+        const locationInput = location.data.component as TextInputBuilder;
+        locationInput.setValue(meetup.location);
 
         const timeString = meetup.time.toLocaleTimeString("de-DE", {
             hour: "2-digit",
             minute: "2-digit",
         });
-        time.setValue(timeString);
+        const timeInput = time.data.component as TextInputBuilder;
+        timeInput.setValue(timeString);
 
         let dateString = meetup.time.toLocaleDateString("de-DE", {
             day: "2-digit",
@@ -59,10 +63,12 @@ export class MeetupEditModal extends MeetupCreateModal {
         if (dateString.endsWith(".")) {
             dateString = dateString.slice(0, dateString.length - 1);
         }
-        date.setValue(dateString);
+        const dateInput = date.data.component as TextInputBuilder;
+        dateInput.setValue(dateString);
 
         if (meetup.note) {
-            note.setValue(meetup.note);
+            const noteInput = note.data.component as TextInputBuilder;
+            noteInput.setValue(meetup.note);
         }
 
         return {
