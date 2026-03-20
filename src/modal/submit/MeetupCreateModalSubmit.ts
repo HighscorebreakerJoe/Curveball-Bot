@@ -13,13 +13,13 @@ import { db } from "../../database/Database";
 import { tCommon, tMeetup, tModal } from "../../i18n";
 import { calculateYear } from "../../util/calculateYear";
 import { checkForLinks } from "../../util/checkForLinks";
+import { getDynamicData } from "../../util/getDynamicIDData";
 import { createMeetupInfoEmbed } from "../../util/meetup/createMeetupInfoEmbed";
 import { createParticipantListMessage } from "../../util/meetup/createParticipantListMessage";
 import { ParticipantData } from "../../util/meetup/editMeetupInfoEmbed";
-import { getDynamicData } from "../../util/getDynamicIDData";
-import { assignRole } from "../../util/role/assignRole";
-import { postSuccess } from "../../util/postEmbeds";
 import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
+import { postSuccess } from "../../util/postEmbeds";
+import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
 
 import { AbstractModalSubmit } from "./AbstractModalSubmit";

@@ -7,8 +7,8 @@ import {
 } from "../../database/table/Meetup";
 import { tCommon, tMeetup } from "../../i18n";
 import { delay } from "../delay";
-import { resetMeetupListChannel } from "./resetMeetupListChannel";
 import { splitArray } from "../splitArray";
+import { resetMeetupListChannel } from "./resetMeetupListChannel";
 
 type DeleteData = {
     lessThanTwoWeeks: MeetupRow[];

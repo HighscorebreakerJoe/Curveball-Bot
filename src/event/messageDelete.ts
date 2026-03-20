@@ -1,6 +1,10 @@
 import { Client, Events, Message, OmitPartialGroupDMChannel, PartialMessage } from "discord.js";
 import { getMeetupInfoChannel } from "../cache/meetupChannels";
-import { deleteMeetupsByMeetupIDs, getMeetupByMessageID, MeetupRow, } from "../database/table/Meetup";
+import {
+    deleteMeetupsByMeetupIDs,
+    getMeetupByMessageID,
+    MeetupRow,
+} from "../database/table/Meetup";
 import { tCommon } from "../i18n";
 import { delay } from "../util/delay";
 
