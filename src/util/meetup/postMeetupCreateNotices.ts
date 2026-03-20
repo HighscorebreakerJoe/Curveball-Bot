@@ -15,16 +15,23 @@ export async function postMeetupCreateNotices(): Promise<void> {
     const embeds: EmbedBuilder[] = [];
     embeds.push(
         prepareEmbedMessage(
-            tMeetup("tutorial.description", {
+            tMeetup("defaultNotice.tutorial.description", {
                 meetupListChannelID: getMeetupListChannel().id,
                 meetupInfoChannelID: getMeetupInfoChannel().id,
             }),
-            tMeetup("tutorial.title"),
+            tMeetup("defaultNotice.tutorial.title"),
             noticeTypeMap.get("tutorial")!,
+        ),
+        prepareEmbedMessage(
+            tMeetup("defaultNotice.cleanup.description"),
+            tMeetup("defaultNotice.cleanup.title"),
+            noticeTypeMap.get("hint")!,
         ),
     );
 
-    await getMeetupCreateChannel().send({
-        embeds: embeds,
-    });
+    for (const embed of embeds) {
+        await getMeetupCreateChannel().send({
+            embeds: [embed],
+        });
+    }
 }
