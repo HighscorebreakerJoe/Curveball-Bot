@@ -6,6 +6,7 @@ import { tMeetup } from "../../i18n";
 /**
  * Generates message listing all currently available meetups from now on
  */
+
 export async function generateMeetupListMessage(): Promise<string> {
     const now = new Date();
 

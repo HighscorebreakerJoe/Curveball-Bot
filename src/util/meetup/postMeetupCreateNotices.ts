@@ -11,6 +11,7 @@ import { prepareEmbedMessage } from "../postEmbeds";
 /**
  * Posts default meetup create notices
  */
+
 export async function postMeetupCreateNotices(): Promise<void> {
     const embeds: EmbedBuilder[] = [];
     embeds.push(

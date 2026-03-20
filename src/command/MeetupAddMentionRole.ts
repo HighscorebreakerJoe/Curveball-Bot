@@ -1,6 +1,3 @@
-/**
- * Command for adding roles to the allowed mention roles whitelist
- */
 import {
     APIApplicationCommandOption,
     ApplicationCommandOptionType,
@@ -14,6 +11,10 @@ import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateC
 import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractCommand } from "./AbstractCommand";
+
+/**
+ * Command for adding roles to the allowed mention roles whitelist
+ */
 
 export class MeetupAddMentionRoleCommand extends AbstractCommand {
     name: string = "meetup_add_mention_role";

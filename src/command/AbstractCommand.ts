@@ -1,7 +1,3 @@
-/**
- * Base class for all commands for Curveball Bot
- */
-
 import {
     APIApplicationCommandOption,
     ChatInputCommandInteraction,
@@ -9,6 +5,10 @@ import {
 } from "discord.js";
 import { tCommon } from "../i18n";
 import { postError } from "../util/postEmbeds";
+
+/**
+ * Base class for all commands for Curveball Bot
+ */
 
 export abstract class AbstractCommand {
     public readonly name!: string;

@@ -5,7 +5,6 @@ import { noticeTypeMap } from "../../map/noticeTypeMap";
 import { assertUserHasMeetupConfigRole } from "../../permission/assertUserHasMeetupConfigRole";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
-
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
 
 /**

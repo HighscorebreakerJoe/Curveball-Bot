@@ -1,6 +1,3 @@
-/**
- * Class for handling "Remove participant" buttonpress in meetup info embeds
- */
 import { ButtonInteraction } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
@@ -10,6 +7,10 @@ import { getParticipantData } from "../util/meetup/createMeetupInfoEmbed";
 import { ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { removeRole } from "../util/role/removeRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
+
+/**
+ * Class for handling "Remove participant" buttonpress in meetup info embeds
+ */
 
 export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
     customId: string = "meetup_remove_participant";

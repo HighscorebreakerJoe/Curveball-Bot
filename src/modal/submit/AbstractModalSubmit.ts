@@ -1,9 +1,10 @@
-/**
- * Base class for all modals submit handlers for Curveball Bot.
- */
 import { ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
 import { tCommon } from "../../i18n";
 import { postError } from "../../util/postEmbeds";
+
+/**
+ * Base class for all modals submit handlers for Curveball Bot.
+ */
 
 export abstract class AbstractModalSubmit {
     public readonly customId!: string;

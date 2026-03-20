@@ -1,6 +1,3 @@
-/**
- * Class for handling "Delete meetup" buttonpress in meetup info embeds
- */
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -17,6 +14,10 @@ import { tButton, tMeetup } from "../i18n";
 import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValidMeetup";
 import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
 import { AbstractButton } from "./AbstractButton";
+
+/**
+ * Class for handling "Delete meetup" buttonpress in meetup info embeds
+ */
 
 export class MeetupDeleteButton extends AbstractButton {
     customId: string = "meetup_delete:{d}";

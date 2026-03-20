@@ -1,8 +1,9 @@
+import { tCommand } from "../i18n";
+import { MeetupCommand } from "./MeetupCommand";
+
 /**
  * Alias for meetup command
  */
-import { tCommand } from "../i18n";
-import { MeetupCommand } from "./MeetupCommand";
 
 export class PollCommand extends MeetupCommand {
     name: string = "poll";

@@ -1,10 +1,11 @@
-/**
- * Class for handling "Meetup delete cancel" buttonpress in meetup delete embeds
- */
 import { ButtonInteraction, Message } from "discord.js";
 import { tButton } from "../i18n";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractButton } from "./AbstractButton";
+
+/**
+ * Class for handling "Meetup delete cancel" buttonpress in meetup delete embeds
+ */
 
 export class MeetupDeleteCancelButton extends AbstractButton {
     customId: string = "meetup_delete_cancel";
