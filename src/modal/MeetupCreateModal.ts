@@ -1,7 +1,7 @@
 import {
-    ActionRowBuilder,
     ButtonInteraction,
     ChatInputCommandInteraction,
+    LabelBuilder,
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
@@ -78,60 +78,68 @@ export class MeetupCreateModal extends AbstractModal {
             .setTitle(this.modalTitle);
 
         const { pokemon, location, time, date, note } = this.buildInputs();
-
-        const row1 = new ActionRowBuilder<TextInputBuilder>().addComponents(pokemon);
-        const row2 = new ActionRowBuilder<TextInputBuilder>().addComponents(location);
-        const row3 = new ActionRowBuilder<TextInputBuilder>().addComponents(time);
-        const row4 = new ActionRowBuilder<TextInputBuilder>().addComponents(date);
-        const row5 = new ActionRowBuilder<TextInputBuilder>().addComponents(note);
-
         // Add inputs to the modal
-        modal.addComponents(row1, row2, row3, row4, row5);
+        modal.addLabelComponents(pokemon, location, time, date, note);
 
         return modal;
     }
 
     protected buildInputs() {
-        const pokemon: TextInputBuilder = new TextInputBuilder()
+        const pokemonInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("pokemon")
-            .setLabel(tModal("meetupCreate.field.pokemon"))
             .setPlaceholder(tModal("meetupCreate.field.pokemonPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
-        const location: TextInputBuilder = new TextInputBuilder()
+        const pokemon: LabelBuilder = new LabelBuilder()
+            .setLabel(tModal("meetupCreate.field.pokemon"))
+            .setTextInputComponent(pokemonInput);
+
+        const locationInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("location")
-            .setLabel(tModal("meetupCreate.field.location"))
             .setPlaceholder(tModal("meetupCreate.field.locationPlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
 
-        const time: TextInputBuilder = new TextInputBuilder()
+        const location: LabelBuilder = new LabelBuilder()
+            .setLabel(tModal("meetupCreate.field.location"))
+            .setTextInputComponent(locationInput);
+
+        const timeInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("time")
-            .setLabel(tModal("meetupCreate.field.time"))
             .setPlaceholder(tModal("meetupCreate.field.timePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
+
+        const time: LabelBuilder = new LabelBuilder()
+            .setLabel(tModal("meetupCreate.field.time"))
+            .setTextInputComponent(timeInput);
 
         const nowDate = new Date();
         const day: string = String(nowDate.getDate()).padStart(2, "0");
         const month: string = String(nowDate.getMonth() + 1).padStart(2, "0");
         const dateValue: string = `${day}.${month}`;
 
-        const date: TextInputBuilder = new TextInputBuilder()
+        const dateInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("date")
-            .setLabel(tModal("meetupCreate.field.date"))
             .setPlaceholder(tModal("meetupCreate.field.datePlaceholder"))
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
             .setValue(dateValue);
 
-        const note: TextInputBuilder = new TextInputBuilder()
+        const date: LabelBuilder = new LabelBuilder()
+            .setLabel(tModal("meetupCreate.field.date"))
+            .setTextInputComponent(dateInput);
+
+        const noteInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("note")
-            .setLabel(tModal("meetupCreate.field.note"))
             .setPlaceholder(tModal("meetupCreate.field.notePlaceholder"))
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
+
+        const note: LabelBuilder = new LabelBuilder()
+            .setLabel(tModal("meetupCreate.field.note"))
+            .setTextInputComponent(noteInput);
 
         return {
             pokemon: pokemon,
