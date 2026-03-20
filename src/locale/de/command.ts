@@ -62,6 +62,10 @@ const command: TranslationObject = {
     poll: {
         description: "Erstellt ein Meetup (Alias für /meetup)",
     },
+
+    postMeetupCreateNotices: {
+        description: "Verfasst die Standardhinweise im Meetup-Erstellungskanal",
+    },
 };
 
 export default command;

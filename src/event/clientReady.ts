@@ -8,12 +8,13 @@ import {
 } from "discord.js";
 import { loadGuild } from "../cache/guild";
 import { loadMeetupAllowedMentionsRoles } from "../cache/meetupAllowedMentionsRoles";
-import { loadMeetupChannels } from "../cache/meetupChannels";
+import { getMeetupCreateChannel, loadMeetupChannels } from "../cache/meetupChannels";
 import { setupDailyCleanupCronjob } from "../cronjob/dailyCleanup";
 import { setupHourlyCleanupCronjob } from "../cronjob/hourlyCleanup";
 import env from "../env";
 import { tSetup } from "../i18n";
 import { commandsMap } from "../map/commandsMap";
+import { postMeetupCreateNotices } from "../util/meetup/postMeetupCreateNotices";
 
 export default function onClientReady(client: Client): void {
     client.on(Events.ClientReady, async () => {
@@ -56,6 +57,15 @@ export default function onClientReady(client: Client): void {
             console.log(tSetup("step.registeredCommands"));
         } catch (error) {
             console.error(tSetup("error.registerCommands"), error);
+        }
+
+        //post meetup create notices
+        if (!env.MEETUP_CREATE_DISABLE_DEFAULT_NOTICES) {
+            const messages = await getMeetupCreateChannel().messages.fetch({ limit: 1 });
+
+            if (messages.size == 0) {
+                await postMeetupCreateNotices();
+            }
         }
     });
 }

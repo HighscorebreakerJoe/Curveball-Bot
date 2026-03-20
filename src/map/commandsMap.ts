@@ -6,6 +6,7 @@ import { MeetupRemoveMentionRoleCommand } from "../command/MeetupRemoveMentionRo
 import { NoticeCreateCommand } from "../command/NoticeCreateCommand";
 import { NoticeEditCommand } from "../command/NoticeEditCommand";
 import { PollCommand } from "../command/PollCommand";
+import { PostMeetupCreateNoticesCommand } from "../command/PostMeetupCreateNotices";
 
 const commandClasses: Array<new () => AbstractCommand> = [
     MeetupCommand,
@@ -15,6 +16,7 @@ const commandClasses: Array<new () => AbstractCommand> = [
     NoticeCreateCommand,
     NoticeEditCommand,
     PollCommand,
+    PostMeetupCreateNoticesCommand,
 ];
 
 export const commandsMap = new Map<string, new () => AbstractCommand>();

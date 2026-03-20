@@ -6,7 +6,7 @@ import { tPermission } from "../i18n";
  */
 
 export async function assertMessageHasValidMeetup(messageID: string): Promise<MeetupRow> {
-    const meetup = await getMeetupByMessageID(messageID);
+    const meetup: MeetupRow | undefined = await getMeetupByMessageID(messageID);
 
     if (!meetup) {
         throw new Error(tPermission("error.noMeetupFoundByMessage"));
