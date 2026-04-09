@@ -8,10 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "description": "",
   "dependencies": {
-    "discord.js": "^14.25.1",
+    "discord.js": "^14.26.2",
     "dotenv": "^17.2.3",
     "i18next": "^25.8.13",
     "kysely": "^0.28.8",
