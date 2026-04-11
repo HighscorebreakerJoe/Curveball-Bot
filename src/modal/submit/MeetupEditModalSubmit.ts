@@ -141,11 +141,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         //reset meetup list channel
         await resetMeetupListChannel();
 
-        const successEmbed = prepareEmbedMessage(tMeetup("info.editSuccess"), tCommon("successDefaultEmbedTitle"), 0x00ff00);
-
-        await interaction.editReply({
-            embeds: [successEmbed]
-        });
+        await interaction.deleteReply();
     }
 
     private async sendDifferencesMessage(
