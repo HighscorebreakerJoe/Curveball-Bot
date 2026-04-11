@@ -1,6 +1,7 @@
-import { ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
+import { MessageFlags, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
 import { tCommon } from "../../i18n";
 import { postError } from "../../util/postEmbeds";
+import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 
 /**
  * Base class for all modals submit handlers for Curveball Bot.
@@ -11,12 +12,14 @@ export abstract class AbstractModalSubmit {
     public readonly dynamicId!: boolean;
     protected sanitizedInputs: Record<string, any> = {};
     protected additionalData: Record<string, any> = {};
+    protected responseMode = InteractionResponseMode.UPDATE;
 
     /**
      * Handles user inputs from modal
      */
     public async execute(interaction: ModalSubmitInteraction): Promise<void> {
         try {
+            await this.prepareResponse(interaction);
             await this.checkPermissions(interaction);
             this.checkModalInputs(interaction.fields);
             await this.successModalInputs(interaction);
@@ -52,4 +55,23 @@ export abstract class AbstractModalSubmit {
      * Called after user inputs of this modal have been successfully verified
      */
     protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {}
+
+    /**
+     * Sets the interaction response for this modal submit. Run this as early as possible after a submit to prevent timeout errors
+     */
+    private async prepareResponse(interaction: ModalSubmitInteraction) {
+        switch(this.responseMode){
+            case InteractionResponseMode.UPDATE:
+                await interaction.deferUpdate();
+                break;
+
+            case InteractionResponseMode.REPLY:
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                break;
+
+            case InteractionResponseMode.NONE:
+                //do nothing;
+                break;
+        }
+    }
 }

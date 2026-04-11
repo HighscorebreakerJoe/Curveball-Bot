@@ -59,9 +59,6 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
      * Posts embed-message after modal inputs have been successfully validated
      */
     protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
-        //post defer reply to prevent timeout errors
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
         const { title, description, type } = this.sanitizedInputs;
 
         let color: number = noticeTypeMap.get("hint")!;
@@ -76,7 +73,5 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
         await getMeetupCreateChannel().send({
             embeds: [embed],
         });
-
-        await interaction.deleteReply();
     }
 }

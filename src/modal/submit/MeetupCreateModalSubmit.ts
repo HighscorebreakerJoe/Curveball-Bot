@@ -21,8 +21,8 @@ import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel
 import { postSuccess } from "../../util/postEmbeds";
 import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
-
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
+import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 
 /**
  * Handles Create Modal submits
@@ -31,6 +31,7 @@ import { AbstractModalSubmit } from "./AbstractModalSubmit";
 export class MeetupCreateModalSubmit extends AbstractModalSubmit {
     customId: string = "meetup_create:{d}";
     dynamicId: boolean = true;
+    responseMode: string = InteractionResponseMode.REPLY;
 
     protected async checkPermissions(interaction: ModalSubmitInteraction): Promise<void> {
         let roleIds: string[] = [];
@@ -145,9 +146,6 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
      * Posts meetup after modal inputs have been successfully validated
      */
     protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
-        //post defer reply to prevent timeout errors
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         //handle date
