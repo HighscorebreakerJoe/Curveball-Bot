@@ -1,7 +1,6 @@
 import {
     EmbedBuilder,
     heading,
-    MessageFlags,
     ModalSubmitInteraction,
     roleMention,
     Snowflake,
@@ -13,7 +12,7 @@ import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 import { db } from "../../database/Database";
 import { MeetupRow } from "../../database/table/Meetup";
-import { tCommon, tMeetup } from "../../i18n";
+import { tMeetup } from "../../i18n";
 import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../../util/getDynamicIDData";
@@ -21,6 +20,7 @@ import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
 import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
+import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 
 /**
  * Handles Edit Modal submits
@@ -29,6 +29,7 @@ import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     customId: string = "meetup_edit:{d}";
     dynamicId: boolean = true;
+    responseMode: string = InteractionResponseMode.UPDATE;
 
     protected async checkPermissions(interaction: ModalSubmitInteraction): Promise<void> {
         const meetupID: number = Number(getDynamicData(interaction.customId));
@@ -43,9 +44,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     /**
      * Posts meetup after modal inputs have been successfully validated
      */
-    protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-        
+    protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {        
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         const meetup = this.additionalData.meetup as MeetupRow;
@@ -140,8 +139,6 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         //reset meetup list channel
         await resetMeetupListChannel();
-
-        await interaction.deleteReply();
     }
 
     private async sendDifferencesMessage(

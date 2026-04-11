@@ -49,7 +49,5 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
         message.edit({
             embeds: [newEmbed],
         });
-
-        await interaction.deferUpdate();
     }
 }
