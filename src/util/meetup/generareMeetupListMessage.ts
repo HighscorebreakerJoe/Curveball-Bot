@@ -14,7 +14,7 @@ export async function generateMeetupListMessage(): Promise<string> {
         .selectFrom("meetup")
         .selectAll()
         .where("time", ">=", now)
-        .orderBy("time", "asc")
+        .orderBy("time", env.MEETUP_LIST_SORT_ORDER)
         .execute();
 
     const lines: string[] = [];

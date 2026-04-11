@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { getPositiveNumberFromString } from "./util/getPositiveNumberFromString";
+import { OrderByModifiers } from "kysely";
 
 declare type envStruct = {
     BOT_TOKEN: string;
@@ -12,6 +13,7 @@ declare type envStruct = {
     MEETUP_LIST_CHANNEL_ID: string;
     MEETUP_CREATE_DISABLE_DEFAULT_NOTICES: boolean;
     MEETUP_DELETE_LIMIT_HOURS: number;
+    MEETUP_LIST_SORT_ORDER: OrderByModifiers;
     DB_HOST: string;
     DB_PORT: string;
     DB_USERNAME: string;
@@ -33,6 +35,7 @@ const env: envStruct = {
     MEETUP_CREATE_DISABLE_DEFAULT_NOTICES:
         process.env.MEETUP_CREATE_DISABLE_DEFAULT_NOTICES === "true",
     MEETUP_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MEETUP_DELETE_LIMIT_HOURS),
+    MEETUP_LIST_SORT_ORDER: (process.env.MEETUP_LIST_SORT_ORDER?.toLocaleLowerCase() === "asc" ? "asc" : "desc"),
     DB_HOST: process.env.DB_HOST || "",
     DB_PORT: process.env.DB_PORT || "",
     DB_USERNAME: process.env.DB_USERNAME || "",
