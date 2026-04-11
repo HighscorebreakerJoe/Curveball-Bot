@@ -8,6 +8,7 @@ const meetup: TranslationObject = {
         threadDefaultDeleteReason: "Automatisch gelöscht",
         createSuccess: "Dein Meetup wurde erfolgreich erstellt!",
         createSuccessLink: "Hier geht es zu deinem erstellten Meetup.",
+        editSuccess: "Das Meetup wurde erfolgreich bearbeitet!",
 
         pokemon: "Pokémon",
         location: "Treffpunkt",

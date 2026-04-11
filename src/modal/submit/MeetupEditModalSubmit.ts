@@ -1,6 +1,7 @@
 import {
     EmbedBuilder,
     heading,
+    MessageFlags,
     ModalSubmitInteraction,
     roleMention,
     Snowflake,
@@ -12,7 +13,7 @@ import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 import { db } from "../../database/Database";
 import { MeetupRow } from "../../database/table/Meetup";
-import { tMeetup } from "../../i18n";
+import { tCommon, tMeetup } from "../../i18n";
 import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../../util/getDynamicIDData";
@@ -43,6 +44,8 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
      * Posts meetup after modal inputs have been successfully validated
      */
     protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         const meetup = this.additionalData.meetup as MeetupRow;
@@ -138,7 +141,11 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         //reset meetup list channel
         await resetMeetupListChannel();
 
-        await interaction.deferUpdate();
+        const successEmbed = prepareEmbedMessage(tMeetup("info.editSuccess"), tCommon("successDefaultEmbedTitle"), 0x00ff00);
+
+        await interaction.editReply({
+            embeds: [successEmbed]
+        });
     }
 
     private async sendDifferencesMessage(

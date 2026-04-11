@@ -8,6 +8,7 @@ const meetup: TranslationObject = {
         threadDefaultDeleteReason: "Deleted automatically",
         createSuccess: "Your meetup was successfully created!",
         createSuccessLink: "You can find your meetup here.",
+        editSuccess: "The meetup was successfully edited!",
         footerText: "Meetup #{{meetupID}}",
 
         pokemon: "Pokémon",
