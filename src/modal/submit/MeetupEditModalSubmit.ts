@@ -17,7 +17,7 @@ import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
-import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
+import { scheduleMeetupListReset } from "../../util/meetup/scheduleMeetupListReset";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 import { InteractionResponseMode } from "../../constant/interactionResponseMode";
@@ -137,8 +137,8 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
             );
         }
 
-        //reset meetup list channel
-        await resetMeetupListChannel();
+        //schedule meetup list channel reset
+        scheduleMeetupListReset();
     }
 
     private async sendDifferencesMessage(
