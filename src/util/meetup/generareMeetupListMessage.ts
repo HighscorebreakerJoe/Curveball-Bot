@@ -19,15 +19,22 @@ export async function generateMeetupListMessage(): Promise<string> {
 
     const lines: string[] = [];
 
-    let currentDateHeader: string | null = null;
+    let currentDateHeading: string | null = null;
+    const locale = env.LANGUAGE  === "de" ? "de-DE" : "en-US";
 
     for (const meetup of allUpcomingMeetups) {
         const meetupDate = new Date(meetup.time);
-        const dateHeader: string = meetupDate.toLocaleDateString("de-DE");
 
-        if (dateHeader !== currentDateHeader) {
-            currentDateHeader = dateHeader;
-            lines.push(`# 📅 ${currentDateHeader} \n`);
+        const weekday = new Intl.DateTimeFormat(locale, {
+            weekday: "short",
+        }).format(meetupDate);
+        const shortWeekday = weekday.replace(".", "").slice(0, 2);
+
+        const dateHeading: string =  shortWeekday + " – "  + meetupDate.toLocaleDateString(locale);
+
+        if (dateHeading !== currentDateHeading) {
+            currentDateHeading = dateHeading;
+            lines.push(`# 🗓️ ${currentDateHeading} \n`);
         }
 
         const messageID: string = meetup.messageID as string;
