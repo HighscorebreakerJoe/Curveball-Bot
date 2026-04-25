@@ -17,7 +17,7 @@ import { getDynamicData } from "../../util/getDynamicIDData";
 import { createMeetupInfoEmbed } from "../../util/meetup/createMeetupInfoEmbed";
 import { createParticipantListMessage } from "../../util/meetup/createParticipantListMessage";
 import { ParticipantData } from "../../util/meetup/editMeetupInfoEmbed";
-import { resetMeetupListChannel } from "../../util/meetup/resetMeetupListChannel";
+import { scheduleMeetupListReset } from "../../util/meetup/scheduleMeetupListReset";
 import { postSuccess } from "../../util/postEmbeds";
 import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
@@ -252,8 +252,8 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             await assignRole(interaction.user.id, meetupRole.id);
         }
 
-        //reset meetup list channel
-        await resetMeetupListChannel();
+        //schedule meetup list channel reset
+        scheduleMeetupListReset();
 
         //create success embed
         await postSuccess(

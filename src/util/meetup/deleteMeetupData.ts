@@ -8,7 +8,7 @@ import {
 import { tCommon, tMeetup } from "../../i18n";
 import { delay } from "../delay";
 import { splitArray } from "../splitArray";
-import { resetMeetupListChannel } from "./resetMeetupListChannel";
+import { scheduleMeetupListReset } from "./scheduleMeetupListReset";
 
 type DeleteData = {
     lessThanTwoWeeks: MeetupRow[];
@@ -58,8 +58,8 @@ export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
         await deleteRoleByRoleIDs(combinedRoleIDs);
     }
 
-    //reset meetup list channel
-    await resetMeetupListChannel();
+    //schedule meetup list channel reset
+    scheduleMeetupListReset();
 }
 
 async function deleteMessagesBulk(meetups: MeetupRow[]) {
