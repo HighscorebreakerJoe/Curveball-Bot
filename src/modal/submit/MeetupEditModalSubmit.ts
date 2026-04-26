@@ -17,10 +17,10 @@ import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
-import { scheduleMeetupListReset } from "../../util/meetup/scheduleMeetupListReset";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 import { InteractionResponseMode } from "../../constant/interactionResponseMode";
+import { scheduleManager } from "../../manager/ScheduleManager";
 
 /**
  * Handles Edit Modal submits
@@ -138,7 +138,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         }
 
         //schedule meetup list channel reset
-        scheduleMeetupListReset();
+        scheduleManager.scheduleResetMeetupList();
     }
 
     private async sendDifferencesMessage(

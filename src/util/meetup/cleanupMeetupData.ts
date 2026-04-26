@@ -1,8 +1,8 @@
 import { db } from "../../database/Database";
 import { MeetupRow } from "../../database/table/Meetup";
 import env from "../../env";
+import { scheduleManager } from "../../manager/ScheduleManager";
 import { deleteMeetupData } from "./deleteMeetupData";
-import { scheduleMeetupListReset } from "./scheduleMeetupListReset";
 
 /**
  * Cleans up meetup-data and -channels. Used by cleanup-cronjob and command.
@@ -35,6 +35,6 @@ async function deleteOldMeetups(): Promise<void> {
         await deleteMeetupData(meetupIDs);
     } else {
         //just reset meetup list channel
-        scheduleMeetupListReset();
+        scheduleManager.scheduleResetMeetupList();
     }
 }
