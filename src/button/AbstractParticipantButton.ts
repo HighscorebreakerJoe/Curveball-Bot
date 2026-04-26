@@ -1,10 +1,8 @@
-import { ButtonInteraction, EmbedBuilder } from "discord.js";
+import { ButtonInteraction } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValidMeetup";
-import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
-import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { AbstractButton } from "./AbstractButton";
 
 /**
@@ -51,42 +49,6 @@ export abstract class AbstractParticipantButton extends AbstractButton {
             .where("meetupID", "=", meetupParticipant.meetupID)
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
-    }
-
-    /**
-     * Updates meetup info embed
-     */
-    protected async updateMeetupEmbed(
-        interaction: ButtonInteraction,
-        participantData: ParticipantData[],
-    ): Promise<void> {
-        const embed: EmbedBuilder = EmbedBuilder.from(interaction.message.embeds[0]);
-
-        const newEmbed: EmbedBuilder = editMeetupInfoEmbed(embed, {
-            participants: participantData,
-        });
-
-        await interaction.message.edit({
-            embeds: [newEmbed],
-        });
-    }
-
-    /**
-     * Updates participant list
-     */
-    protected async updateParticipantList(
-        interaction: ButtonInteraction,
-        participantData: ParticipantData[],
-        participantListMessageID: string,
-    ): Promise<void> {
-        const participantListMessage =
-            await interaction.message.thread?.messages.fetch(participantListMessageID);
-
-        if (participantListMessage) {
-            await participantListMessage.edit({
-                content: createParticipantListMessage(participantData),
-            });
-        }
     }
 
     /**

@@ -3,8 +3,7 @@ import { db } from "../database/Database";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
-import { getParticipantData } from "../util/meetup/createMeetupInfoEmbed";
-import { ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
+import { scheduleManager } from "../manager/ScheduleManager";
 import { assignRole } from "../util/role/assignRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
@@ -46,11 +45,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
             await this.handleUpdateExisting(true);
         }
 
-        const participantData: ParticipantData[] = await getParticipantData(meetup.meetupID);
-        await this.updateMeetupEmbed(interaction, participantData);
-
-        const participantListMessageID = meetup.participantListMessageID as string;
-        await this.updateParticipantList(interaction, participantData, participantListMessageID);
+        scheduleManager.scheduleUpdateMeetupInfo(meetup.meetupID);
     }
 
     /**

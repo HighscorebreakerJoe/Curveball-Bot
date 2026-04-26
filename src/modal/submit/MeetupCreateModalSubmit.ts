@@ -1,6 +1,5 @@
 import {
     hyperlink,
-    MessageFlags,
     ModalSubmitFields,
     ModalSubmitInteraction,
     Role,
@@ -9,20 +8,20 @@ import { InsertResult } from "kysely";
 import { getGuild } from "../../cache/guild";
 import { getMeetupAllowedMentionsRoles } from "../../cache/meetupAllowedMentionsRoles";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
+import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 import { db } from "../../database/Database";
 import { tCommon, tMeetup, tModal } from "../../i18n";
+import { scheduleManager } from "../../manager/ScheduleManager";
 import { calculateYear } from "../../util/calculateYear";
 import { checkForLinks } from "../../util/checkForLinks";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { createMeetupInfoEmbed } from "../../util/meetup/createMeetupInfoEmbed";
 import { createParticipantListMessage } from "../../util/meetup/createParticipantListMessage";
 import { ParticipantData } from "../../util/meetup/editMeetupInfoEmbed";
-import { scheduleMeetupListReset } from "../../util/meetup/scheduleMeetupListReset";
 import { postSuccess } from "../../util/postEmbeds";
 import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
-import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 
 /**
  * Handles Create Modal submits
@@ -253,7 +252,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         }
 
         //schedule meetup list channel reset
-        scheduleMeetupListReset();
+        scheduleManager.scheduleResetMeetupList();
 
         //create success embed
         await postSuccess(
