@@ -1,10 +1,11 @@
 import { EmbedBuilder } from "discord.js";
-import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { getMeetupInfoChannel, getMeetupListChannel } from "../cache/meetupChannels";
 import { client } from "../client";
 import { MeetupRow } from "../database/table/Meetup";
 import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
 import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
-import { resetMeetupListChannel } from "../util/meetup/resetMeetupListChannel";
+import { generateMeetupListMessage } from "../util/meetup/generareMeetupListMessage";
+import { sendChunkedMessages } from "../util/sendChunkedMessages";
 
 /**
  * Manager for handling Discord UI updates (messages and threads).
@@ -14,10 +15,18 @@ import { resetMeetupListChannel } from "../util/meetup/resetMeetupListChannel";
 class UIManager {
 
     /**
-     * Resets meetup list
+     * Resets meetup list and generates message listing all currently available meetups from now on
      */
     public async resetMeetupListChannel(): Promise<void> {
-        await resetMeetupListChannel();
+        //clear meetup list channel
+        const messages = await getMeetupListChannel().messages.fetch({ limit: 100 });
+        await getMeetupListChannel().bulkDelete(messages);
+
+        //post new list
+        const meetupListMessage: string = await generateMeetupListMessage();
+        if (meetupListMessage.length > 0) {
+            await sendChunkedMessages(meetupListMessage, getMeetupListChannel());
+        }
     }
 
     /**
