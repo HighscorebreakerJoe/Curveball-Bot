@@ -47,7 +47,7 @@ export function editMeetupInfoEmbed(
     }
 
     if (options.toSaveDate) {
-        const dateIndex = fields.findIndex((f) => f.name.startsWith("📅"));
+        const dateIndex = fields.findIndex((f) => f.name.startsWith("🗓️"));
         if (dateIndex !== -1) {
             fields[dateIndex].value = time(options.toSaveDate, TimestampStyles.LongDateShortTime);
         }
