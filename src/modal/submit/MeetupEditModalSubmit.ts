@@ -76,7 +76,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         if (meetup.time.getTime() !== toSaveDate.getTime()) {
             differences.set("time", {
-                title: "📅 " + tMeetup("info.dateTime"),
+                title: "🗓️ " + tMeetup("info.dateTime"),
                 old: meetup.time,
                 new: toSaveDate,
             });

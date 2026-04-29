@@ -63,7 +63,7 @@ export class MeetupDeleteButton extends AbstractButton {
                     value: meetup.location,
                 },
                 {
-                    name: "📅 " + tMeetup("info.dateTime"),
+                    name: "🗓️ " + tMeetup("info.dateTime"),
                     value: time(meetup.time, TimestampStyles.LongDateShortTime),
                 },
             )
