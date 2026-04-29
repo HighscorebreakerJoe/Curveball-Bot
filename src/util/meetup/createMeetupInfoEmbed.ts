@@ -61,7 +61,7 @@ export function createMeetupInfoEmbed(
                 value: location,
             },
             {
-                name: "📅 " + tMeetup("info.dateTime"),
+                name: "🗓️ " + tMeetup("info.dateTime"),
                 value: time(toSaveDate, TimestampStyles.LongDateShortTime),
                 inline: true,
             },
