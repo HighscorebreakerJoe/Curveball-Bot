@@ -3,7 +3,7 @@ import { tMeetup } from "../../i18n";
 import { ParticipantData } from "./editMeetupInfoEmbed";
 import { printParticipantData } from "./printParticipantData";
 
-export function createParticipantListMessage(data: ParticipantData[]): string {
+export function createParticipantListMessage(data: ParticipantData[], maxLength = 2000): string {
     //sum up all participants
     const totalParticipantsCount: number = data.reduce((sum, currentParticipant) => {
         return sum + currentParticipant.participants;
@@ -26,29 +26,34 @@ export function createParticipantListMessage(data: ParticipantData[]): string {
 
     const lines: string[] = [];
 
-    lines.push("# ✅ " + tMeetup("participantList.participants"));
-    lines.push(
-        bold(tMeetup("participantList.personsTotal")) +
+    const participantHeader = "# ✅ " + tMeetup("participantList.participants");
+    const participantCount = bold(tMeetup("participantList.personsTotal")) +
             " " +
-            inlineCode(totalParticipantsCount + ""),
-    );
+            inlineCode(totalParticipantsCount + "");
 
-    lines.push("## 👍 " + tMeetup("participantList.confirmedParticipants"));
-    lines.push(
-        bold(tMeetup("participantList.persons")) + " " + inlineCode(sureParticipantsCount + ""),
-    );
+    lines.push(participantHeader);
+    lines.push(participantCount);
+
+    const confirmedParticipantHeader = "## 👍 " + tMeetup("participantList.confirmedParticipants");
+    const confirmedParticipantCount = bold(tMeetup("participantList.persons")) + " " + inlineCode(sureParticipantsCount + "");
+
+    lines.push(confirmedParticipantHeader);
+    lines.push(confirmedParticipantCount);
 
     for (const participant of sureParticipants) {
-        lines.push(printParticipantData(participant, true, false));
+        const currentParticipantData = printParticipantData(participant, true, false);
+        lines.push(currentParticipantData);
     }
 
-    lines.push("## 🤷 " + tMeetup("participantList.unsureParticipants"));
-    lines.push(
-        bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + ""),
-    );
+    const unsureParticipantHeader = "## 🤷 " + tMeetup("participantList.unsureParticipants");
+    const unsureParticipantCount =  bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + "");
+
+    lines.push(unsureParticipantHeader);
+    lines.push(unsureParticipantCount);
 
     for (const participant of unsureParticipants) {
-        lines.push(printParticipantData(participant, true, false));
+        const currentParticipantData = printParticipantData(participant, true, false);
+        lines.push(currentParticipantData);
     }
 
     return lines.join("\n");
