@@ -7,6 +7,8 @@ import { MeetupEditButton } from "../button/MeetupEditButton";
 import { MeetupRemoteParticipantButton } from "../button/MeetupRemoteParticipantButton";
 import { MeetupRemoveParticipantButton } from "../button/MeetupRemoveParticipantButton";
 import { MeetupUnsureParticipantButton } from "../button/MeetupUnsureParticipantButton";
+import { ShowAllParticipantsButton } from "../button/ShowAllParticipantsButton";
+import { ShowParticipantsSwitchPageButton } from "../button/ShowParticipantsSwitchPageButton";
 
 const buttonClasses: Array<new () => AbstractButton> = [
     MeetupAddParticipantButton,
@@ -17,6 +19,8 @@ const buttonClasses: Array<new () => AbstractButton> = [
     MeetupDeleteButton,
     MeetupDeleteConfirmButton,
     MeetupDeleteCancelButton,
+    ShowAllParticipantsButton,
+    ShowParticipantsSwitchPageButton
 ];
 
 export const buttonsMap = new Map<string, new () => AbstractButton>();

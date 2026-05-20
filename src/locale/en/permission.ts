@@ -2,6 +2,8 @@ import { TranslationObject } from "../../i18n";
 
 const permission: TranslationObject = {
     error: {
+        invalidDynamicData: "Invalid dynamic data",
+        invalidPageNumber: "Invalid page number",
         memberNotFound: "Member not found.",
         meetupCantEdit: "You don't have permissions to edit this meetup.",
         meetupCantDelete: "You don't have permissions to delete this meetup.",

@@ -28,6 +28,12 @@ const button: TranslationObject = {
         notParticipant:
             "Currently you are not a participant in this meetup. Did you hit the wrong button?",
     },
+
+    showAllParticipants: {
+        show: "Show all participants",
+        previousPage: "Previous page",
+        nextPage: "Next page"
+    },
 };
 
 export default button;

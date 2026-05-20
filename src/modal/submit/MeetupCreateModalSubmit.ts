@@ -16,7 +16,7 @@ import { calculateYear } from "../../util/calculateYear";
 import { checkForLinks } from "../../util/checkForLinks";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { createMeetupInfoEmbed } from "../../util/meetup/createMeetupInfoEmbed";
-import { createParticipantListMessage } from "../../util/meetup/createParticipantListMessage";
+import { createParticipantListPages } from "../../util/meetup/createParticipantListPages";
 import { ParticipantData } from "../../util/meetup/editMeetupInfoEmbed";
 import { postSuccess } from "../../util/postEmbeds";
 import { assignRole } from "../../util/role/assignRole";
@@ -225,10 +225,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             reason: tMeetup("info.threadDefaultCreateReason"),
         });
 
-        //write participant message in thread
+        //write participant message in thread, with meetup creator as the only participant
+        const participantListPages = createParticipantListPages([meetupCreatorParticipant]);
 
         const participantListMessage = await meetupInfoThread.send({
-            content: createParticipantListMessage([meetupCreatorParticipant]),
+            content: participantListPages[0]
         });
 
         // create meetup role
