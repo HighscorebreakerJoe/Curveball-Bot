@@ -229,7 +229,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         const participantListPages = createParticipantListPages([meetupCreatorParticipant]);
 
         const participantListMessage = await meetupInfoThread.send({
-            content: participantListPages[0] ?? ""
+            content: participantListPages[0]
         });
 
         // create meetup role

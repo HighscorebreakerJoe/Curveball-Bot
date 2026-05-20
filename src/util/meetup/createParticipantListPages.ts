@@ -59,7 +59,7 @@ export function createParticipantListPages(data: ParticipantData[], maxLength = 
         addLine(state, currentParticipantData);
     }
 
-    //unsure participants ---
+    //unsure participants
     const unsureParticipantHeader = "## 🤷 " + tMeetup("participantList.unsureParticipants");
     const unsureParticipantCount = bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + "");
 

@@ -63,7 +63,7 @@ export class ShowAllParticipantsButton extends AbstractButton {
         }
 
         await interaction.editReply({
-            content: participantPages[0] ?? "",
+            content: participantPages[0],
             components: components,
         });
     }

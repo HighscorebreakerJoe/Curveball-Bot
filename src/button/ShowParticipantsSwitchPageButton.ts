@@ -51,11 +51,18 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
         const participantPages = createParticipantListPages(participantData);
         const lastPage = participantPages.length - 1;
 
+        let toSwitchPageNo = pageNo;
+
+        if(toSwitchPageNo < 0 || toSwitchPageNo > lastPage){
+            //get next available page (go pages up or down depending on position)
+            toSwitchPageNo = Math.max(0, Math.min(pageNo, lastPage));
+        }
+
         //components
         const components: ActionRowBuilder<ButtonBuilder>[] = [];
         if(participantPages.length > 1){
-            let previousPage = (pageNo - 1 <= 0 ? 0 : pageNo - 1);
-            let nextPage = (pageNo + 1 >= lastPage ? lastPage : pageNo + 1);
+            let previousPage = (toSwitchPageNo - 1 <= 0 ? 0 : toSwitchPageNo - 1);
+            let nextPage = (toSwitchPageNo + 1 >= lastPage ? lastPage : toSwitchPageNo + 1);
 
             //add navigation buttons
             const previousPageButton: ButtonBuilder = new ButtonBuilder()
@@ -64,7 +71,7 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
                 .setEmoji("⬅️")
                 .setStyle(ButtonStyle.Secondary);
 
-            if(pageNo <= 0){
+            if(toSwitchPageNo <= 0){
                 previousPageButton.setDisabled(true);
             }
 
@@ -74,9 +81,9 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
                 .setEmoji("➡️")
                 .setStyle(ButtonStyle.Secondary);
 
-            if(pageNo >= lastPage){
+            if(toSwitchPageNo >= lastPage){
                 nextPageButton.setDisabled(true);
-            }    
+            }
 
             const navigationButtonRow: ActionRowBuilder<ButtonBuilder> =
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -88,7 +95,7 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
         }
 
         await interaction.update({
-            content: participantPages[pageNo] ?? "",
+            content: participantPages[toSwitchPageNo],
             components: components,
         });
     }

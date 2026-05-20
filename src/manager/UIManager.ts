@@ -80,14 +80,9 @@ class UIManager {
         }
 
         const participantPages: string[] = createParticipantListPages(participantData);
+        const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
-        await message.edit({
-            content: participantPages[0] ?? "",
-        });
-
-        const hasButton: boolean = this.hasShowFullParticipantListButton(message);
-
-        if(participantPages.length > 1 && !hasButton){
+        if(participantPages.length > 1){
             //add button
             const showAllParticipantsButton: ButtonBuilder = new ButtonBuilder()
                 .setCustomId("show_all_participants:" + meetup.meetupID)
@@ -99,16 +94,14 @@ class UIManager {
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     showAllParticipantsButton,
                 );
-            
-            await message.edit({
-                components: [showAllParticipantsButtonRow]
-            });
-        } else if (participantPages.length <= 1 && hasButton) {
-            //remove button
-            await message.edit({
-                components: []
-            });
+
+            components.push(showAllParticipantsButtonRow);
         }
+
+         await message.edit({
+            content: participantPages[0],
+            components: components
+        });
     }
 
     private hasShowFullParticipantListButton(message: Message): boolean {
