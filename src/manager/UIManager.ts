@@ -1,11 +1,12 @@
-import { EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Channel, ComponentType, EmbedBuilder, Message } from "discord.js";
 import { getMeetupInfoChannel, getMeetupListChannel } from "../cache/meetupChannels";
 import { client } from "../client";
 import { MeetupRow } from "../database/table/Meetup";
-import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
+import { createParticipantListPages } from "../util/meetup/createParticipantListPages";
 import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { generateMeetupListMessage } from "../util/meetup/generareMeetupListMessage";
 import { sendChunkedMessages } from "../util/sendChunkedMessages";
+import { tButton } from "../i18n";
 
 /**
  * Manager for handling Discord UI updates (messages and threads).
@@ -40,7 +41,7 @@ class UIManager {
             return;
         }
 
-        const message = await getMeetupInfoChannel().messages.fetch(meetup.messageID);
+        const message: Message = await getMeetupInfoChannel().messages.fetch(meetup.messageID);
 
         if (!message) { 
             return;
@@ -68,18 +69,60 @@ class UIManager {
             return;
         }
 
-        const thread = await client.channels.fetch(meetup.threadID);
+        const thread: Channel|null = await client.channels.fetch(meetup.threadID);
         if (!thread || !thread.isThread()) {
             return;
         }
 
-        const message = await thread.messages.fetch(meetup.participantListMessageID);
+        const message: Message = await thread.messages.fetch(meetup.participantListMessageID);
         if (!message) { 
             return;
         }
 
+        const participantPages: string[] = createParticipantListPages(participantData);
+
         await message.edit({
-            content: createParticipantListMessage(participantData),
+            content: participantPages[0] ?? "",
+        });
+
+        const hasButton: boolean = this.hasShowFullParticipantListButton(message);
+
+        if(participantPages.length > 1 && !hasButton){
+            //add button
+            const showAllParticipantsButton: ButtonBuilder = new ButtonBuilder()
+                .setCustomId("show_all_participants:" + meetup.meetupID)
+                .setLabel(tButton("showAllParticipants.show"))
+                .setEmoji("👪")
+                .setStyle(ButtonStyle.Secondary);
+
+            const showAllParticipantsButtonRow: ActionRowBuilder<ButtonBuilder> =
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    showAllParticipantsButton,
+                );
+            
+            await message.edit({
+                components: [showAllParticipantsButtonRow]
+            });
+        } else if (participantPages.length <= 1 && hasButton) {
+            //remove button
+            await message.edit({
+                components: []
+            });
+        }
+    }
+
+    private hasShowFullParticipantListButton(message: Message): boolean {
+        return message.components.some((row) =>{
+            if (row.type !== ComponentType.ActionRow) {
+                return false;
+            }
+
+            return row.components.some((component) => {
+                return (
+                    component.type === ComponentType.Button &&
+                    (component as ButtonComponent).customId?.startsWith("show_all_participants")
+                );
+            });
         });
     }
 }

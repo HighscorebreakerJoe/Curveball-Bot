@@ -3,7 +3,14 @@ import { tMeetup } from "../../i18n";
 import { ParticipantData } from "./editMeetupInfoEmbed";
 import { printParticipantData } from "./printParticipantData";
 
-export function createParticipantListMessage(data: ParticipantData[], maxLength = 2000): string {
+type BuildState = {
+    pages: string[];
+    currentLines: string[];
+    maxLength: number;
+    newline: string;
+};
+
+export function createParticipantListPages(data: ParticipantData[], maxLength = 2000): string[] {
     //sum up all participants
     const totalParticipantsCount: number = data.reduce((sum, currentParticipant) => {
         return sum + currentParticipant.participants;
@@ -24,37 +31,73 @@ export function createParticipantListMessage(data: ParticipantData[], maxLength 
         return sum + currentParticipant.participants;
     }, 0);
 
-    const lines: string[] = [];
+    const state: BuildState = {
+        pages: [],
+        currentLines: [],
+        maxLength,
+        newline: "\n",
+    };
 
+    //general participant info
     const participantHeader = "# ✅ " + tMeetup("participantList.participants");
     const participantCount = bold(tMeetup("participantList.personsTotal")) +
             " " +
             inlineCode(totalParticipantsCount + "");
 
-    lines.push(participantHeader);
-    lines.push(participantCount);
+    addLine(state, participantHeader);
+    addLine(state, participantCount);
 
+    //confirmed participants
     const confirmedParticipantHeader = "## 👍 " + tMeetup("participantList.confirmedParticipants");
     const confirmedParticipantCount = bold(tMeetup("participantList.persons")) + " " + inlineCode(sureParticipantsCount + "");
 
-    lines.push(confirmedParticipantHeader);
-    lines.push(confirmedParticipantCount);
+    addLine(state, confirmedParticipantHeader);
+    addLine(state, confirmedParticipantCount);
 
     for (const participant of sureParticipants) {
         const currentParticipantData = printParticipantData(participant, true, false);
-        lines.push(currentParticipantData);
+        addLine(state, currentParticipantData);
     }
 
+    //unsure participants ---
     const unsureParticipantHeader = "## 🤷 " + tMeetup("participantList.unsureParticipants");
-    const unsureParticipantCount =  bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + "");
+    const unsureParticipantCount = bold(tMeetup("participantList.persons")) + " " + inlineCode(unsureParticipantsCount + "");
 
-    lines.push(unsureParticipantHeader);
-    lines.push(unsureParticipantCount);
+    addLine(state, unsureParticipantHeader);
+    addLine(state, unsureParticipantCount);
 
     for (const participant of unsureParticipants) {
         const currentParticipantData = printParticipantData(participant, true, false);
-        lines.push(currentParticipantData);
+        addLine(state, currentParticipantData);
     }
 
-    return lines.join("\n");
+    return finalizePages(state);
+}
+
+function addLine(state: BuildState, toAddLine: string): void {
+    const currentLines = [...state.currentLines, toAddLine];
+    
+    const testPage = currentLines.join(state.newline);
+
+    if (testPage.length > state.maxLength) {
+        state.pages.push(
+            state.currentLines.join(state.newline),
+        );
+
+        state.currentLines = [];
+    }
+
+    state.currentLines.push(toAddLine);
+}
+
+function finalizePages(state: BuildState): string[] {
+    if (state.currentLines.length > 0) {
+        state.pages.push(
+            state.currentLines.join(state.newline),
+        );
+    }
+
+    state.currentLines = [];
+
+    return state.pages;
 }

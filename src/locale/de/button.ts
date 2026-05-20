@@ -27,6 +27,12 @@ const button: TranslationObject = {
     meetupRemoveParticipant: {
         notParticipant: "Du bist in diesem Meetup nicht als Teilnehmer markiert. Verdrückt?",
     },
+
+    showAllParticipants: {
+        show: "Alle Teilnehmer anzeigen",
+        previousPage: "Vorherige Seite",
+        nextPage: "Nächste Seite"
+    },
 };
 
 export default button;
