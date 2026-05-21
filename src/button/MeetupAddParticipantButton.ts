@@ -21,13 +21,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         await super.checkPermissions(interaction);
-
-        //check if this user has too many participants
-        const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
-
-        if (meetupParticipant && meetupParticipant.participants >= 10) {
-            throw new Error(tButton("meetupAddParticipant.error.maxParticipantsReached"));
-        }
+        this.checkParticipants();
     }
 
     /**
@@ -67,6 +61,17 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
 
         if (meetup.mentionRoleID) {
             await assignRole(userID, meetup.mentionRoleID);
+        }
+    }
+
+    /**
+     * Checks if user has too many participants
+     */
+    protected checkParticipants(): void {
+        const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
+
+        if (meetupParticipant && meetupParticipant.participants >= 10) {
+            throw new Error(tButton("meetupAddParticipant.error.maxParticipantsReached"));
         }
     }
 }

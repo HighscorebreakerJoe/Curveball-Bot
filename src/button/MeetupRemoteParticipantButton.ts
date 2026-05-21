@@ -33,4 +33,11 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
     }
+
+    /**
+     * Checks if user has too many participants
+     */
+    protected checkParticipants(): void {
+        //not needed here
+    }
 }
