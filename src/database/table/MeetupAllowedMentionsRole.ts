@@ -1,5 +1,4 @@
-import { Generated } from "kysely";
-import { Selectable } from "kysely/dist/esm";
+import { Generated, Selectable } from "kysely";
 import { Database } from "../Database";
 
 export interface MeetupAllowedMentionsRole {
