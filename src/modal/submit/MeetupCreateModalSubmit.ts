@@ -16,11 +16,12 @@ import { calculateYear } from "../../util/calculateYear";
 import { checkForLinks } from "../../util/checkForLinks";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { createMeetupInfoEmbed } from "../../util/meetup/createMeetupInfoEmbed";
-import { createParticipantListPages } from "../../util/meetup/createParticipantListPages";
+import { createParticipantListMessage } from "../../util/meetup/createParticipantListMessage";
 import { ParticipantData } from "../../util/meetup/editMeetupInfoEmbed";
 import { postSuccess } from "../../util/postEmbeds";
 import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
+import { splitMessage } from "../../util/splitMessage";
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
 
 /**
@@ -226,9 +227,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //write participant message in thread, with meetup creator as the only participant
-        const participantListPages = createParticipantListPages([meetupCreatorParticipant]);
+        const participantListMessage: string = createParticipantListMessage([meetupCreatorParticipant]);
+        //shouldn't exceed message length limit, but better be safe than sorry
+        const participantListPages: string[] = splitMessage(participantListMessage);
 
-        const participantListMessage = await meetupInfoThread.send({
+        const participantListThreadMessage = await meetupInfoThread.send({
             content: participantListPages[0]
         });
 
@@ -241,7 +244,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             .set({
                 messageID: meetupInfoMessage.id,
                 threadID: meetupInfoThread.id,
-                participantListMessageID: participantListMessage.id,
+                participantListMessageID: participantListThreadMessage.id,
                 mentionRoleID: meetupRole ? meetupRole.id : null,
             })
             .where("meetupID", "=", meetupID)
