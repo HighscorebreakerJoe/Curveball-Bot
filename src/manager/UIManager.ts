@@ -103,21 +103,6 @@ class UIManager {
             components: components
         });
     }
-
-    private hasShowFullParticipantListButton(message: Message): boolean {
-        return message.components.some((row) =>{
-            if (row.type !== ComponentType.ActionRow) {
-                return false;
-            }
-
-            return row.components.some((component) => {
-                return (
-                    component.type === ComponentType.Button &&
-                    (component as ButtonComponent).customId?.startsWith("show_all_participants")
-                );
-            });
-        });
-    }
 }
 
 export const uiManager = new UIManager();
