@@ -1,11 +1,12 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
-import { AbstractButton } from "./AbstractButton";
 import { MeetupRow } from "../database/table/Meetup";
-import { getParticipantData } from "../util/meetup/createMeetupInfoEmbed";
-import { createParticipantListPages } from "../util/meetup/createParticipantListPages";
 import { tButton, tPermission } from "../i18n";
-import { getDynamicData } from "../util/getDynamicIDData";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
+import { getDynamicData } from "../util/getDynamicIDData";
+import { getParticipantData } from "../util/meetup/createMeetupInfoEmbed";
+import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
+import { splitMessage } from "../util/splitMessage";
+import { AbstractButton } from "./AbstractButton";
 
 /**
  * Class for handling "Show participants switch page" buttonpress in ephemeral meetup participant list messages
@@ -48,8 +49,10 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
         const participantData = await getParticipantData(meetup.meetupID);
 
         //get pages
-        const participantPages = createParticipantListPages(participantData);
-        const lastPage = participantPages.length - 1;
+        const participantListMessage: string = createParticipantListMessage(participantData);
+        const participantListPages: string[] = splitMessage(participantListMessage);
+        
+        const lastPage = participantListPages.length - 1;
 
         let toSwitchPageNo = pageNo;
 
@@ -60,7 +63,7 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
 
         //components
         const components: ActionRowBuilder<ButtonBuilder>[] = [];
-        if(participantPages.length > 1){
+        if(participantListPages.length > 1){
             let previousPage = (toSwitchPageNo - 1 <= 0 ? 0 : toSwitchPageNo - 1);
             let nextPage = (toSwitchPageNo + 1 >= lastPage ? lastPage : toSwitchPageNo + 1);
 
@@ -95,7 +98,7 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
         }
 
         await interaction.update({
-            content: participantPages[toSwitchPageNo],
+            content: participantListPages[toSwitchPageNo],
             components: components,
         });
     }

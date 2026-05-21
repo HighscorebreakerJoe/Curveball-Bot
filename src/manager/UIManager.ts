@@ -1,12 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Channel, ComponentType, EmbedBuilder, Message } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Channel, EmbedBuilder, Message } from "discord.js";
 import { getMeetupInfoChannel, getMeetupListChannel } from "../cache/meetupChannels";
 import { client } from "../client";
 import { MeetupRow } from "../database/table/Meetup";
-import { createParticipantListPages } from "../util/meetup/createParticipantListPages";
+import { tButton } from "../i18n";
+import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
 import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
 import { generateMeetupListMessage } from "../util/meetup/generareMeetupListMessage";
 import { sendChunkedMessages } from "../util/sendChunkedMessages";
-import { tButton } from "../i18n";
+import { splitMessage } from "../util/splitMessage";
 
 /**
  * Manager for handling Discord UI updates (messages and threads).
@@ -79,10 +80,12 @@ class UIManager {
             return;
         }
 
-        const participantPages: string[] = createParticipantListPages(participantData);
+        const participantListMessage: string = createParticipantListMessage(participantData);
+        const participantListPages: string[] = splitMessage(participantListMessage);
+ 
         const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
-        if(participantPages.length > 1){
+        if(participantListPages.length > 1){
             //add button
             const showAllParticipantsButton: ButtonBuilder = new ButtonBuilder()
                 .setCustomId("show_all_participants:" + meetup.meetupID)
@@ -99,7 +102,7 @@ class UIManager {
         }
 
          await message.edit({
-            content: participantPages[0],
+            content: participantListPages[0],
             components: components
         });
     }
