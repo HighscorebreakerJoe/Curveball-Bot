@@ -1,177 +1,126 @@
+import { DiscordAPIError } from "discord.js";
 import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
-    MeetupRow,
+    MeetupRow
 } from "../../database/table/Meetup";
 import { tCommon, tMeetup } from "../../i18n";
-import { scheduleManager } from "../../manager/ScheduleManager";
 import { delay } from "../delay";
 import { splitArray } from "../splitArray";
 
-type DeleteData = {
-    lessThanTwoWeeks: MeetupRow[];
-    moreThanTwoWeeks: MeetupRow[];
+type CategorizedMessageIDs = {
+    lessThanTwoWeeks: string[];
+    moreThanTwoWeeks: string[];
 };
 
 /**
  * Function for deleting meetup-channels and data
  */
 export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
+    const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
+
+    const categorizedMessageIDs: CategorizedMessageIDs = getMessageIDsFromMeetups(toDeleteMeetups);
+    const roleIDs: string[] = toDeleteMeetups
+        .map((meetup) => meetup.mentionRoleID)
+        .filter((roleID): roleID is string => Boolean(roleID));
+
+    await Promise.allSettled(
+        [
+            deleteMessages(categorizedMessageIDs),
+            deleteRoleByRoleIDs(roleIDs)
+        ]
+    );
+
+    await deleteMeetupsByMeetupIDs(meetupIDs);
+}
+
+function getMessageIDsFromMeetups(meetups: MeetupRow[]){
     // Discord allows bulk deleting up to 100 messages which are not older than 14 days old
     // -> split up messages into two categories
 
-    const deleteStruct: DeleteData = {
+    const categorizedMessageIDs: CategorizedMessageIDs = {
         lessThanTwoWeeks: [],
         moreThanTwoWeeks: [],
     };
-
-    const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
     const dateNow = new Date();
     const twoWeeksAgo = new Date(dateNow);
     twoWeeksAgo.setDate(dateNow.getDate() - 14);
 
-    for (const toDeleteMeetup of toDeleteMeetups) {
-        sortInDeleteStruct(deleteStruct, toDeleteMeetup, twoWeeksAgo);
+    for (const toDeleteMeetup of meetups) {
+        setMessageIDCategory(categorizedMessageIDs, toDeleteMeetup, twoWeeksAgo);
     }
 
-    const results = [];
-
-    if (deleteStruct.lessThanTwoWeeks.length > 0) {
-        results.push(await deleteMessagesBulk(deleteStruct.lessThanTwoWeeks));
-    }
-
-    if (deleteStruct.moreThanTwoWeeks.length > 0) {
-        results.push(await deleteMessagesManually(deleteStruct.moreThanTwoWeeks));
-    }
-
-    const combinedMeetupIDs: number[] = results.flatMap((r) => r.toDeleteMeetupIDs);
-    const combinedRoleIDs: string[] = results.flatMap((r) => r.toDeleteRoleIDs);
-
-    if (combinedMeetupIDs.length) {
-        await deleteMeetupsByMeetupIDs(combinedMeetupIDs);
-    }
-
-    if (combinedRoleIDs.length) {
-        await deleteRoleByRoleIDs(combinedRoleIDs);
-    }
-
-    //schedule meetup list channel reset
-    scheduleManager.scheduleResetMeetupList();
+    return categorizedMessageIDs;
 }
 
-async function deleteMessagesBulk(meetups: MeetupRow[]) {
+async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs) {
+    if (categorizedMessageIDs.lessThanTwoWeeks.length > 0) {
+        await deleteMessagesBulk(categorizedMessageIDs.lessThanTwoWeeks);
+    }
+
+    if (categorizedMessageIDs.moreThanTwoWeeks.length > 0) {
+       await deleteMessagesManually(categorizedMessageIDs.moreThanTwoWeeks);
+    }
+}
+
+async function deleteMessagesBulk(messageIDs: string[]) {
     //split message IDs in chunks
-    const messageIDs: Set<string> = new Set(
-        meetups
-            .map((meetup: MeetupRow) => meetup.messageID)
-            .filter((messageID): messageID is string => !!messageID),
-    );
-
     const messageIDChunks: string[][] = splitArray([...messageIDs], 100);
-
-    const deletedMessageIDs = new Set<string>();
 
     // bulk delete all message chunks
     for (const messageIDChunk of messageIDChunks) {
-        const deleted = await getMeetupInfoChannel().bulkDelete(messageIDChunk, true);
-        for (const messageID of deleted.keys()) {
-            deletedMessageIDs.add(messageID);
-        }
+        try {
+            await getMeetupInfoChannel().bulkDelete(messageIDChunk, true);
+            await delay(500);
+        } catch (error: unknown) {
+            if (error instanceof DiscordAPIError && error.code === 10008) {
+                continue;
+            }
 
-        await delay(500);
-    }
-
-    const excludeMessageIDs = new Set<string>();
-
-    for (const id of messageIDs) {
-        if (!deletedMessageIDs.has(id)) {
-            excludeMessageIDs.add(id);
+            console.error(tMeetup("message.error.delete", { messageID: "0" }), error);
         }
     }
-
-    return createToDeleteSummary(meetups, excludeMessageIDs);
 }
 
-async function deleteMessagesManually(meetups: MeetupRow[]) {
-    //get messages
-    const messageIDs: Set<string> = new Set(
-        meetups
-            .map((meetup: MeetupRow) => meetup.messageID)
-            .filter((messageID): messageID is string => !!messageID),
-    );
-
-    const toDeleteMessages = [];
-    const failedMessageIDs = new Set<string>();
-
+async function deleteMessagesManually(messageIDs: string[]) {
     for (const messageID of messageIDs) {
-        const message = await getMeetupInfoChannel()
-            .messages.fetch(messageID)
-            .catch(() => {
-                failedMessageIDs.add(messageID);
-                return null;
-            });
+        try {
+            const message = await getMeetupInfoChannel().messages.fetch(messageID);
+            await message.delete();
 
-        if (!message) {
-            continue;
-        }
+            await delay(500);
+        } catch (error: unknown) {
+            if (error instanceof DiscordAPIError && error.code === 10008) {
+                continue;
+            }
 
-        if (message) {
-            toDeleteMessages.push(message);
+            console.error(tMeetup("message.error.delete", { messageID: messageID }), error);
         }
     }
-
-    // delete messages one by one without reaching rate limit
-    for (const toDeleteMessage of toDeleteMessages) {
-        await toDeleteMessage.delete().catch(() => {
-            failedMessageIDs.add(toDeleteMessage.id);
-            return null;
-        });
-
-        await delay(500);
-    }
-
-    return createToDeleteSummary(meetups, failedMessageIDs);
 }
 
-function sortInDeleteStruct(
-    deleteStruct: DeleteData,
+function setMessageIDCategory(
+    categorizedMessageIDs: CategorizedMessageIDs,
     toDeleteMeetup: MeetupRow,
     limitDate: Date,
 ): void {
-    const isLessThanTwoWeeks: boolean = !!(
-        toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate
-    );
+    const messageID: string = toDeleteMeetup.messageID ?? "";
+
+    if (!messageID) {
+        return;
+    }
+
+    const isLessThanTwoWeeks: boolean = 
+        !!(toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate);
 
     if (isLessThanTwoWeeks) {
-        deleteStruct.lessThanTwoWeeks.push(toDeleteMeetup);
+        categorizedMessageIDs.lessThanTwoWeeks.push(messageID);
     } else {
-        deleteStruct.moreThanTwoWeeks.push(toDeleteMeetup);
+        categorizedMessageIDs.moreThanTwoWeeks.push(messageID);
     }
-}
-
-function createToDeleteSummary(meetups: MeetupRow[], excludeMessageIDs: Set<string>) {
-    const toDeleteMeetupIDs: number[] = [];
-    const toDeleteRoleIDs: string[] = [];
-
-    for (const meetup of meetups) {
-        if (!meetup.messageID || excludeMessageIDs.has(meetup.messageID)) {
-            continue;
-        }
-
-        toDeleteMeetupIDs.push(meetup.meetupID);
-
-        if (meetup.mentionRoleID) {
-            toDeleteRoleIDs.push(meetup.mentionRoleID);
-        }
-    }
-
-    return {
-        toDeleteMeetupIDs: toDeleteMeetupIDs,
-        toDeleteRoleIDs: toDeleteRoleIDs,
-    };
 }
 
 async function deleteRoleByRoleIDs(roleIDs: string[]) {
@@ -179,7 +128,11 @@ async function deleteRoleByRoleIDs(roleIDs: string[]) {
         try {
             await getGuild().roles.delete(roleID, tCommon("defaultDeleteReason"));
             await delay(500);
-        } catch (error) {
+        } catch (error: unknown) {
+            if (error instanceof DiscordAPIError && error.code === 10011) {
+                continue;
+            }
+
             console.error(tMeetup("role.error.delete", { roleID: roleID }), error);
         }
     }

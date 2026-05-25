@@ -3,6 +3,7 @@ import { MeetupRow } from "../../database/table/Meetup";
 import env from "../../env";
 import { scheduleManager } from "../../manager/ScheduleManager";
 import { deleteMeetupData } from "./deleteMeetupData";
+import { deleteRedundantMeetupThreads } from "./deleteRedundantMeetupThreads";
 
 /**
  * Cleans up meetup-data and -channels. Used by cleanup-cronjob and command.
@@ -10,6 +11,8 @@ import { deleteMeetupData } from "./deleteMeetupData";
 
 export async function cleanupMeetupData(): Promise<void> {
     await deleteOldMeetups();
+    await deleteRedundantMeetupThreads();
+    scheduleManager.scheduleResetMeetupList();
 }
 
 async function deleteOldMeetups(): Promise<void> {
@@ -33,8 +36,5 @@ async function deleteOldMeetups(): Promise<void> {
     if (meetupIDs.length > 0) {
         //delete old meetups
         await deleteMeetupData(meetupIDs);
-    } else {
-        //just reset meetup list channel
-        scheduleManager.scheduleResetMeetupList();
     }
 }

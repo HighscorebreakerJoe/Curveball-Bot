@@ -3,7 +3,6 @@ import { tCommand } from "../i18n";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
 import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
 import { cleanupMeetupData } from "../util/meetup/cleanupMeetupData";
-import { deleteRedundantMeetupThreads } from "../util/meetup/deleteRedundantMeetupThreads";
 import { postSuccess } from "../util/postEmbeds";
 import { AbstractCommand } from "./AbstractCommand";
 
@@ -32,7 +31,6 @@ export class MeetupCleanUpCommand extends AbstractCommand {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         await cleanupMeetupData();
-        await deleteRedundantMeetupThreads();
 
         //create success embed
         await postSuccess(interaction, tCommand("meetupCleanup.success"));

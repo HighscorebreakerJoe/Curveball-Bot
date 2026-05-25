@@ -1,6 +1,7 @@
 import { ButtonInteraction, Message, User } from "discord.js";
 import { MeetupRow } from "../database/table/Meetup";
 import { tButton, tCommand, tCommon } from "../i18n";
+import { scheduleManager } from "../manager/ScheduleManager";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../util/getDynamicIDData";
@@ -40,6 +41,9 @@ export class MeetupDeleteConfirmButton extends AbstractButton {
         const meetup = this.context.meetup as MeetupRow;
 
         await deleteMeetupData([meetup.meetupID]);
+        
+        //schedule meetup list channel reset
+        scheduleManager.scheduleResetMeetupList();
 
         const message: Message = interaction.message;
         const user: User = interaction.user;
