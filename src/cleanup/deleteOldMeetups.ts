@@ -1,21 +1,13 @@
-import { db } from "../../database/Database";
-import { MeetupRow } from "../../database/table/Meetup";
-import env from "../../env";
-import { scheduleManager } from "../../manager/ScheduleManager";
+import { db } from "../database/Database";
+import { MeetupRow } from "../database/table/Meetup";
+import env from "../env";
 import { deleteMeetupData } from "./deleteMeetupData";
-import { deleteRedundantMeetupThreads } from "./deleteRedundantMeetupThreads";
 
 /**
- * Cleans up meetup-data and -channels. Used by cleanup-cronjob and command.
+ * Function for deleting old meetups
  */
 
-export async function cleanupMeetupData(): Promise<void> {
-    await deleteOldMeetups();
-    await deleteRedundantMeetupThreads();
-    scheduleManager.scheduleResetMeetupList();
-}
-
-async function deleteOldMeetups(): Promise<void> {
+export async function deleteOldMeetups(): Promise<void> {
     //detect old meetups
     const dateNow = new Date();
     const deleteLimitHours: number = 3600000 * env.MEETUP_DELETE_LIMIT_HOURS;

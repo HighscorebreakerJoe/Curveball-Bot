@@ -1,14 +1,14 @@
 import { DiscordAPIError } from "discord.js";
-import { getGuild } from "../../cache/guild";
-import { getMeetupInfoChannel } from "../../cache/meetupChannels";
+import { getMeetupInfoChannel } from "../cache/meetupChannels";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
     MeetupRow
-} from "../../database/table/Meetup";
-import { tCommon, tMeetup } from "../../i18n";
-import { delay } from "../delay";
-import { splitArray } from "../splitArray";
+} from "../database/table/Meetup";
+import { tMeetup } from "../i18n";
+import { delay } from "../util/delay";
+import { splitArray } from "../util/splitArray";
+import { deleteRoleByRoleIDs } from "./deleteRoleByRoleIDs";
 
 type CategorizedMessageIDs = {
     lessThanTwoWeeks: string[];
@@ -120,20 +120,5 @@ function setMessageIDCategory(
         categorizedMessageIDs.lessThanTwoWeeks.push(messageID);
     } else {
         categorizedMessageIDs.moreThanTwoWeeks.push(messageID);
-    }
-}
-
-async function deleteRoleByRoleIDs(roleIDs: string[]) {
-    for (const roleID of roleIDs) {
-        try {
-            await getGuild().roles.delete(roleID, tCommon("defaultDeleteReason"));
-            await delay(500);
-        } catch (error: unknown) {
-            if (error instanceof DiscordAPIError && error.code === 10011) {
-                continue;
-            }
-
-            console.error(tMeetup("role.error.delete", { roleID: roleID }), error);
-        }
     }
 }

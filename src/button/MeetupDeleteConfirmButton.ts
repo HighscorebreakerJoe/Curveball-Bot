@@ -1,11 +1,11 @@
 import { ButtonInteraction, Message, User } from "discord.js";
+import { deleteMeetupData } from "../cleanup/deleteMeetupData";
 import { MeetupRow } from "../database/table/Meetup";
 import { tButton, tCommand, tCommon } from "../i18n";
 import { scheduleManager } from "../manager/ScheduleManager";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../util/getDynamicIDData";
-import { deleteMeetupData } from "../util/meetup/deleteMeetupData";
 import { prepareEmbedMessage } from "../util/postEmbeds";
 import { AbstractButton } from "./AbstractButton";
 

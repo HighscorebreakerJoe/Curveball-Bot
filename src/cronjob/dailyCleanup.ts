@@ -1,8 +1,8 @@
 import nodeCron from "node-cron";
-import { getMeetupCreateChannel } from "../cache/meetupChannels";
-import env from "../env";
+import { deleteNonBotMessagesFromCreateChannel } from "../cleanup/deleteNonBotMessagesFromCreateChannel";
+import { deleteRedundantMeetupRoles } from "../cleanup/deleteRedundantMeetupRoles";
+import { deleteRedundantMeetupThreads } from "../cleanup/deleteRedundantMeetupThreads";
 import { tCronjob, tSetup } from "../i18n";
-import { deleteRedundantMeetupThreads } from "../util/meetup/deleteRedundantMeetupThreads";
 
 export async function setupDailyCleanupCronjob(): Promise<void> {
     nodeCron.schedule("0 30 0 * * *", cronjob);
@@ -11,8 +11,7 @@ export async function setupDailyCleanupCronjob(): Promise<void> {
 
 async function cronjob(): Promise<void> {
     try {
-        await deleteRedundantMeetupThreads();
-        await deleteNonBotMessagesFromCreateChannel();
+        await runCleanup();
 
         console.log(tCronjob("dailyCleanup.success", { time: new Date().toISOString() }));
     } catch (error) {
@@ -20,11 +19,10 @@ async function cronjob(): Promise<void> {
     }
 }
 
-async function deleteNonBotMessagesFromCreateChannel(): Promise<void> {
-    const messages = await getMeetupCreateChannel().messages.fetch({ limit: 100 });
-    const filteredMessages = messages.filter(
-        (message) => !message.author.bot || message.author.id !== env.CLIENT_ID,
-    );
-
-    await getMeetupCreateChannel().bulkDelete(filteredMessages);
+async function runCleanup(): Promise<void> {
+    await deleteRedundantMeetupThreads();
+    await deleteRedundantMeetupRoles();
+    await deleteNonBotMessagesFromCreateChannel();
 }
+
+

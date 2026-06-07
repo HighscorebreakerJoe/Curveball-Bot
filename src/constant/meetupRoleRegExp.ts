@@ -1,0 +1,1 @@
+export const meetupRoleRegExp: RegExp = /^Meetup\[(\d+)\]$/;
