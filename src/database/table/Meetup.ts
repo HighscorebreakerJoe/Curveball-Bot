@@ -43,6 +43,12 @@ export async function getMeetupsByMeetupIDs(meetupIDs: number[]): Promise<Meetup
         .execute()) as MeetupRow[];
 }
 
+export async function getAllMeetupIDs(): Promise<number[]> {
+    const rows = await db.selectFrom("meetup").select("meetupID").execute();
+
+    return rows.map((row) => row.meetupID).filter((id): id is number => id !== null);
+}
+
 export async function getAllMeetupMessageIDs(): Promise<string[]> {
     const rows = await db.selectFrom("meetup").select("messageID").execute();
 

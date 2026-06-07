@@ -41,6 +41,12 @@ const meetup: TranslationObject = {
         },
     },
 
+    message: {
+        error: {
+            delete: "Failed to delete message {{messageID}}",
+        },
+    },
+
     update: {
         title: "Update!",
         embedTitle: "This meetup got an update!",

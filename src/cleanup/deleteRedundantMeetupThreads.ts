@@ -1,11 +1,11 @@
 import { ThreadChannel } from "discord.js";
-import { getAllMeetupThreadIDs } from "../../database/table/Meetup";
-import { tCommon, tMeetup } from "../../i18n";
-import { delay } from "../delay";
-import { getAllAvailableMeetupInfoThreads } from "./getAllAvailableMeetupInfoThreads";
+import { getAllMeetupThreadIDs } from "../database/table/Meetup";
+import { tCommon, tMeetup } from "../i18n";
+import { delay } from "../util/delay";
+import { getAllAvailableMeetupInfoThreads } from "../util/meetup/getAllAvailableMeetupInfoThreads";
 
 /**
- * Deletes threads which were linked by already deleted meetups
+ * Deletes threads which are linked by already deleted meetups
  */
 
 export async function deleteRedundantMeetupThreads(): Promise<void> {
