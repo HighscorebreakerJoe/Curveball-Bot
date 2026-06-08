@@ -1,5 +1,6 @@
 import nodeCron from "node-cron";
 import { deleteNonBotMessagesFromCreateChannel } from "../cleanup/deleteNonBotMessagesFromCreateChannel";
+import { deleteOldModalInputDrafts } from "../cleanup/deleteOldModalInputDrafts";
 import { deleteRedundantMeetupRoles } from "../cleanup/deleteRedundantMeetupRoles";
 import { deleteRedundantMeetupThreads } from "../cleanup/deleteRedundantMeetupThreads";
 import { tCronjob, tSetup } from "../i18n";
@@ -23,6 +24,8 @@ async function runCleanup(): Promise<void> {
     await deleteRedundantMeetupThreads();
     await deleteRedundantMeetupRoles();
     await deleteNonBotMessagesFromCreateChannel();
+
+    await deleteOldModalInputDrafts();
 }
 
 
