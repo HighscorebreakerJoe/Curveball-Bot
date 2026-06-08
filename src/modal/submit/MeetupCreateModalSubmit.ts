@@ -46,91 +46,12 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
     }
 
-    protected checkModalInputs(fields: ModalSubmitFields): void {
-        //check pokémon
+    protected sanitizeModalInputs(fields: ModalSubmitFields): void {
         const pokemon: string = sanitizeTextInput(fields.getTextInputValue("pokemon"));
-
-        if (!pokemon.length) {
-            throw new Error(tModal("meetupCreate.submit.error.pokemonEmpty"));
-        }
-
-        if (checkForLinks(pokemon)) {
-            throw new Error(tCommon("error.linkDetected"));
-        }
-
-        //check location
         const location: string = sanitizeTextInput(fields.getTextInputValue("location"));
-
-        if (!location.length) {
-            throw new Error(tModal("meetupCreate.submit.error.locationEmpty"));
-        }
-
-        if (checkForLinks(location)) {
-            throw new Error(tCommon("error.linkDetected"));
-        }
-
-        //check time
-        const time: string = fields.getTextInputValue("time");
-
-        if (!time.length) {
-            throw new Error(tModal("meetupCreate.submit.error.timeEmpty"));
-        }
-
-        const timeRegexp = new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
-
-        if (!timeRegexp.test(time)) {
-            throw new Error(tModal("meetupCreate.submit.error.timeWrongFormat"));
-        }
-
-        const timeParts: string[] = time.split(":");
-        if (timeParts.length !== 2) {
-            throw new Error(tModal("meetupCreate.submit.error.timeWrongFormat"));
-        }
-
-        const [hour, minute] = timeParts.map(Number);
-
-        const currentDate = new Date();
-        currentDate.setSeconds(0, 0);
-
-        //check date
-        const date: string = fields.getTextInputValue("date");
-
-        if (!date.length) {
-            throw new Error(tModal("meetupCreate.submit.error.dateEmpty"));
-        }
-
-        const dateRegexp = new RegExp("^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$");
-
-        if (!dateRegexp.test(date)) {
-            throw new Error(tModal("meetupCreate.submit.error.dateWrongFormat"));
-        }
-
-        const dateParts: string[] = date.split(".");
-        if (dateParts.length !== 2) {
-            throw new Error(tModal("meetupCreate.submit.error.dateWrongFormat"));
-        }
-
-        const [day, month] = dateParts.map(Number);
-        const year: number = calculateYear(day, month);
-
-        const dateObject = new Date(year, month - 1, day, hour, minute);
-
-        if (dateObject.getDate() !== day || dateObject.getMonth() !== month - 1) {
-            throw new Error(tModal("meetupCreate.submit.error.dateInvalid"));
-        }
-
-        if (dateObject < currentDate) {
-            throw new Error(tModal("meetupCreate.submit.error.dateInThePast"));
-        }
-
-        //check note (optional)
+        const time: string = fields.getTextInputValue("time").trim();
+        const date: string = fields.getTextInputValue("date").trim();
         const note: string = sanitizeTextInput(fields.getTextInputValue("note"));
-
-        if (note.length > 0) {
-            if (checkForLinks(note)) {
-                throw new Error(tCommon("error.linkDetected"));
-            }
-        }
 
         //save inputs for later
         this.sanitizedInputs = {
@@ -140,6 +61,83 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             date,
             note,
         };
+    }
+
+    protected validateModalInputs(): void {
+        const { pokemon, location, time, date, note } = this.sanitizedInputs;
+
+        //check pokémon
+        if (!pokemon.length) {
+            this.handleError(tModal("meetupCreate.submit.error.pokemonEmpty"));
+        }
+
+        if (checkForLinks(pokemon)) {
+            this.handleError(tCommon("error.linkDetected"));
+        }
+
+        //check location
+        if (!location.length) {
+            this.handleError(tModal("meetupCreate.submit.error.locationEmpty"));
+        }
+
+        if (checkForLinks(location)) {
+            this.handleError(tCommon("error.linkDetected"));
+        }
+
+        //check time
+        if (!time.length) {
+            this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
+        }
+
+        const timeRegexp = new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
+
+        if (!timeRegexp.test(time)) {
+            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+        }
+
+        const timeParts: string[] = time.split(":");
+        if (timeParts.length !== 2) {
+            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+        }
+
+        const [hour, minute] = timeParts.map(Number);
+
+        const currentDate = new Date();
+        currentDate.setSeconds(0, 0);
+
+        //check date
+        if (!date.length) {
+            this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
+        }
+
+        const dateRegexp = new RegExp("^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$");
+
+        if (!dateRegexp.test(date)) {
+            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+        }
+
+        const dateParts: string[] = date.split(".");
+        if (dateParts.length !== 2) {
+            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+        }
+
+        const [day, month] = dateParts.map(Number);
+        const year: number = calculateYear(day, month);
+
+        const dateObject = new Date(year, month - 1, day, hour, minute);
+
+        if (dateObject.getDate() !== day || dateObject.getMonth() !== month - 1) {
+            this.handleError(tModal("meetupCreate.submit.error.dateInvalid"));
+        }
+
+        if (dateObject < currentDate) {
+            this.handleError(tModal("meetupCreate.submit.error.dateInThePast"));
+        }
+
+        //check note (optional)
+        if (note.length > 0 && checkForLinks(note)) {
+            this.handleError(tCommon("error.linkDetected"));
+        }
     }
 
     /**
@@ -258,6 +256,9 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         //schedule meetup list channel reset
         scheduleManager.scheduleResetMeetupList();
 
+        //remove modal input draft
+        await this.deleteModalInputDraft();
+
         //create success embed
         await postSuccess(
             interaction,
@@ -293,6 +294,10 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         }
 
         return toSaveDate;
+    }
+
+    protected setDraftCustomID(): void {
+        this.draftCustomID = "meetup_create";
     }
 
     private async createMeetupRole(meetupID: number): Promise<Role | null> {

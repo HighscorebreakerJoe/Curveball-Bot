@@ -19,7 +19,7 @@ function createModalInputDraftTable(db: Kysely<any>): Promise<void> {
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "modalCustomID",
+            "draftCustomID",
             "varchar(100)",
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
@@ -37,7 +37,7 @@ function createModalInputDraftTable(db: Kysely<any>): Promise<void> {
         .addPrimaryKeyConstraint("modal_input_draft_pk",
             [
                 "userID",
-                "modalCustomID",
+                "draftCustomID",
             ]
         )
         .execute();

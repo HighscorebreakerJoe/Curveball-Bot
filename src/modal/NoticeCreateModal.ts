@@ -2,13 +2,13 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     LabelBuilder,
-    ModalBuilder,
     ModalSubmitInteraction,
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
     TextInputBuilder,
-    TextInputStyle,
+    TextInputStyle
 } from "discord.js";
+import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
 
@@ -41,22 +41,11 @@ export class NoticeCreateModal extends AbstractModal {
         }
     }
 
-    protected setSubmitCustomId() {
+    protected setSubmitCustomID() {
         this.submitCustomId = "notice_create";
     }
 
-    protected buildModal(): ModalBuilder {
-        const modal: ModalBuilder = new ModalBuilder()
-            .setCustomId(this.submitCustomId)
-            .setTitle(this.modalTitle);
-
-        const { title, description, type } = this.buildInputs();
-        modal.addLabelComponents(title, description, type);
-
-        return modal;
-    }
-
-    protected buildInputs() {
+    protected buildInputs(): Record<string, LabelBuilder> {
         const titleInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("title")
             .setPlaceholder(tModal("noticeCreate.field.titlePlaceholder"))
@@ -103,4 +92,28 @@ export class NoticeCreateModal extends AbstractModal {
             type: type,
         };
     }
+
+    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
+        const { title, description, type } = inputs;
+
+        const formData = JSON.parse(draft.formData);
+
+        // title
+        if(formData.title !== undefined) {
+            const titleInput = title.data.component as TextInputBuilder;
+            titleInput.setValue(String(formData.title));
+        }
+
+        // description
+        if(formData.description !== undefined) {
+            const descriptionInput = description.data.component as TextInputBuilder;
+            descriptionInput.setValue(String(formData.description));
+        }
+
+        // type
+        if(formData.type !== undefined) {
+            const typeInput = type.data.component as TextInputBuilder;
+            typeInput.setValue(String(formData.type));
+        }
+    };
 }
