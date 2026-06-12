@@ -5,7 +5,11 @@ const modal: TranslationObject = {
         error: {
             invalidInteractionType: "Invalid interaction type",
             invalidCommand: "Invalid command {{commandName}}",
+            draft: "Failed to save modal input draft",
+            unknown: "Unknown error",
         },
+
+        placeholder: "Placeholder",
     },
 
     meetupCreate: {

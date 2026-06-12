@@ -2,12 +2,12 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     LabelBuilder,
-    ModalBuilder,
     TextInputBuilder,
-    TextInputStyle,
+    TextInputStyle
 } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupAllowedMentionsRoleRow } from "../database/table/MeetupAllowedMentionsRole";
+import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
 
@@ -66,25 +66,17 @@ export class MeetupCreateModal extends AbstractModal {
         });
     }
 
-    protected setSubmitCustomId() {
+    protected setSubmitCustomID() {
         const roleIdString = this.additionalData.roleIds.join(",");
 
         this.submitCustomId = "meetup_create:" + roleIdString;
     }
 
-    protected buildModal(): ModalBuilder {
-        const modal: ModalBuilder = new ModalBuilder()
-            .setCustomId(this.submitCustomId)
-            .setTitle(this.modalTitle);
-
-        const { pokemon, location, time, date, note } = this.buildInputs();
-        // Add inputs to the modal
-        modal.addLabelComponents(pokemon, location, time, date, note);
-
-        return modal;
+    protected setDraftCustomID(): void {
+        this.draftCustomID = "meetup_create";
     }
 
-    protected buildInputs() {
+    protected buildInputs(): Record<string, LabelBuilder> {
         const pokemonInput: TextInputBuilder = new TextInputBuilder()
             .setCustomId("pokemon")
             .setPlaceholder(tModal("meetupCreate.field.pokemonPlaceholder"))
@@ -149,6 +141,42 @@ export class MeetupCreateModal extends AbstractModal {
             note: note,
         };
     }
+
+    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
+        const { pokemon, location, time, date, note } = inputs;
+
+        const formData = JSON.parse(draft.formData);
+
+        // pokemon
+        if(formData.pokemon !== undefined) {
+            const pokemonInput = pokemon.data.component as TextInputBuilder;
+            pokemonInput.setValue(String(formData.pokemon));
+        }
+
+        // location
+        if(formData.location !== undefined) {
+            const locationInput = location.data.component as TextInputBuilder;
+            locationInput.setValue(String(formData.location));
+        }
+
+        // time
+        if(formData.time !== undefined) {
+            const timeInput = time.data.component as TextInputBuilder;
+            timeInput.setValue(String(formData.time));
+        }
+
+        // date
+        if(formData.date !== undefined) {
+            const dateInput = date.data.component as TextInputBuilder;
+            dateInput.setValue(String(formData.date));
+        }
+
+        // note
+        if(formData.note !== undefined) {
+            const noteInput = note.data.component as TextInputBuilder;
+            noteInput.setValue(String(formData.note));
+        }
+    };
 
     private async checkRole(roleId: string): Promise<void> {
         const role = (await db

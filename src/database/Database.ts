@@ -4,11 +4,13 @@ import env from "../env";
 import { Meetup } from "./table/Meetup";
 import { MeetupAllowedMentionsRole } from "./table/MeetupAllowedMentionsRole";
 import { MeetupParticipant } from "./table/MeetupParticipant";
+import { ModalInputDraft } from "./table/ModalInputDraft";
 
 export interface Database {
     meetup: Meetup;
     meetup_participant: MeetupParticipant;
     meetup_allowed_mentions_role: MeetupAllowedMentionsRole;
+    modal_input_draft: ModalInputDraft;
 }
 
 export const db = new Kysely<Database>({

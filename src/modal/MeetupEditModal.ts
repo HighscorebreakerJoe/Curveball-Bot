@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction, TextInputBuilder } from "discord.js";
+import { ButtonInteraction, ChatInputCommandInteraction, LabelBuilder, TextInputBuilder } from "discord.js";
 import { MeetupRow } from "../database/table/Meetup";
 import { tModal } from "../i18n";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
@@ -33,13 +33,18 @@ export class MeetupEditModal extends MeetupCreateModal {
         });
     }
 
-    protected setSubmitCustomId() {
+    protected setSubmitCustomID() {
         this.submitCustomId = "meetup_edit:" + this.additionalData.meetup.meetupID;
     }
 
-    protected buildInputs() {
-        const { pokemon, location, time, date, note } = super.buildInputs();
+    protected setDraftCustomID(): void {
+        this.draftCustomID = this.submitCustomId;
+    }
 
+    protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {
+        const { pokemon, location, time, date, note } = inputs;
+
+        //use meetup data from database as default
         const meetup = this.additionalData.meetup as MeetupRow;
 
         //set values
@@ -70,13 +75,5 @@ export class MeetupEditModal extends MeetupCreateModal {
             const noteInput = note.data.component as TextInputBuilder;
             noteInput.setValue(meetup.note);
         }
-
-        return {
-            pokemon: pokemon,
-            location: location,
-            time: time,
-            date: date,
-            note: note,
-        };
-    }
+    };
 }

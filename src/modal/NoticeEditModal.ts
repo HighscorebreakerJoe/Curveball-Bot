@@ -1,6 +1,7 @@
 import {
     ChatInputCommandInteraction,
     Embed,
+    LabelBuilder,
     Message,
     StringSelectMenuBuilder,
     TextInputBuilder,
@@ -42,13 +43,14 @@ export class NoticeEditModal extends NoticeCreateModal {
         });
     }
 
-    protected setSubmitCustomId() {
+    protected setSubmitCustomID() {
         this.submitCustomId = "notice_edit:" + this.additionalData.message.id;
     }
 
-    protected buildInputs() {
-        const { title, description, type } = super.buildInputs();
+     protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {
+        const { title, description, type } = inputs;
 
+        //use message embed directly as default
         const message = this.additionalData.message as Message;
         const embed: Embed = message.embeds[0];
 
@@ -62,11 +64,5 @@ export class NoticeEditModal extends NoticeCreateModal {
 
         const typeInput = type.data.component as StringSelectMenuBuilder;
         //TODO set type
-
-        return {
-            title: title,
-            description: description,
-            type: type,
-        };
-    }
+    };
 }
