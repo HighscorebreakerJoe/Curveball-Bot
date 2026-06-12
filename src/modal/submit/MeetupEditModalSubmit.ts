@@ -29,7 +29,7 @@ import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     customId: string = "meetup_edit:{d}";
     dynamicId: boolean = true;
-    responseMode: string = InteractionResponseMode.UPDATE;
+    responseMode: string = InteractionResponseMode.REPLY;
 
     protected async checkPermissions(interaction: ModalSubmitInteraction): Promise<void> {
         const meetupID: number = Number(getDynamicData(interaction.customId));
@@ -139,6 +139,8 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         //schedule meetup list channel reset
         scheduleManager.scheduleResetMeetupList();
+
+        interaction.deleteReply();
     }
 
     protected setDraftCustomID(): void {
