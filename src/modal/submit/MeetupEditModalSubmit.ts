@@ -10,7 +10,6 @@ import {
 } from "discord.js";
 import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
-import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 import { db } from "../../database/Database";
 import { MeetupRow } from "../../database/table/Meetup";
 import { tMeetup } from "../../i18n";
@@ -28,8 +27,6 @@ import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
 
 export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     customId: string = "meetup_edit:{d}";
-    dynamicId: boolean = true;
-    responseMode: string = InteractionResponseMode.REPLY;
 
     protected async checkPermissions(interaction: ModalSubmitInteraction): Promise<void> {
         const meetupID: number = Number(getDynamicData(interaction.customId));
