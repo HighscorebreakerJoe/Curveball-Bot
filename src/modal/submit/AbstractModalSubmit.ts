@@ -2,7 +2,7 @@ import { MessageFlags, ModalSubmitFields, ModalSubmitInteraction } from "discord
 import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 import { db } from "../../database/Database";
 import { deleteModalInputDrafts } from "../../database/table/ModalInputDraft";
-import { tCommon } from "../../i18n";
+import { tCommon, tModal } from "../../i18n";
 import { postError } from "../../util/postEmbeds";
 
 /**
@@ -25,9 +25,9 @@ export abstract class AbstractModalSubmit {
     public async execute(interaction: ModalSubmitInteraction): Promise<void> {
         try {
             await this.prepareResponse(interaction);
+            await this.checkPermissions(interaction);
             this.setInteractionUserID(interaction);
             this.setDraftCustomID(interaction);
-            await this.checkPermissions(interaction);
             this.sanitizeModalInputs(interaction.fields);
             this.validateModalInputs();
             await this.successModalInputs(interaction);
@@ -91,17 +91,23 @@ export abstract class AbstractModalSubmit {
      * Saves the current modal inputs so they can be restored when the user reopens the modal
      */
     private async saveModalInputDraft(): Promise<void> {
-        await db
-            .insertInto("modal_input_draft")
-            .values({
-                userID: this.interactionUserID,
-                draftCustomID: this.draftCustomID,
-                formData: JSON.stringify(this.sanitizedInputs)
-            })
-            .onDuplicateKeyUpdate({
-                formData: JSON.stringify(this.sanitizedInputs),
-            })
-            .executeTakeFirstOrThrow();
+        try {
+            const formData = JSON.stringify(this.sanitizedInputs);  
+
+            await db
+                .insertInto("modal_input_draft")
+                .values({
+                    userID: this.interactionUserID,
+                    draftCustomID: this.draftCustomID,
+                    formData: formData,
+                })
+                .onDuplicateKeyUpdate({
+                    formData: formData,
+                })
+                .execute();  
+        } catch (error) {
+            console.error(tModal("error.draft"), error);
+        }
     }
 
     /**

@@ -10,17 +10,17 @@ import {
 } from "discord.js";
 import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
+import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 import { db } from "../../database/Database";
 import { MeetupRow } from "../../database/table/Meetup";
 import { tMeetup } from "../../i18n";
+import { scheduleManager } from "../../manager/ScheduleManager";
 import { assertMeetupIDIsValid } from "../../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../../permission/assertUserIsMeetupCreatorOrConfig";
 import { getDynamicData } from "../../util/getDynamicIDData";
 import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
-import { InteractionResponseMode } from "../../constant/interactionResponseMode";
-import { scheduleManager } from "../../manager/ScheduleManager";
 
 /**
  * Handles Edit Modal submits
@@ -139,6 +139,12 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         //schedule meetup list channel reset
         scheduleManager.scheduleResetMeetupList();
+    }
+
+    protected setDraftCustomID(): void {
+        const meetup = this.additionalData.meetup as MeetupRow;
+
+        this.draftCustomID = "meetup_edit:" + meetup.meetupID;
     }
 
     private async sendDifferencesMessage(
