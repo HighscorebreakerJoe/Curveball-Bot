@@ -10,7 +10,7 @@ const meetup: TranslationObject = {
         createSuccessLink: "Hier geht es zu deinem erstellten Meetup.",
         editSuccess: "Das Meetup wurde erfolgreich bearbeitet!",
 
-        pokemon: "Pokémon",
+        pokemon: "Pokémon / Event",
         location: "Treffpunkt",
         dateTime: "Datum und Uhrzeit",
         remainingTime: "Verbleibende Zeit",

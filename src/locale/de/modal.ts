@@ -12,7 +12,7 @@ const modal: TranslationObject = {
         title: "Neues Meetup erstellen",
 
         field: {
-            pokemon: "Pokémon (+ zugehöriges Event)",
+            pokemon: "Pokémon  / Event",
             pokemonPlaceholder: "z.B. Enton oder Raidstunde Enton",
 
             location: "Treffpunkt",

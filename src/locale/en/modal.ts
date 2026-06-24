@@ -16,7 +16,7 @@ const modal: TranslationObject = {
         title: "Create new meetup",
 
         field: {
-            pokemon: "Pokémon (+ associated event)",
+            pokemon: "Pokémon  / Event",
             pokemonPlaceholder: "e.g. Psyduck or Raid Hour Psyduck",
 
             location: "Location",

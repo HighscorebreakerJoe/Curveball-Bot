@@ -11,7 +11,7 @@ const meetup: TranslationObject = {
         editSuccess: "The meetup was successfully edited!",
         footerText: "Meetup #{{meetupID}}",
 
-        pokemon: "Pokémon",
+        pokemon: "Pokémon / Event",
         location: "Location",
         dateTime: "Date and time",
         remainingTime: "Remaining time",
