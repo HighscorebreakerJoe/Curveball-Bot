@@ -4,7 +4,9 @@
   "main": "dist/bot.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node ."
+    "start:dev": "npm run build && cross-env STAGE=dev node .",
+    "start:prod": "npm run build && cross-env STAGE=prod node .",
+    "start:test": "npm run build && cross-env STAGE=test node ."
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "@eslint/js": "^9.39.4",
     "@typescript-eslint/eslint-plugin": "^8.59.4",
     "@typescript-eslint/parser": "^8.59.4",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",

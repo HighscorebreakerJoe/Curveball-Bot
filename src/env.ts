@@ -1,6 +1,27 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import fs from "fs";
 import { OrderByModifiers } from "kysely";
 import { getPositiveNumberFromString } from "./util/getPositiveNumberFromString";
+
+const defaultStage = "prod";
+const allowedStages = new Set(["dev", "test", "prod"]);
+const requestedStage = process.env.STAGE ?? defaultStage;
+
+const stage = allowedStages.has(requestedStage) ? requestedStage : defaultStage;
+const envFile = `.env.${stage}`;
+
+console.log(`### Stage: ${stage} ###`);
+
+if (!fs.existsSync(envFile)) {
+    throw new Error(`Missing env file: ${envFile}`);
+}
+
+dotenv.config(
+    { 
+        path: envFile,
+        quiet: true,
+    }
+);
 
 declare type envStruct = {
     BOT_TOKEN: string;
