@@ -92,18 +92,47 @@ Permissions that are sufficient to set up meetup-related channels.
 
 ### 2.5 Configuration
 
-Copy the contents of `.env.example` into a new file called `.env`.
+Copy `.env.example` and create your main configuration file:
 
-This file contains all important configuration values required by the bot.
-Edit the `.env` file according to the instructions provided in the comments.
+- `.env.prod`
+
+This file contains all required configuration values for running the bot in production mode.
+
+If you just want to run the bot without any additional setup, configuring `.env.prod` is sufficient.
+
+Edit the file according to the comments inside `.env.example`.
+
+#### Additional stages
+
+You can *optionally* define configurations for additional environments:
+
+- `.env.dev` for development
+- `.env.test` for testing
+
+These are only needed if you want to run the bot in these stages.
 
 ## 3. GO!
 
 With all preparations done, you're ready to start the bot!
 When the bot starts, it automatically sets up and updates the database by applying any pending migrations.
 
-Start the bot using:
-`npm run start`
+If you just want to run the bot normally, use the production environment:
+
+`npm run start:prod`
+
+This is the recommended way to run the bot.
+
+### Additional stages
+
+Instead of the default production setup, you can run the bot in different environments using:
+
+- Development:
+  `npm run start:dev`
+
+- Testing:
+  `npm run start:test`
+
+These are only required if you explicitly work with multiple environments.
 
 ## Technologies and tools used
 
