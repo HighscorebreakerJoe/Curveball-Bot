@@ -5,6 +5,8 @@ const button: TranslationObject = {
         error: {
             maxParticipantsReached:
                 "Maximalanzahl der Mitteilnehmenden erreicht. Mich freut es aber, dass du so viele Freunde hast!",
+            invalidCreateAdditionalAuditLogCall :
+                "Dev: Ungültiger Aufruf von createAdditionalAuditLog. Genau einer der Werte defaultRemoteState oder defaultUnsureState muss true sein."
         },
     },
 

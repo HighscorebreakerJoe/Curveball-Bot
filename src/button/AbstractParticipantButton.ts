@@ -1,5 +1,7 @@
 import { ButtonInteraction } from "discord.js";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { assertMessageHasValidMeetup } from "../permission/assertMessageHasValidMeetup";
@@ -49,6 +51,14 @@ export abstract class AbstractParticipantButton extends AbstractButton {
             .where("meetupID", "=", meetupParticipant.meetupID)
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
+
+        const auditAction = (add ? AuditLogAction.MEETUP_PARTICIPANT_ADD : AuditLogAction.MEETUP_PARTICIPANT_REMOVE);
+
+        await createAuditLog(auditAction, {
+            userID: meetupParticipant.userID,
+            meetupID: meetupParticipant.meetupID,
+            additionalInformation: `new count: ${participantCount}`,
+        });   
     }
 
     /**

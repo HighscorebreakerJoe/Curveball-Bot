@@ -1,11 +1,13 @@
 import { DiscordAPIError } from "discord.js";
 import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { AuditLogAction } from "../constant/auditLogAction";
+import { createAuditLog } from "../database/table/AuditLog";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
     MeetupRow
 } from "../database/table/Meetup";
-import { tMeetup } from "../i18n";
+import { tCommon, tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 import { splitArray } from "../util/splitArray";
 import { deleteRoleByRoleIDs } from "./deleteRoleByRoleIDs";
@@ -18,7 +20,7 @@ type CategorizedMessageIDs = {
 /**
  * Function for deleting meetup-channels and data
  */
-export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
+export async function deleteMeetupData(meetupIDs: number[], automaticallyDeleted: boolean = false, userID?: string): Promise<void> {
     const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
     const categorizedMessageIDs: CategorizedMessageIDs = getMessageIDsFromMeetups(toDeleteMeetups);
@@ -34,6 +36,14 @@ export async function deleteMeetupData(meetupIDs: number[]): Promise<void> {
     );
 
     await deleteMeetupsByMeetupIDs(meetupIDs);
+
+    meetupIDs?.forEach((meetupID: number): void => {
+        createAuditLog(AuditLogAction.MEETUP_DELETE, {
+            userID: userID,
+            meetupID: meetupID,
+            additionalInformation: (automaticallyDeleted ? tCommon("defaultDeleteReason") : undefined)
+        });
+    });
 }
 
 function getMessageIDsFromMeetups(meetups: MeetupRow[]){

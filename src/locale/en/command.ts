@@ -24,8 +24,10 @@ const command: TranslationObject = {
 
         error: {
             invalidRole: "Can't find role.",
-            roleAlreadyAdded: "Role with ID {{roleID}} is already added as a mentionable role.",
+            roleAlreadyAdded: "Role {{roleMention}} is already added as a mentionable role.",
         },
+
+        success: "Role {{roleMention}} is now mentionable in meetups.",
     },
 
     meetupCleanup: {
@@ -41,8 +43,10 @@ const command: TranslationObject = {
         },
 
         error: {
-            roleAlreadyAdded: "Role with ID {{roleID}} is not added as a mentionable role.",
+            roleAlreadyAdded: "Role {{roleMention}} is not added as a mentionable role.",
         },
+
+        success: "Role {{roleMention}} is not mentionable in meetups anymore.",
     },
 
     noticeCreate: {

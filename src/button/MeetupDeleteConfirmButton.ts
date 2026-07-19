@@ -40,13 +40,14 @@ export class MeetupDeleteConfirmButton extends AbstractButton {
         //post delete prompt to user
         const meetup = this.context.meetup as MeetupRow;
 
-        await deleteMeetupData([meetup.meetupID]);
+        const user: User = interaction.user;
+
+        await deleteMeetupData([meetup.meetupID], false, user?.id);
         
         //schedule meetup list channel reset
         scheduleManager.scheduleResetMeetupList();
 
-        const message: Message = interaction.message;
-        const user: User = interaction.user;
+        const message: Message = interaction.message;        
         await message.delete();
 
         await this.postConfirmSuccess(user);

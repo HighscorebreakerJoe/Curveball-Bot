@@ -8,8 +8,10 @@ import { InsertResult } from "kysely";
 import { getGuild } from "../../cache/guild";
 import { getMeetupAllowedMentionsRoles } from "../../cache/meetupAllowedMentionsRoles";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
+import { AuditLogAction } from "../../constant/auditLogAction";
 import { InteractionResponseMode } from "../../constant/interactionResponseMode";
 import { db } from "../../database/Database";
+import { createAuditLog } from "../../database/table/AuditLog";
 import { tCommon, tMeetup, tModal } from "../../i18n";
 import { scheduleManager } from "../../manager/ScheduleManager";
 import { calculateYear } from "../../util/calculateYear";
@@ -164,6 +166,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         //get meetupID
         const meetupID: number = Number(meetupResult.insertId);
 
+        await createAuditLog(AuditLogAction.MEETUP_CREATE, {
+            userID: interaction.user.id,
+            meetupID: meetupID
+        });
+
         //save meetup creator as meetup participant
         await db
             .insertInto("meetup_participant")
@@ -175,6 +182,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
                 remote: false,
             })
             .executeTakeFirstOrThrow();
+
+        await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
+            userID: interaction.user.id,
+            meetupID: meetupID
+        });
 
         //create and post meetup-embed
         let embedTitle: string =

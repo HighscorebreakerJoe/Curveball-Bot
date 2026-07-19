@@ -27,6 +27,6 @@ export async function deleteOldMeetups(): Promise<void> {
 
     if (meetupIDs.length > 0) {
         //delete old meetups
-        await deleteMeetupData(meetupIDs);
+        await deleteMeetupData(meetupIDs, true);
     }
 }

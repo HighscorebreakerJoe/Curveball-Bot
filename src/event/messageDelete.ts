@@ -1,5 +1,7 @@
 import { Client, Events, Message, OmitPartialGroupDMChannel, PartialMessage } from "discord.js";
-import { getMeetupInfoChannel } from "../cache/meetupChannels";
+import { getMeetupCreateChannel, getMeetupInfoChannel } from "../cache/meetupChannels";
+import { AuditLogAction } from "../constant/auditLogAction";
+import { createAuditLog } from "../database/table/AuditLog";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupByMessageID,
@@ -19,6 +21,8 @@ export default function onMessageDelete(client: Client): void {
         async (message: OmitPartialGroupDMChannel<Message | PartialMessage>): Promise<void> => {
             if (message.channel.id == getMeetupInfoChannel().id) {
                 await handleMeetupMessage(message);
+            } else if (message.channel.id == getMeetupCreateChannel().id) {
+                await handleInfoMessage(message);
             }
         },
     );
@@ -41,4 +45,19 @@ async function handleMeetupMessage(
     } catch (error) {
         console.error(tCommon("error.meetupDeleteError"), error);
     }
+}
+
+async function handleInfoMessage(
+    message: OmitPartialGroupDMChannel<Message | PartialMessage>,
+): Promise<void> {
+    //check if message is an embed message  / notice
+    if (!message.embeds.length || message.embeds.length > 1) {
+        return;
+    }
+
+    //audit log
+    await createAuditLog(AuditLogAction.NOTICE_DELETE, {
+        //userID: , //TODO: Add user ID if possible
+        additionalInformation: `message.id: ${message.id}`
+    });
 }

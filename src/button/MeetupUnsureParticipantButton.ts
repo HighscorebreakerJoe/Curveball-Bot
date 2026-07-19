@@ -1,5 +1,7 @@
 import { ButtonInteraction } from "discord.js";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { MeetupAddParticipantButton } from "./MeetupAddParticipantButton";
 
@@ -24,14 +26,23 @@ export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
     protected async handleUpdateExisting(add: boolean): Promise<void> {
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
+        const newStatus = !meetupParticipant.unsure;
+
         await db
             .updateTable("meetup_participant")
             .set({
-                unsure: !meetupParticipant.unsure,
+                unsure: newStatus,
             })
             .where("meetupID", "=", meetupParticipant.meetupID)
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
+
+        const auditAction = (newStatus ? AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE : AuditLogAction.MEETUP_PARTICIPANT_UNSURE_DISABLE);
+
+        await createAuditLog(auditAction, {
+            userID: meetupParticipant.userID,
+            meetupID: meetupParticipant.meetupID,
+        });  
     }
 
     /**

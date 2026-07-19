@@ -1,5 +1,7 @@
 import { ButtonInteraction } from "discord.js";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
@@ -59,6 +61,12 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
             .where("meetupID", "=", meetupParticipant.meetupID)
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
+
+        await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_REMOVE, {
+            userID: meetupParticipant.userID,
+            meetupID: meetupParticipant.meetupID,
+            additionalInformation: `new count: 0`,
+        });
 
         if (meetup.mentionRoleID) {
             await removeRole(meetupParticipant.userID, meetup.mentionRoleID);
