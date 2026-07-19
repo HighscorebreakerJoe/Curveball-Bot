@@ -1,5 +1,7 @@
 import { ButtonInteraction } from "discord.js";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { MeetupRow } from "../database/table/Meetup";
 import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { tButton } from "../i18n";
@@ -59,6 +61,16 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
             })
             .executeTakeFirstOrThrow();
 
+        await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
+            userID: userID,
+            meetupID: meetup.meetupID,
+            additionalInformation: `new count: 1`
+        });
+
+        if(this.defaultUnsureState || this.defaultRemoteState){
+            this.createAdditionalAuditLog(userID, meetup.meetupID);
+        }        
+
         if (meetup.mentionRoleID) {
             await assignRole(userID, meetup.mentionRoleID);
         }
@@ -73,5 +85,26 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
         if (meetupParticipant && meetupParticipant.participants >= 10) {
             throw new Error(tButton("meetupAddParticipant.error.maxParticipantsReached"));
         }
+    }
+
+    /**
+     * Creates an additional audit log entry depending on the pressed button
+     */
+    private async createAdditionalAuditLog(userID: string, meetupID: number){
+
+        let action;
+        
+        if(this.defaultUnsureState){
+            action = AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE;
+        } else if (this.defaultRemoteState) {
+            action = AuditLogAction.MEETUP_PARTICIPANT_REMOTE_ENABLE;
+        } else {
+            throw new Error(tButton("meetupAddParticipant.error.invalidCreateAdditionalAuditLogCall"));
+        }
+
+        await createAuditLog(action, {
+            userID: userID,
+            meetupID: meetupID,
+        });
     }
 }
