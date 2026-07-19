@@ -3,6 +3,7 @@ import {
     ModalSubmitFields,
     ModalSubmitInteraction,
     Role,
+    roleMention,
 } from "discord.js";
 import { InsertResult } from "kysely";
 import { getGuild } from "../../cache/guild";
@@ -189,7 +190,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //create and post meetup-embed
-        let embedTitle: string =
+        const embedTitle: string =
             pokemon + ": " + tMeetup("info.titleRaidFrom") + " " + interaction.user?.tag;
 
         const meetupCreatorParticipant: ParticipantData = {
@@ -215,7 +216,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         //set role mentions
         const roleMentions: string[] = [];
         this.additionalData.roleIds.forEach((roleID: string) => {
-            roleMentions.push(`<@&${roleID}>`);
+            roleMentions.push(roleMention(roleID));
         });
 
         const meetupInfoMessage = await getMeetupInfoChannel().send({
