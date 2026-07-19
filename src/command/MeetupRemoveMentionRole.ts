@@ -3,6 +3,7 @@ import {
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     MessageFlags,
+    roleMention,
 } from "discord.js";
 import { removeRole } from "../cache/meetupAllowedMentionsRoles";
 import { AuditLogAction } from "../constant/auditLogAction";
@@ -50,7 +51,7 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
         //create success embed
         await postSuccess(
             interaction,
-            `Die Rolle <@&${role.id}> ist nun nicht mehr in Meetups erwähnbar`,
+            tCommand("meetupRemoveMention.success", { roleMention: roleMention(role.id) }),
         );
     }
 
@@ -66,7 +67,7 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
 
         if (!result.length) {
             throw new Error(
-                tCommand("meetupRemoveMention.error.roleAlreadyAdded", { roleID: roleID }),
+                tCommand("meetupRemoveMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
             );
         }
     }

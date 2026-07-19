@@ -3,6 +3,7 @@ import {
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     MessageFlags,
+    roleMention,
 } from "discord.js";
 import { addRole } from "../cache/meetupAllowedMentionsRoles";
 import { AuditLogAction } from "../constant/auditLogAction";
@@ -78,7 +79,10 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         });
 
         //create success embed
-        await postSuccess(interaction, `Die Rolle <@&${role.id}> ist nun in Meetups erwähnbar`);
+        await postSuccess(
+            interaction, 
+            tCommand("meetupAddMention.success", { roleMention: roleMention(role.id) }),
+        );
     }
 
     protected async checkInList(roleID: string): Promise<void> {
@@ -91,7 +95,7 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         if (result.length) {
             throw new Error(
-                tCommand("meetupAddMention.error.roleAlreadyAdded", { roleID: roleID }),
+                tCommand("meetupAddMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
             );
         }
     }

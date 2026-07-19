@@ -11,7 +11,7 @@ const command: TranslationObject = {
         },
 
         error: {
-            roleNotMentionable: "Die Rolle mit der ID {{roleID}} kann nicht erwähnt werden.",
+            roleNotMentionable: "Die Rolle {{roleMention}} kann nicht erwähnt werden.",
         },
     },
 
@@ -25,8 +25,10 @@ const command: TranslationObject = {
         error: {
             invalidRole: "Die angegebene Rolle wurde nicht gefunden.",
             roleAlreadyAdded:
-                "Die Rolle mit der ID {{roleID}} befindet sich bereits in den erwähnabren Rollen.",
+                "Die Rolle {{roleMention}} befindet sich bereits in den erwähnabren Rollen.",
         },
+
+        success: "Die Rolle {{roleMention}} ist nun in Meetups erwähnbar.",
     },
 
     meetupCleanup: {
@@ -43,8 +45,10 @@ const command: TranslationObject = {
 
         error: {
             roleAlreadyAdded:
-                "Die Rolle mit der ID {{roleID}} befindet sich nicht in den erwähnabren Rollen.",
+                "Die Rolle {{roleMention}} befindet sich nicht in den erwähnabren Rollen.",
         },
+
+        success: "Die Rolle {{roleMention}} ist nun nicht mehr in Meetups erwähnbar.",
     },
 
     noticeCreate: {
