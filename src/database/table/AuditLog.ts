@@ -1,5 +1,6 @@
 import { Generated, InsertResult, Selectable } from "kysely";
 import { AuditLogAction } from "../../constant/auditLogAction";
+import env from "../../env";
 import { Database, db } from "../Database";
 
 export interface AuditLog {
@@ -20,7 +21,11 @@ export async function createAuditLog(
         meetupID?: number;
         additionalInformation?: string;
     },
-): Promise<InsertResult> {
+): Promise<InsertResult|undefined> {
+    if (env.DISABLE_AUDIT_LOG) {
+        return;
+    }
+
     return ( await db
         .insertInto("audit_log")
         .values({

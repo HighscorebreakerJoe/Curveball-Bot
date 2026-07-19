@@ -43,6 +43,7 @@ declare type envStruct = {
     DB_DATABASE: string;
     ENABLE_I18NEXT_DEBUG: boolean;
     DISABLE_CRONJOBS: boolean;
+    DISABLE_AUDIT_LOG: boolean;
 };
 
 const env: envStruct = {
@@ -66,6 +67,7 @@ const env: envStruct = {
     DB_DATABASE: process.env.DB_DATABASE || "",
     ENABLE_I18NEXT_DEBUG: process.env.ENABLE_I18NEXT_DEBUG === "true",
     DISABLE_CRONJOBS: process.env.DISABLE_CRONJOBS === "true",
+    DISABLE_AUDIT_LOG: process.env.DISABLE_AUDIT_LOG === "true",
 };
 
 export default env;
