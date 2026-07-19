@@ -1,13 +1,14 @@
 import { ColumnDefinitionBuilder, ForeignKeyConstraintBuilder, Kysely, sql } from "kysely";
+import { Database } from "../Database";
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<Database>): Promise<void> {
     await createMeetupTable(db);
     await createMeetupParticipantTable(db);
     await createAllowedMentionsRoleTable(db);
     await addForeignKeys(db);
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<Database>): Promise<void> {
     await removeForeignKeys(db);
     await dropAllowedMentionsRoleTable(db);
     await dropMeetupParticipantTable(db);
@@ -16,7 +17,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 
 // === up ===
 
-function createMeetupTable(db: Kysely<any>): Promise<void> {
+function createMeetupTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup")
         .addColumn(
@@ -65,7 +66,7 @@ function createMeetupTable(db: Kysely<any>): Promise<void> {
         .execute();
 }
 
-function createMeetupParticipantTable(db: Kysely<any>): Promise<void> {
+function createMeetupParticipantTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup_participant")
         .addColumn(
@@ -106,7 +107,7 @@ function createMeetupParticipantTable(db: Kysely<any>): Promise<void> {
         .execute();
 }
 
-function createAllowedMentionsRoleTable(db: Kysely<any>): Promise<void> {
+function createAllowedMentionsRoleTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup_allowed_mentions_role")
         .addColumn(
@@ -129,7 +130,7 @@ function createAllowedMentionsRoleTable(db: Kysely<any>): Promise<void> {
         .execute();
 }
 
-function addForeignKeys(db: Kysely<any>): Promise<void> {
+function addForeignKeys(db: Kysely<Database>): Promise<void> {
     return db.schema
         .alterTable("meetup_participant")
         .addForeignKeyConstraint(
@@ -145,21 +146,21 @@ function addForeignKeys(db: Kysely<any>): Promise<void> {
 
 // === down ===
 
-function removeForeignKeys(db: Kysely<any>): Promise<void> {
+function removeForeignKeys(db: Kysely<Database>): Promise<void> {
     return db.schema
         .alterTable("meetup_participant")
         .dropConstraint("fk_meetup_participant_meetup")
         .execute();
 }
 
-function dropAllowedMentionsRoleTable(db: Kysely<any>): Promise<void> {
+function dropAllowedMentionsRoleTable(db: Kysely<Database>): Promise<void> {
     return db.schema.dropTable("meetup_allowed_mentions_role").execute();
 }
 
-function dropMeetupParticipantTable(db: Kysely<any>): Promise<void> {
+function dropMeetupParticipantTable(db: Kysely<Database>): Promise<void> {
     return db.schema.dropTable("meetup_participant").execute();
 }
 
-function dropMeetupTable(db: Kysely<any>): Promise<void> {
+function dropMeetupTable(db: Kysely<Database>): Promise<void> {
     return db.schema.dropTable("meetup").execute();
 }
