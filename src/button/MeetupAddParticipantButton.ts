@@ -88,19 +88,18 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
     }
 
     /**
-     * Creates an additional audit log entry depending on the pressed button
+     * Creates an additional audit log entry depending on the activated participant button
      */
     private async createAdditionalAuditLog(userID: string, meetupID: number){
-
-        let action;
-        
-        if(this.defaultUnsureState){
-            action = AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE;
-        } else if (this.defaultRemoteState) {
-            action = AuditLogAction.MEETUP_PARTICIPANT_REMOTE_ENABLE;
-        } else {
-            throw new Error(tButton("meetupAddParticipant.error.invalidCreateAdditionalAuditLogCall"));
+        if (this.defaultUnsureState === this.defaultRemoteState) {
+            throw new Error(
+                tButton("meetupAddParticipant.error.invalidCreateAdditionalAuditLogCall"),
+            );
         }
+
+        const action = this.defaultUnsureState
+            ? AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE
+            : AuditLogAction.MEETUP_PARTICIPANT_REMOTE_ENABLE;
 
         await createAuditLog(action, {
             userID: userID,
