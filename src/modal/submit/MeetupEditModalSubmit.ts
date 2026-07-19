@@ -10,7 +10,9 @@ import {
 } from "discord.js";
 import { getGuild } from "../../cache/guild";
 import { getMeetupInfoChannel } from "../../cache/meetupChannels";
+import { AuditLogAction } from "../../constant/auditLogAction";
 import { db } from "../../database/Database";
+import { createAuditLog } from "../../database/table/AuditLog";
 import { MeetupRow } from "../../database/table/Meetup";
 import { tMeetup } from "../../i18n";
 import { scheduleManager } from "../../manager/ScheduleManager";
@@ -20,6 +22,19 @@ import { getDynamicData } from "../../util/getDynamicIDData";
 import { editMeetupInfoEmbed } from "../../util/meetup/editMeetupInfoEmbed";
 import { prepareEmbedMessage } from "../../util/postEmbeds";
 import { MeetupCreateModalSubmit } from "./MeetupCreateModalSubmit";
+
+type MeetupDifference = {
+    title: string;
+    old: string | Date;
+    new: string | Date;
+};
+type MeetupDifferenceMap = Map<string, MeetupDifference>;
+
+type MeetupDifferenceAudit = {
+    old: string | Date;
+    new: string | Date;
+};
+type MeetupDifferenceAuditRecord = Record<string, MeetupDifferenceAudit>;
 
 /**
  * Handles Edit Modal submits
@@ -50,10 +65,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         const toSaveDate: Date = this.getToSaveDate(time, date);
 
         //save differences for later use
-        const differences = new Map<
-            string,
-            { title: string; old: string | Date; new: string | Date }
-        >();
+        const differences: MeetupDifferenceMap  = new Map();
 
         if (meetup.pokemon !== pokemon) {
             differences.set("pokemon", {
@@ -98,6 +110,12 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
             })
             .where("meetupID", "=", this.additionalData.meetup.meetupID)
             .execute();
+
+        await createAuditLog(AuditLogAction.MEETUP_EDIT, {
+            userID: interaction.user.id,
+            meetupID: this.additionalData.meetup.meetupID,
+            additionalInformation: JSON.stringify(this.prepareAuditLogChanges(differences))
+        });    
 
         //update embed in message
         const messageID = meetup.messageID as Snowflake;
@@ -147,14 +165,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     }
 
     private async sendDifferencesMessage(
-        differences: Map<
-            string,
-            {
-                title: string;
-                old: string | Date;
-                new: string | Date;
-            }
-        >,
+        differences: MeetupDifferenceMap,
         thread: TextThreadChannel,
         mentionRoleID: null | string,
     ): Promise<void> {
@@ -190,5 +201,19 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
             content: contentHeading,
             embeds: [updateEmbed],
         });
+    }
+
+    private prepareAuditLogChanges(
+        differences: MeetupDifferenceMap,
+    ): MeetupDifferenceAuditRecord{
+        return Object.fromEntries(
+            [...differences.entries()].map(([key, value]) => [
+                key,
+                {
+                    old: value.old,
+                    new: value.new,
+                },
+            ]),
+        );
     }
 }
