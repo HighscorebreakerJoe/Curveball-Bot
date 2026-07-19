@@ -23,7 +23,11 @@ export const AuditLogAction = {
 
   // Cronjobs
   CRON_HOURLY_RUN: 40,
-  CRON_DAILY_RUN: 41,
+  CRON_HOURLY_SUCCESS: 41,
+  CRON_HOURLY_ERROR: 42,
+  CRON_DAILY_RUN: 43,
+  CRON_DAILY_SUCCESS: 44,
+  CRON_DAILY_ERROR: 45,
 } as const;
 
 export type AuditLogAction = typeof AuditLogAction[keyof typeof AuditLogAction];
