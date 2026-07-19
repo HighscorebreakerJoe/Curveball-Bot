@@ -1,4 +1,6 @@
 import { EmbedBuilder, ModalSubmitInteraction } from "discord.js";
+import { AuditLogAction } from "../../constant/auditLogAction";
+import { createAuditLog } from "../../database/table/AuditLog";
 import { noticeTypeMap } from "../../map/noticeTypeMap";
 import { assertMessageHasOneEmbed } from "../../permission/assertMessageHasOneEmbed";
 import { assertMessagePostedByBot } from "../../permission/assertMessagePostedByBot";
@@ -48,6 +50,11 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
 
         message.edit({
             embeds: [newEmbed],
+        });
+
+        await createAuditLog(AuditLogAction.NOTICE_EDIT, {
+            userID: interaction.user.id,
+            additionalInformation: `message.id: ${message.id}`
         });
     }
 }

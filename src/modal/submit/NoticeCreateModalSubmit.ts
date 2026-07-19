@@ -1,5 +1,7 @@
-import { EmbedBuilder, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
+import { EmbedBuilder, Message, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
 import { getMeetupCreateChannel } from "../../cache/meetupChannels";
+import { AuditLogAction } from "../../constant/auditLogAction";
+import { createAuditLog } from "../../database/table/AuditLog";
 import { tModal } from "../../i18n";
 import { noticeTypeMap } from "../../map/noticeTypeMap";
 import { assertUserHasMeetupConfigRole } from "../../permission/assertUserHasMeetupConfigRole";
@@ -84,8 +86,13 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
         //post embed
         const embed: EmbedBuilder = prepareEmbedMessage(description, title, color);
 
-        await getMeetupCreateChannel().send({
+        const message: Message = await getMeetupCreateChannel().send({
             embeds: [embed],
+        });
+
+        await createAuditLog(AuditLogAction.NOTICE_CREATE, {
+            userID: interaction.user.id,
+            additionalInformation: `message.id: ${message.id}`
         });
     }
 }
