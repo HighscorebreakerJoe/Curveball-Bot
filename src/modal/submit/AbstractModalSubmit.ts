@@ -52,12 +52,12 @@ export abstract class AbstractModalSubmit {
     /**
      * Checks if current user is allowed to use and submit this modal
      */
-    protected async checkPermissions(interaction: ModalSubmitInteraction): Promise<void> {}
+    protected async checkPermissions(_interaction: ModalSubmitInteraction): Promise<void> {}
 
     /**
      * Sanitizes and stores the modal input values
      */
-    protected sanitizeModalInputs(fields: ModalSubmitFields): void {}
+    protected sanitizeModalInputs(_fields: ModalSubmitFields): void {}
 
     /**
      * Checks and verifies user inputs of this modal
@@ -67,7 +67,7 @@ export abstract class AbstractModalSubmit {
     /**
      * Called after user inputs of this modal have been successfully verified
      */
-    protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {}
+    protected async successModalInputs(_interaction: ModalSubmitInteraction): Promise<void> {}
 
     /**
      * Handles validation errors for modal inputs

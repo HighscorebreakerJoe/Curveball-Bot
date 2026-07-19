@@ -25,7 +25,7 @@ export async function deleteRedundantMeetupThreads(): Promise<void> {
         try {
             await thread.delete(tMeetup("info.threadDefaultDeleteReason"));
             await delay(500);
-        } catch (error) {
+        } catch (_error) {
             console.error(tCommon("error.threadDeleteError"));
         }
     }
