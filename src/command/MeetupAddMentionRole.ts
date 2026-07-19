@@ -5,7 +5,9 @@ import {
     MessageFlags,
 } from "discord.js";
 import { addRole } from "../cache/meetupAllowedMentionsRoles";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { tCommand } from "../i18n";
 import { assertMeetupCreateChannelUsed } from "../permission/assertMeetupCreateChannelUsed";
 import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetupConfigRole";
@@ -69,6 +71,11 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
             .execute();
 
         addRole(role.id);
+
+        await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_ADD, {
+            userID: interaction.user.id,
+            additionalInformation: `roleID: ${role.id}`
+        });
 
         //create success embed
         await postSuccess(interaction, `Die Rolle <@&${role.id}> ist nun in Meetups erwähnbar`);

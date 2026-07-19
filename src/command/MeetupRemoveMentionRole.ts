@@ -5,7 +5,9 @@ import {
     MessageFlags,
 } from "discord.js";
 import { removeRole } from "../cache/meetupAllowedMentionsRoles";
+import { AuditLogAction } from "../constant/auditLogAction";
 import { db } from "../database/Database";
+import { createAuditLog } from "../database/table/AuditLog";
 import { tCommand } from "../i18n";
 import { postSuccess } from "../util/postEmbeds";
 import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRole";
@@ -39,6 +41,11 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
         const { role } = this.sanitizedInputs;
 
         await db.deleteFrom("meetup_allowed_mentions_role").where("roleID", "=", role.id).execute();
+
+        await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_REMOVE, {
+            userID: interaction.user.id,
+            additionalInformation: `roleID: ${role.id}`
+        });
 
         //create success embed
         await postSuccess(
