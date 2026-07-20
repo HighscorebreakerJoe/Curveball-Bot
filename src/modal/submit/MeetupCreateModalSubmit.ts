@@ -92,7 +92,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
         }
 
-        const timeRegexp = new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
+        const timeRegexp = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
         if (!timeRegexp.test(time)) {
             this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
@@ -113,7 +113,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
         }
 
-        const dateRegexp = new RegExp("^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$");
+        const dateRegexp = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$/;
 
         if (!dateRegexp.test(date)) {
             this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
