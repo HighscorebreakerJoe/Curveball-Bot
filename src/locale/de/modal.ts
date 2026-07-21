@@ -51,6 +51,43 @@ const modal: TranslationObject = {
     meetupEdit: {
         title: "Meetup bearbeiten",
     },
+
+    noticeCreate: {
+        title: "Neue Ankündigung erstellen",
+
+        field: {
+            title: "Titel",
+            titlePlaceholder: "Der Titel deiner Ankündigung",
+
+            description: "Beschreibung",
+            descriptionPlaceholder: "Der Inhalt deiner Ankündigung",
+
+            type: "Typ",
+            typePlaceholder: "Wähle den Typ deiner Ankündigung aus",
+
+            typeHint: {
+                label: "Hinweis",
+                description: "Für Hinweise verwendet - Orangene Randfarbe",
+            },
+
+            typeTutorial: {
+                label: "Tutorial",
+                description: "Für Tutorials verwendet - Blaue Randfarbe",
+            },
+        },
+
+        submit: {
+            error: {
+                titleEmpty: "Du hast vergessen, einen Titel anzugeben.",
+                descriptionEmpty: "Du hast vergessen, eine Beschreibung anzugeben.",
+                typeEmpty: "Du hast vergessen, einen Typ anzugeben.",
+            },
+        },
+    },
+
+    noticeEdit: {
+        title: "Ankündigung bearbeiten",
+    },
 };
 
 export default modal;

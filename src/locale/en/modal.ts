@@ -72,12 +72,12 @@ const modal: TranslationObject = {
 
             typeHint: {
                 label: "Hint",
-                description: "Used for hints - Border color will be blue",
+                description: "Used for hints - Border color will be orange",
             },
 
             typeTutorial: {
                 label: "Tutorial",
-                description: "Used for tutorials - Border color will be orange",
+                description: "Used for tutorials - Border color will be blue",
             },
         },
 
