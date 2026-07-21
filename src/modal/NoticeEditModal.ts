@@ -63,6 +63,9 @@ export class NoticeEditModal extends NoticeCreateModal {
         const typeValue = embed.color === noticeTypeMap.get("hint")! ? "hint" : "tutorial";
 
         const typeInput = type.data.component as StringSelectMenuBuilder;
-        //TODO set type
+
+        for (const option of typeInput.options) {
+            option.setDefault(option.data.value === typeValue);
+        }
     };
 }
