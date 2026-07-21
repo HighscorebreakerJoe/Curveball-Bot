@@ -30,10 +30,10 @@ export abstract class AbstractButton {
     /**
      * Checks if current user is allowed to execute the function of this button
      */
-    protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {}
+    protected async checkPermissions(_interaction: ButtonInteraction): Promise<void> {}
 
     /**
      * Runs actual command
      */
-    protected async run(interaction: ButtonInteraction): Promise<void> {}
+    protected async run(_interaction: ButtonInteraction): Promise<void> {}
 }

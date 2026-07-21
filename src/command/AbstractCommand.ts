@@ -60,12 +60,12 @@ export abstract class AbstractCommand {
     /**
      * Checks if current user is allowed to execute this command
      */
-    protected async checkPermissions(interaction: ChatInputCommandInteraction): Promise<void> {}
+    protected async checkPermissions(_interaction: ChatInputCommandInteraction): Promise<void> {}
 
     /**
      * Validates options if given
      */
-    protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {}
+    protected async checkOptions(_interaction: ChatInputCommandInteraction): Promise<void> {}
 
     /**
      * Runs actual command

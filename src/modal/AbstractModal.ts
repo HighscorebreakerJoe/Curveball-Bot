@@ -94,12 +94,12 @@ export abstract class AbstractModal {
     /**
      * Applies values from draft on input fields
      */
-    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {};
+    protected async applyDraftInputValues(_inputs: Record<string, LabelBuilder>, _draft: ModalInputDraftRow): Promise<void> {};
 
     /**
      * Default behaviour for applying values on input fields (e.g. from database or just do nothing)
      */
-    protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {};
+    protected async applyDefaultInputValues(_inputs: Record<string, LabelBuilder>): Promise<void> {};
 
     /**
      * Sets customID for modal submit
@@ -119,14 +119,14 @@ export abstract class AbstractModal {
      * Runs before modal is shown
      */
     protected async preShowModal(
-        interaction: ChatInputCommandInteraction | ButtonInteraction,
+        _interaction: ChatInputCommandInteraction | ButtonInteraction,
     ): Promise<void> {}
 
     /**
      * Checks if current user is allowed to use and submit this modal
      */
     protected async checkPermissions(
-        interaction: ChatInputCommandInteraction | ButtonInteraction,
+        _interaction: ChatInputCommandInteraction | ButtonInteraction,
     ): Promise<void> {}
 
     /**

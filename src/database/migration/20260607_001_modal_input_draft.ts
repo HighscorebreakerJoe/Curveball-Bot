@@ -1,16 +1,17 @@
 import { ColumnDefinitionBuilder, Kysely, sql } from "kysely";
+import { Database } from "../Database";
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<Database>): Promise<void> {
     await createModalInputDraftTable(db);
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<Database>): Promise<void> {
     await dropModalInputDraftTable(db);
 }
 
 // === up ===
 
-function createModalInputDraftTable(db: Kysely<any>): Promise<void> {
+function createModalInputDraftTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("modal_input_draft")
         .addColumn(
@@ -45,6 +46,6 @@ function createModalInputDraftTable(db: Kysely<any>): Promise<void> {
 
 // === down ===
 
-function dropModalInputDraftTable(db: Kysely<any>): Promise<void> {
+function dropModalInputDraftTable(db: Kysely<Database>): Promise<void> {
     return db.schema.dropTable("modal_input_draft").execute();
 }

@@ -64,8 +64,8 @@ export class ShowParticipantsSwitchPageButton extends AbstractButton {
         //components
         const components: ActionRowBuilder<ButtonBuilder>[] = [];
         if(participantListPages.length > 1){
-            let previousPage = (toSwitchPageNo - 1 <= 0 ? 0 : toSwitchPageNo - 1);
-            let nextPage = (toSwitchPageNo + 1 >= lastPage ? lastPage : toSwitchPageNo + 1);
+            const previousPage = (toSwitchPageNo - 1 <= 0 ? 0 : toSwitchPageNo - 1);
+            const nextPage = (toSwitchPageNo + 1 >= lastPage ? lastPage : toSwitchPageNo + 1);
 
             //add navigation buttons
             const previousPageButton: ButtonBuilder = new ButtonBuilder()

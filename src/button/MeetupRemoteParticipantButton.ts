@@ -23,7 +23,7 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     /**
      * Updates existing participation entry for this user
      */
-    protected async handleUpdateExisting(add: boolean): Promise<void> {
+    protected async handleUpdateExisting(_add: boolean): Promise<void> {
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         const newStatus = !meetupParticipant.remote;

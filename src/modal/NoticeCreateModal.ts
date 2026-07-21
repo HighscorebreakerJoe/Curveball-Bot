@@ -11,6 +11,7 @@ import {
 import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
+import { NoticeCreateModalInputType } from "./type/NoticeCreateModalInputType";
 
 /**
  * Displays Create Notice Modal
@@ -96,24 +97,32 @@ export class NoticeCreateModal extends AbstractModal {
     protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
         const { title, description, type } = inputs;
 
-        const formData = JSON.parse(draft.formData);
+        const formData = draft.formData as NoticeCreateModalInputType;
 
-        // title
-        if(formData.title !== undefined) {
-            const titleInput = title.data.component as TextInputBuilder;
-            titleInput.setValue(String(formData.title));
+        if(formData === null){
+            return;
         }
 
-        // description
-        if(formData.description !== undefined) {
-            const descriptionInput = description.data.component as TextInputBuilder;
-            descriptionInput.setValue(String(formData.description));
-        }
+        try {
+            // title
+            if(formData.title !== undefined) {
+                const titleInput = title.data.component as TextInputBuilder;
+                titleInput.setValue(String(formData.title));
+            }
 
-        // type
-        if(formData.type !== undefined) {
-            const typeInput = type.data.component as TextInputBuilder;
-            typeInput.setValue(String(formData.type));
+            // description
+            if(formData.description !== undefined) {
+                const descriptionInput = description.data.component as TextInputBuilder;
+                descriptionInput.setValue(String(formData.description));
+            }
+
+            // type
+            if(formData.type !== undefined) {
+                const typeInput = type.data.component as TextInputBuilder;
+                typeInput.setValue(String(formData.type));
+            }
+        } catch {
+            console.error(tModal("global.error.applyDraft"));
         }
     };
 }

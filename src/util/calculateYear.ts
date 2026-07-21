@@ -10,7 +10,7 @@ export function calculateYear(day: number, month: number): number {
     //build input date with current year (set to midnight)
     const dateThisYear = new Date(now.getFullYear(), month - 1, day);
 
-    let returnYear: number = now.getFullYear();
+    const returnYear: number = now.getFullYear();
 
     if (dateThisYear < today) {
         //date with current year is in the past -> increase year

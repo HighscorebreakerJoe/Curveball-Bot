@@ -3,6 +3,7 @@ import {
     ModalSubmitFields,
     ModalSubmitInteraction,
     Role,
+    roleMention,
 } from "discord.js";
 import { InsertResult } from "kysely";
 import { getGuild } from "../../cache/guild";
@@ -91,7 +92,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
         }
 
-        const timeRegexp = new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
+        const timeRegexp = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
         if (!timeRegexp.test(time)) {
             this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
@@ -112,7 +113,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
             this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
         }
 
-        const dateRegexp = new RegExp("^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$");
+        const dateRegexp = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$/;
 
         if (!dateRegexp.test(date)) {
             this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
@@ -189,7 +190,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //create and post meetup-embed
-        let embedTitle: string =
+        const embedTitle: string =
             pokemon + ": " + tMeetup("info.titleRaidFrom") + " " + interaction.user?.tag;
 
         const meetupCreatorParticipant: ParticipantData = {
@@ -215,7 +216,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         //set role mentions
         const roleMentions: string[] = [];
         this.additionalData.roleIds.forEach((roleID: string) => {
-            roleMentions.push(`<@&${roleID}>`);
+            roleMentions.push(roleMention(roleID));
         });
 
         const meetupInfoMessage = await getMeetupInfoChannel().send({

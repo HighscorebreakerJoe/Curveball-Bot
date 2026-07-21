@@ -5,7 +5,8 @@ const modal: TranslationObject = {
         error: {
             invalidInteractionType: "Invalid interaction type",
             invalidCommand: "Invalid command {{commandName}}",
-            draft: "Failed to save modal input draft",
+            applyDraft: "Failed to apply modal input draft to modal",
+            saveDraft: "Failed to save modal input draft",
             unknown: "Unknown error",
         },
 
@@ -71,12 +72,12 @@ const modal: TranslationObject = {
 
             typeHint: {
                 label: "Hint",
-                description: "Used for hints - Border color will be blue",
+                description: "Used for hints - Border color will be orange",
             },
 
             typeTutorial: {
                 label: "Tutorial",
-                description: "Used for tutorials - Border color will be orange",
+                description: "Used for tutorials - Border color will be blue",
             },
         },
 
