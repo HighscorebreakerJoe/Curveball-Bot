@@ -10,6 +10,7 @@ import { MeetupAllowedMentionsRoleRow } from "../database/table/MeetupAllowedMen
 import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
+import { MeetupCreateModalInputType } from "./type/MeetupCreateModalInputType";
 
 /**
  * Displays Create Meetup Modal
@@ -145,36 +146,44 @@ export class MeetupCreateModal extends AbstractModal {
     protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
         const { pokemon, location, time, date, note } = inputs;
 
-        const formData = JSON.parse(draft.formData);
+        const formData = draft.formData as MeetupCreateModalInputType;
 
-        // pokemon
-        if(formData.pokemon !== undefined) {
-            const pokemonInput = pokemon.data.component as TextInputBuilder;
-            pokemonInput.setValue(String(formData.pokemon));
+        if(formData === null){
+            return;
         }
 
-        // location
-        if(formData.location !== undefined) {
-            const locationInput = location.data.component as TextInputBuilder;
-            locationInput.setValue(String(formData.location));
-        }
+        try { 
+            // pokemon
+            if(formData.pokemon !== undefined) {
+                const pokemonInput = pokemon.data.component as TextInputBuilder;
+                pokemonInput.setValue(String(formData.pokemon));
+            }
 
-        // time
-        if(formData.time !== undefined) {
-            const timeInput = time.data.component as TextInputBuilder;
-            timeInput.setValue(String(formData.time));
-        }
+            // location
+            if(formData.location !== undefined) {
+                const locationInput = location.data.component as TextInputBuilder;
+                locationInput.setValue(String(formData.location));
+            }
 
-        // date
-        if(formData.date !== undefined) {
-            const dateInput = date.data.component as TextInputBuilder;
-            dateInput.setValue(String(formData.date));
-        }
+            // time
+            if(formData.time !== undefined) {
+                const timeInput = time.data.component as TextInputBuilder;
+                timeInput.setValue(String(formData.time));
+            }
 
-        // note
-        if(formData.note !== undefined) {
-            const noteInput = note.data.component as TextInputBuilder;
-            noteInput.setValue(String(formData.note));
+            // date
+            if(formData.date !== undefined) {
+                const dateInput = date.data.component as TextInputBuilder;
+                dateInput.setValue(String(formData.date));
+            }
+
+            // note
+            if(formData.note !== undefined) {
+                const noteInput = note.data.component as TextInputBuilder;
+                noteInput.setValue(String(formData.note));
+            }
+        } catch {
+            console.error(tModal("global.error.applyDraft"));
         }
     };
 

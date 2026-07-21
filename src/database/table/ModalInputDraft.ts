@@ -1,10 +1,18 @@
 import { DeleteResult, Generated, Selectable } from "kysely";
 import { Database, db } from "../Database";
 
+type JsonValue =
+    | string
+    | number
+    | boolean
+    | null
+    | JsonValue[]
+    | { [key: string]: JsonValue };
+
 export interface ModalInputDraft {
     userID: string;
     draftCustomID: string;
-    formData: string; //json
+    formData: JsonValue;
 
     createTime: Generated<Date | null>;
 }

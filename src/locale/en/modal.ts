@@ -5,7 +5,8 @@ const modal: TranslationObject = {
         error: {
             invalidInteractionType: "Invalid interaction type",
             invalidCommand: "Invalid command {{commandName}}",
-            draft: "Failed to save modal input draft",
+            applyDraft: "Failed to apply modal input draft to modal",
+            saveDraft: "Failed to save modal input draft",
             unknown: "Unknown error",
         },
 
