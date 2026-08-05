@@ -30,12 +30,11 @@ const modal: TranslationObject = {
             datePlaceholder: "e.g. 24.12",
 
             note: "Note",
-            notePlaceholder:
-                "Additional information/notes to your meetup",
+            notePlaceholder: "Additional information/notes to your meetup",
         },
 
         error: {
-            invalidRole: "Invalid role with roleID: {{roleID}}",
+            roleNotSupported: "Role {{roleMention}} must not be used in meetups.",
             createRole: "Could not create role for meetup {{meetupID}}",
         },
 

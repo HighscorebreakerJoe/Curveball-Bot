@@ -2,8 +2,9 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     LabelBuilder,
+    roleMention,
     TextInputBuilder,
-    TextInputStyle
+    TextInputStyle,
 } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupAllowedMentionsRoleRow } from "../database/table/MeetupAllowedMentionsRole";
@@ -143,49 +144,52 @@ export class MeetupCreateModal extends AbstractModal {
         };
     }
 
-    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
+    protected async applyDraftInputValues(
+        inputs: Record<string, LabelBuilder>,
+        draft: ModalInputDraftRow,
+    ): Promise<void> {
         const { pokemon, location, time, date, note } = inputs;
 
         const formData = draft.formData as MeetupCreateModalInputType;
 
-        if(formData === null){
+        if (formData === null) {
             return;
         }
 
         try {
             // pokemon
-            if(formData.pokemon !== undefined) {
+            if (formData.pokemon !== undefined) {
                 const pokemonInput = pokemon.data.component as TextInputBuilder;
                 pokemonInput.setValue(String(formData.pokemon));
             }
 
             // location
-            if(formData.location !== undefined) {
+            if (formData.location !== undefined) {
                 const locationInput = location.data.component as TextInputBuilder;
                 locationInput.setValue(String(formData.location));
             }
 
             // time
-            if(formData.time !== undefined) {
+            if (formData.time !== undefined) {
                 const timeInput = time.data.component as TextInputBuilder;
                 timeInput.setValue(String(formData.time));
             }
 
             // date
-            if(formData.date !== undefined) {
+            if (formData.date !== undefined) {
                 const dateInput = date.data.component as TextInputBuilder;
                 dateInput.setValue(String(formData.date));
             }
 
             // note
-            if(formData.note !== undefined) {
+            if (formData.note !== undefined) {
                 const noteInput = note.data.component as TextInputBuilder;
                 noteInput.setValue(String(formData.note));
             }
         } catch {
             console.error(tModal("global.error.applyDraft"));
         }
-    };
+    }
 
     private async checkRole(roleId: string): Promise<void> {
         const role = (await db
@@ -195,7 +199,9 @@ export class MeetupCreateModal extends AbstractModal {
             .executeTakeFirst()) as MeetupAllowedMentionsRoleRow | undefined;
 
         if (!role) {
-            throw new Error(tModal("meetupCreate.error.invalidRole", { roleID: roleId }));
+            throw new Error(
+                tModal("meetupCreate.error.roleNotSupported", { roleMention: roleMention(roleId) }),
+            );
         }
     }
 }

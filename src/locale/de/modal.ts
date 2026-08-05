@@ -25,12 +25,11 @@ const modal: TranslationObject = {
             datePlaceholder: "z.B. 24.12",
 
             note: "Anmerkungen",
-            notePlaceholder:
-                "Zusätzliche Infos/Anmerkungen zu deinem Meetup",
+            notePlaceholder: "Zusätzliche Infos/Anmerkungen zu deinem Meetup",
         },
 
         error: {
-            invalidRole: "Ungültige Rolle mit der RoleID: {{roleID}}",
+            roleNotSupported: "Die Rolle {{roleMention}} darf nicht in Meetups verwendet werden.",
         },
 
         submit: {
