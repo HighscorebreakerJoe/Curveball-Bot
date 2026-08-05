@@ -50,19 +50,19 @@ export class MeetupCreateModal extends AbstractModal {
         const roleIds: string[] = [];
 
         const role1: Role | APIRole | null = options.getRole("role1");
-        if (role1 && role1.id) {
+        if (role1 && role1.id && role1.mentionable) {
             await this.checkRole(role1.id);
             roleIds.push(role1.id);
         }
 
         const role2: Role | APIRole | null = options.getRole("role2");
-        if (role2 && role2.id) {
+        if (role2 && role2.id && role2.mentionable) {
             await this.checkRole(role2.id);
             roleIds.push(role2.id);
         }
 
         const role3: Role | APIRole | null = options.getRole("role3");
-        if (role3 && role3.id) {
+        if (role3 && role3.id && role3.mentionable) {
             await this.checkRole(role3.id);
             roleIds.push(role3.id);
         }

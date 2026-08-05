@@ -4,6 +4,7 @@ import {
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     Role,
+    roleMention,
 } from "discord.js";
 import { tCommand } from "../i18n";
 import { modalsMap } from "../map/modalsMap";
@@ -73,7 +74,9 @@ export class MeetupCommand extends AbstractCommand {
 
     private checkRole(role: Role | APIRole | null): void {
         if (role && !role.mentionable) {
-            throw new Error(tCommand("meetup.error.roleNotMentionable", { roleID: role.id }));
+            throw new Error(
+                tCommand("meetup.error.roleNotMentionable", { roleMention: roleMention(role.id) }),
+            );
         }
     }
 }
