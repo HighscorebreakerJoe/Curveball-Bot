@@ -1,4 +1,4 @@
-import { DiscordAPIError } from "discord.js";
+import { DiscordAPIError, Message } from "discord.js";
 import { getMeetupInfoChannel } from "../cache/meetupChannels";
 import { AuditLogAction } from "../constant/auditLogAction";
 import { createAuditLog } from "../database/table/AuditLog";
@@ -29,8 +29,8 @@ export async function deleteMeetupData(
 
     const categorizedMessageIDs: CategorizedMessageIDs = getMessageIDsFromMeetups(toDeleteMeetups);
     const roleIDs: string[] = toDeleteMeetups
-        .map((meetup) => meetup.mentionRoleID)
-        .filter((roleID): roleID is string => Boolean(roleID));
+        .map((meetup): string | null => meetup.mentionRoleID)
+        .filter((roleID: string | null): roleID is string => Boolean(roleID));
 
     await Promise.allSettled([deleteMessages(categorizedMessageIDs), deleteRoleByRoleIDs(roleIDs)]);
 
@@ -50,7 +50,7 @@ export async function deleteMeetupData(
     });
 }
 
-function getMessageIDsFromMeetups(meetups: MeetupRow[]) {
+function getMessageIDsFromMeetups(meetups: MeetupRow[]): CategorizedMessageIDs {
     // Discord allows bulk deleting up to 100 messages which are not older than 14 days old
     // -> split up messages into two categories
 
@@ -70,7 +70,7 @@ function getMessageIDsFromMeetups(meetups: MeetupRow[]) {
     return categorizedMessageIDs;
 }
 
-async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs) {
+async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs): Promise<void> {
     if (categorizedMessageIDs.lessThanTwoWeeks.length > 0) {
         await deleteMessagesBulk(categorizedMessageIDs.lessThanTwoWeeks);
     }
@@ -80,7 +80,7 @@ async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs) {
     }
 }
 
-async function deleteMessagesBulk(messageIDs: string[]) {
+async function deleteMessagesBulk(messageIDs: string[]): Promise<void> {
     //split message IDs in chunks
     const messageIDChunks: string[][] = splitArray([...messageIDs], 100);
 
@@ -99,10 +99,10 @@ async function deleteMessagesBulk(messageIDs: string[]) {
     }
 }
 
-async function deleteMessagesManually(messageIDs: string[]) {
+async function deleteMessagesManually(messageIDs: string[]): Promise<void> {
     for (const messageID of messageIDs) {
         try {
-            const message = await getMeetupInfoChannel().messages.fetch(messageID);
+            const message: Message<true> = await getMeetupInfoChannel().messages.fetch(messageID);
             await message.delete();
 
             await delay(500);
