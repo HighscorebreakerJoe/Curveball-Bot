@@ -44,7 +44,7 @@ export class NoticeEditModal extends NoticeCreateModal {
     }
 
     protected setSubmitCustomID() {
-        this.submitCustomId = "notice_edit:" + this.additionalData.message.id;
+        this.submitCustomId = "notice_edit:" + (this.additionalData.message as Message).id;
     }
 
      protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {

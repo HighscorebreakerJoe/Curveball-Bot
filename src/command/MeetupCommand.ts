@@ -58,12 +58,6 @@ export class MeetupCommand extends AbstractCommand {
 
         const role3 = interaction.options.getRole("role3");
         this.checkRole(role3);
-
-        this.sanitizedInputs = {
-            role1: role1,
-            role2: role2,
-            role3: role3,
-        };
     }
 
     protected async run(interaction: ChatInputCommandInteraction): Promise<void> {

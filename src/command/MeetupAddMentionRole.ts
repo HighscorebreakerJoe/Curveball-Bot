@@ -51,7 +51,7 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         }
 
         this.sanitizedInputs = {
-            role,
+            roleID: role.id,
         };
 
         await this.checkInList(role.id);
@@ -61,27 +61,27 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         //post defer reply to prevent timeout errors
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-        const { role } = this.sanitizedInputs;
+        const { roleID } = this.sanitizedInputs;
 
         await db
             .insertInto("meetup_allowed_mentions_role")
             .values({
-                roleID: role.id,
+                roleID: roleID,
                 userID: interaction.user.id,
             })
             .execute();
 
-        addRole(role.id);
+        addRole(roleID);
 
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_ADD, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${role.id}`
+            additionalInformation: `roleID: ${roleID}`
         });
 
         //create success embed
         await postSuccess(
             interaction, 
-            tCommand("meetupAddMention.success", { roleMention: roleMention(role.id) }),
+            tCommand("meetupAddMention.success", { roleMention: roleMention(roleID) }),
         );
     }
 

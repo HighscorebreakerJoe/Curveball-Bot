@@ -12,7 +12,7 @@ import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
     public readonly name!: string;
-    protected sanitizedInputs: Record<string, any> = {};
+    protected sanitizedInputs: Record<string, string> = {};
 
     protected abstract get description(): string;
 

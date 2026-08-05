@@ -2,6 +2,7 @@ import { ButtonInteraction, ChatInputCommandInteraction, LabelBuilder, ModalBuil
 import { getModalInputDrafts, ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { postError } from "../util/postEmbeds";
+import { AdditionalDataRecord } from "./type/AdditionalDataType";
 
 /**
  * Base class for all modals for Curveball Bot. Handles building modals and its user inputs
@@ -10,7 +11,7 @@ import { postError } from "../util/postEmbeds";
 export abstract class AbstractModal {
     public readonly customId!: string;
     protected submitCustomId!: string;
-    protected additionalData: Record<string, any> = {};
+    protected additionalData: AdditionalDataRecord = {};
     protected interactionUserID: string = "";
     protected draftCustomID: string = "";
     protected useDraftAsInputRestore: boolean = true;
@@ -47,7 +48,7 @@ export abstract class AbstractModal {
     /**
      * Sets additional data for this modal
      */
-    public setAdditionalData(additionalData: Record<string, any>): void {
+    public setAdditionalData(additionalData: AdditionalDataRecord): void {
         this.additionalData = additionalData;
     }
 

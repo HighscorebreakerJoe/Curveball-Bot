@@ -214,8 +214,8 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //set role mentions
-        const roleMentions: string[] = [];
-        this.additionalData.roleIds.forEach((roleID: string) => {
+        const roleMentions: string[] = [];        
+        (this.additionalData.roleIds as string[]).forEach((roleID: string) => {
             roleMentions.push(roleMention(roleID));
         });
 

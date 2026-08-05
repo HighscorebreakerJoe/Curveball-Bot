@@ -4,6 +4,7 @@ import { db } from "../../database/Database";
 import { deleteModalInputDrafts } from "../../database/table/ModalInputDraft";
 import { tCommon, tModal } from "../../i18n";
 import { postError } from "../../util/postEmbeds";
+import { AdditionalDataRecord } from "../type/AdditionalDataType";
 
 /**
  * Base class for all modals submit handlers for Curveball Bot.
@@ -12,8 +13,8 @@ import { postError } from "../../util/postEmbeds";
 export abstract class AbstractModalSubmit {
     public readonly customId!: string;
     public readonly dynamicId!: boolean;
-    protected sanitizedInputs: Record<string, any> = {};
-    protected additionalData: Record<string, any> = {};
+    protected sanitizedInputs: Record<string, string> = {};
+    protected additionalData: AdditionalDataRecord = {};
     protected responseMode = InteractionResponseMode.UPDATE;
     protected saveInputDraftOnError: boolean = true;
     protected interactionUserID: string = "";
@@ -45,7 +46,7 @@ export abstract class AbstractModalSubmit {
     /**
      * Sets additional data for this modal
      */
-    public setAdditionalData(additionalData: Record<string, any>): void {
+    public setAdditionalData(additionalData: AdditionalDataRecord): void {
         this.additionalData = additionalData;
     }
 
@@ -73,7 +74,7 @@ export abstract class AbstractModalSubmit {
      * Handles validation errors for modal inputs
      */
     protected handleError(errorMessage: string): Promise<void> {
-        if(this.saveInputDraftOnError){
+        if (this.saveInputDraftOnError) {
             this.saveModalInputDraft();
         }
 
@@ -84,7 +85,7 @@ export abstract class AbstractModalSubmit {
      * Deletes all saved drafts for the current user and modal
      */
     protected async deleteModalInputDraft(): Promise<void> {
-       await deleteModalInputDrafts([this.interactionUserID], this.draftCustomID);
+        await deleteModalInputDrafts([this.interactionUserID], this.draftCustomID);
     }
 
     /**
@@ -92,7 +93,7 @@ export abstract class AbstractModalSubmit {
      */
     private async saveModalInputDraft(): Promise<void> {
         try {
-            const formData = JSON.stringify(this.sanitizedInputs);  
+            const formData = JSON.stringify(this.sanitizedInputs);
 
             await db
                 .insertInto("modal_input_draft")
@@ -104,7 +105,7 @@ export abstract class AbstractModalSubmit {
                 .onDuplicateKeyUpdate({
                     formData: formData,
                 })
-                .execute();  
+                .execute();
         } catch (error) {
             console.error(tModal("error.draft"), error);
         }
@@ -114,16 +115,16 @@ export abstract class AbstractModalSubmit {
      * Sets customId for modal input draft
      */
     protected setDraftCustomID(interaction: ModalSubmitInteraction): void {
-        if(interaction.customId){
+        if (interaction.customId) {
             this.draftCustomID = interaction.customId;
         }
     }
 
     /**
-     * Sets the interaction response for this modal submit. Run this as early as possible after a submit to prevent timeout errors
+     * Sets the interaction response for this modal-submit. Run this as early as possible after a submit to prevent timeout errors
      */
     private async prepareResponse(interaction: ModalSubmitInteraction): Promise<void> {
-        switch(this.responseMode){
+        switch (this.responseMode) {
             case InteractionResponseMode.UPDATE:
                 await interaction.deferUpdate();
                 break;
@@ -142,7 +143,7 @@ export abstract class AbstractModalSubmit {
      * Sets the userID of the user who submitted the modal
      */
     private setInteractionUserID(interaction: ModalSubmitInteraction): void {
-        if(interaction.user.id){
+        if (interaction.user.id) {
             this.interactionUserID = interaction.user.id;
         }
     }

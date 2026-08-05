@@ -34,7 +34,7 @@ export class MeetupEditModal extends MeetupCreateModal {
     }
 
     protected setSubmitCustomID() {
-        this.submitCustomId = "meetup_edit:" + this.additionalData.meetup.meetupID;
+        this.submitCustomId = "meetup_edit:" + (this.additionalData.meetup as MeetupRow).meetupID;
     }
 
     protected setDraftCustomID(): void {

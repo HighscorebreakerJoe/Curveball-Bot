@@ -68,7 +68,7 @@ export class MeetupCreateModal extends AbstractModal {
     }
 
     protected setSubmitCustomID() {
-        const roleIdString = this.additionalData.roleIds.join(",");
+        const roleIdString = (this.additionalData.roleIds as string[]).join(",");
 
         this.submitCustomId = "meetup_create:" + roleIdString;
     }
@@ -152,7 +152,7 @@ export class MeetupCreateModal extends AbstractModal {
             return;
         }
 
-        try { 
+        try {
             // pokemon
             if(formData.pokemon !== undefined) {
                 const pokemonInput = pokemon.data.component as TextInputBuilder;

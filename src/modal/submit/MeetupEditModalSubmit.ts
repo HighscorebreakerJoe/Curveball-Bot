@@ -108,12 +108,12 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
                 time: toSaveDate,
                 note: note,
             })
-            .where("meetupID", "=", this.additionalData.meetup.meetupID)
+            .where("meetupID", "=", (this.additionalData.meetup as MeetupRow).meetupID)
             .execute();
 
         await createAuditLog(AuditLogAction.MEETUP_EDIT, {
             userID: interaction.user.id,
-            meetupID: this.additionalData.meetup.meetupID,
+            meetupID: (this.additionalData.meetup as MeetupRow).meetupID,
             additionalInformation: JSON.stringify(this.prepareAuditLogChanges(differences))
         });    
 

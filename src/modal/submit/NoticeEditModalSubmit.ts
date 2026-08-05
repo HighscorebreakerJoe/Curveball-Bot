@@ -1,4 +1,4 @@
-import { EmbedBuilder, ModalSubmitInteraction } from "discord.js";
+import { EmbedBuilder, Message, ModalSubmitInteraction } from "discord.js";
 import { AuditLogAction } from "../../constant/auditLogAction";
 import { createAuditLog } from "../../database/table/AuditLog";
 import { noticeTypeMap } from "../../map/noticeTypeMap";
@@ -38,7 +38,7 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
     protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
         const { title, description, type } = this.sanitizedInputs;
 
-        const message = this.additionalData.message;
+        const message = this.additionalData.message as Message;
 
         let color: number = noticeTypeMap.get("hint")!;
 
@@ -54,7 +54,7 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
 
         await createAuditLog(AuditLogAction.NOTICE_EDIT, {
             userID: interaction.user.id,
-            additionalInformation: `message.id: ${message.id}`
+            additionalInformation: `message.id: ${message.id}`,
         });
     }
 }
