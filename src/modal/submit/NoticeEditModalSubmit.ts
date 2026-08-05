@@ -52,9 +52,13 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
             embeds: [newEmbed],
         });
 
+        const additionalInformation: string = JSON.stringify({
+            message_id: message.id,
+        });
+
         await createAuditLog(AuditLogAction.NOTICE_EDIT, {
             userID: interaction.user.id,
-            additionalInformation: `message.id: ${message.id}`,
+            additionalInformation: additionalInformation,
         });
     }
 }

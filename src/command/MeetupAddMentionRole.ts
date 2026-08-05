@@ -75,9 +75,13 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         addRole(roleID);
 
+        const additionalInformation: string = JSON.stringify({
+            role_id: roleID,
+        });
+
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_ADD, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${roleID}`,
+            additionalInformation: additionalInformation,
         });
 
         //create success embed

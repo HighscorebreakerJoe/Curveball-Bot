@@ -61,10 +61,14 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
             })
             .executeTakeFirstOrThrow();
 
+        const additionalInformation: string = JSON.stringify({
+            new_count: 1,
+        });
+
         await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
             userID: userID,
             meetupID: meetup.meetupID,
-            additionalInformation: `new count: 1`,
+            additionalInformation: additionalInformation,
         });
 
         if (this.defaultUnsureState || this.defaultRemoteState) {

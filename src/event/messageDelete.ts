@@ -56,8 +56,12 @@ async function handleInfoMessage(
     }
 
     //audit log
+    const additionalInformation: string = JSON.stringify({
+        message_id: message.id,
+    });
+
     await createAuditLog(AuditLogAction.NOTICE_DELETE, {
         //userID: , //TODO: Add user ID if possible
-        additionalInformation: `message.id: ${message.id}`,
+        additionalInformation: additionalInformation,
     });
 }

@@ -43,9 +43,13 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
 
         await db.deleteFrom("meetup_allowed_mentions_role").where("roleID", "=", roleID).execute();
 
+        const additionalInformation: string = JSON.stringify({
+            role_id: roleID,
+        });
+
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_REMOVE, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${roleID}`,
+            additionalInformation: additionalInformation,
         });
 
         //create success embed

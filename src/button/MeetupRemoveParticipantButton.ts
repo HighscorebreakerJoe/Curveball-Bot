@@ -62,10 +62,14 @@ export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
 
+        const additionalInformation: string = JSON.stringify({
+            new_count: 0,
+        });
+
         await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_REMOVE, {
             userID: meetupParticipant.userID,
             meetupID: meetupParticipant.meetupID,
-            additionalInformation: `new count: 0`,
+            additionalInformation: additionalInformation,
         });
 
         if (meetup.mentionRoleID) {

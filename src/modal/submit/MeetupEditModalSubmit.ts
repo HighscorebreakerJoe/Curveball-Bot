@@ -113,10 +113,12 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
             .where("meetupID", "=", (this.additionalData.meetup as MeetupRow).meetupID)
             .execute();
 
+        const additionalInformation = JSON.stringify(this.prepareAuditLogChanges(differences));
+
         await createAuditLog(AuditLogAction.MEETUP_EDIT, {
             userID: interaction.user.id,
             meetupID: (this.additionalData.meetup as MeetupRow).meetupID,
-            additionalInformation: JSON.stringify(this.prepareAuditLogChanges(differences)),
+            additionalInformation: additionalInformation,
         });
 
         //update embed in message

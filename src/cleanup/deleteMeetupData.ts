@@ -7,7 +7,7 @@ import {
     getMeetupsByMeetupIDs,
     MeetupRow,
 } from "../database/table/Meetup";
-import { tCommon, tMeetup } from "../i18n";
+import { tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 import { splitArray } from "../util/splitArray";
 import { deleteRoleByRoleIDs } from "./deleteRoleByRoleIDs";
@@ -36,13 +36,16 @@ export async function deleteMeetupData(
 
     await deleteMeetupsByMeetupIDs(meetupIDs);
 
+    // Use stable values instead of translated strings. Audit logs should not depend on the active locale
+    const additionalInformation: string = JSON.stringify({
+        reason: automaticallyDeleted ? "Deleted automatically" : undefined,
+    });
+
     meetupIDs?.forEach((meetupID: number): void => {
         createAuditLog(AuditLogAction.MEETUP_DELETE, {
             userID: userID,
             meetupID: meetupID,
-            additionalInformation: automaticallyDeleted
-                ? tCommon("defaultDeleteReason")
-                : undefined,
+            additionalInformation: additionalInformation,
         });
     });
 }

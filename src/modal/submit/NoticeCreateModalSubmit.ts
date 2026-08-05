@@ -90,9 +90,13 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
             embeds: [embed],
         });
 
+        const additionalInformation: string = JSON.stringify({
+            message_id: message.id,
+        });
+
         await createAuditLog(AuditLogAction.NOTICE_CREATE, {
             userID: interaction.user.id,
-            additionalInformation: `message.id: ${message.id}`,
+            additionalInformation: additionalInformation,
         });
     }
 }

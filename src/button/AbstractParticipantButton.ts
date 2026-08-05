@@ -56,10 +56,14 @@ export abstract class AbstractParticipantButton extends AbstractButton {
             ? AuditLogAction.MEETUP_PARTICIPANT_ADD
             : AuditLogAction.MEETUP_PARTICIPANT_REMOVE;
 
+        const additionalInformation: string = JSON.stringify({
+            new_count: participantCount,
+        });
+
         await createAuditLog(auditAction, {
             userID: meetupParticipant.userID,
             meetupID: meetupParticipant.meetupID,
-            additionalInformation: `new count: ${participantCount}`,
+            additionalInformation: additionalInformation,
         });
     }
 
