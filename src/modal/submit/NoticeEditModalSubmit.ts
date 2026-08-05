@@ -48,7 +48,7 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
 
         const newEmbed: EmbedBuilder = prepareEmbedMessage(description, title, color);
 
-        message.edit({
+        await message.edit({
             embeds: [newEmbed],
         });
 
