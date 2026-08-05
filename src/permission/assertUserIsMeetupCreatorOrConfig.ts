@@ -10,7 +10,7 @@ import env from "../env";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if user is creator of given meetup or has meetup config role
+ * Checks if the user is the creator of a given meetup or has the meetup config role
  */
 
 export async function assertUserIsMeetupCreatorOrConfig(

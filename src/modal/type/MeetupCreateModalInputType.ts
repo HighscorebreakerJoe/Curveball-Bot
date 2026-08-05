@@ -4,4 +4,4 @@ export type MeetupCreateModalInputType = {
     time?: string;
     date?: string;
     note?: string;
-}
+};

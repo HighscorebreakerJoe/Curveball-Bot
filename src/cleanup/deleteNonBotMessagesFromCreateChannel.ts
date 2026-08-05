@@ -2,7 +2,7 @@ import { getMeetupCreateChannel } from "../cache/meetupChannels";
 import env from "../env";
 
 /**
- * Function for deleting messages from meetup create channel which were not posted by the bot
+ * Function for deleting messages from meetup-create-channel which were not posted by the bot
  */
 
 export async function deleteNonBotMessagesFromCreateChannel(): Promise<void> {

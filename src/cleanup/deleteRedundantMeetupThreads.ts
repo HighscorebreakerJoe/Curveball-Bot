@@ -17,8 +17,8 @@ export async function deleteRedundantMeetupThreads(): Promise<void> {
 
     const threadIDs: Set<string> = new Set(await getAllMeetupThreadIDs());
 
-    const toDeleteThreads = availableThreads.filter(
-        (thread: ThreadChannel) => !threadIDs.has(thread.id),
+    const toDeleteThreads: ThreadChannel<boolean>[] = availableThreads.filter(
+        (thread: ThreadChannel): boolean => !threadIDs.has(thread.id),
     );
 
     for (const thread of toDeleteThreads) {

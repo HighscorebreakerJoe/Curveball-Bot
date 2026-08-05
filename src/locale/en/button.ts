@@ -5,8 +5,8 @@ const button: TranslationObject = {
         error: {
             maxParticipantsReached:
                 "You can't add more participants. But I am happy you have so many friends!",
-            invalidCreateAdditionalAuditLogCall :
-                "Dev: Invalid createAdditionalAuditLog call. Exactly one of defaultRemoteState or defaultUnsureState must be true."
+            invalidCreateAdditionalAuditLogCall:
+                "Dev: Invalid createAdditionalAuditLog call. Exactly one of defaultRemoteState or defaultUnsureState must be true.",
         },
     },
 
@@ -34,7 +34,7 @@ const button: TranslationObject = {
     showAllParticipants: {
         show: "Show all participants",
         previousPage: "Previous page",
-        nextPage: "Next page"
+        nextPage: "Next page",
     },
 };
 

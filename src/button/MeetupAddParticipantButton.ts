@@ -10,7 +10,7 @@ import { assignRole } from "../util/role/assignRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
 /**
- * Class for handling "Add participant" buttonpress in meetup info embeds
+ * Class for handling "Add participant" buttonpresses in meetup info embeds
  */
 
 export class MeetupAddParticipantButton extends AbstractParticipantButton {
@@ -19,7 +19,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
     protected defaultRemoteState: boolean = false;
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         await super.checkPermissions(interaction);
@@ -64,12 +64,12 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
         await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
             userID: userID,
             meetupID: meetup.meetupID,
-            additionalInformation: `new count: 1`
+            additionalInformation: `new count: 1`,
         });
 
-        if(this.defaultUnsureState || this.defaultRemoteState){
-            this.createAdditionalAuditLog(userID, meetup.meetupID);
-        }        
+        if (this.defaultUnsureState || this.defaultRemoteState) {
+            await this.createAdditionalAuditLog(userID, meetup.meetupID);
+        }
 
         if (meetup.mentionRoleID) {
             await assignRole(userID, meetup.mentionRoleID);
@@ -77,7 +77,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
     }
 
     /**
-     * Checks if user has too many participants
+     * Checks if the current user has too many participants
      */
     protected checkParticipants(): void {
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
@@ -90,7 +90,7 @@ export class MeetupAddParticipantButton extends AbstractParticipantButton {
     /**
      * Creates an additional audit log entry depending on the activated participant button
      */
-    private async createAdditionalAuditLog(userID: string, meetupID: number){
+    private async createAdditionalAuditLog(userID: string, meetupID: number) {
         if (this.defaultUnsureState === this.defaultRemoteState) {
             throw new Error(
                 tButton("meetupAddParticipant.error.invalidCreateAdditionalAuditLogCall"),

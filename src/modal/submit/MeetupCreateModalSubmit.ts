@@ -1,7 +1,9 @@
 import {
     hyperlink,
+    Message,
     ModalSubmitFields,
     ModalSubmitInteraction,
+    PublicThreadChannel,
     Role,
     roleMention,
 } from "discord.js";
@@ -169,7 +171,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         await createAuditLog(AuditLogAction.MEETUP_CREATE, {
             userID: interaction.user.id,
-            meetupID: meetupID
+            meetupID: meetupID,
         });
 
         //save meetup creator as meetup participant
@@ -186,7 +188,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
             userID: interaction.user.id,
-            meetupID: meetupID
+            meetupID: meetupID,
         });
 
         //create and post meetup-embed
@@ -214,12 +216,12 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //set role mentions
-        const roleMentions: string[] = [];        
+        const roleMentions: string[] = [];
         (this.additionalData.roleIds as string[]).forEach((roleID: string) => {
             roleMentions.push(roleMention(roleID));
         });
 
-        const meetupInfoMessage = await getMeetupInfoChannel().send({
+        const meetupInfoMessage: Message<true> = await getMeetupInfoChannel().send({
             content: roleMentions.join(" "),
             embeds: [embed],
             components: components,
@@ -231,19 +233,21 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //create thread
-        const meetupInfoThread = await meetupInfoMessage.startThread({
+        const meetupInfoThread: PublicThreadChannel<false> = await meetupInfoMessage.startThread({
             name: tMeetup("info.threadTitle", { meetupID: meetupID }),
             autoArchiveDuration: 60,
             reason: tMeetup("info.threadDefaultCreateReason"),
         });
 
         //write participant message in thread, with meetup creator as the only participant
-        const participantListMessage: string = createParticipantListMessage([meetupCreatorParticipant]);
+        const participantListMessage: string = createParticipantListMessage([
+            meetupCreatorParticipant,
+        ]);
         //shouldn't exceed message length limit, but better be safe than sorry
         const participantListPages: string[] = splitMessage(participantListMessage);
 
-        const participantListThreadMessage = await meetupInfoThread.send({
-            content: participantListPages[0]
+        const participantListThreadMessage: Message<true> = await meetupInfoThread.send({
+            content: participantListPages[0],
         });
 
         // create meetup role
@@ -282,7 +286,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
     }
 
     /**
-     * Calculates datetime to save based on provided date and time
+     * Calculates datetime to save based on the provided date and time
      */
     protected getToSaveDate(time: string, date = ""): Date {
         const [hour, minute] = time.split(":").map(Number);

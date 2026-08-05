@@ -1,8 +1,10 @@
 import {
     APIApplicationCommandOption,
+    APIRole,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     MessageFlags,
+    Role,
     roleMention,
 } from "discord.js";
 import { addRole } from "../cache/meetupAllowedMentionsRoles";
@@ -44,7 +46,7 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
     protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {
         //check role
-        const role = interaction.options.getRole("role");
+        const role: Role | APIRole | null = interaction.options.getRole("role");
 
         if (!role) {
             throw new Error(tCommand("meetupAddMention.error.invalidRole"));
@@ -75,12 +77,12 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_ADD, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${roleID}`
+            additionalInformation: `roleID: ${roleID}`,
         });
 
         //create success embed
         await postSuccess(
-            interaction, 
+            interaction,
             tCommand("meetupAddMention.success", { roleMention: roleMention(roleID) }),
         );
     }
@@ -95,7 +97,9 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         if (result.length) {
             throw new Error(
-                tCommand("meetupAddMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
+                tCommand("meetupAddMention.error.roleAlreadyAdded", {
+                    roleMention: roleMention(roleID),
+                }),
             );
         }
     }

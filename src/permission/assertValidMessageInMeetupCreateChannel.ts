@@ -3,11 +3,11 @@ import { getMeetupCreateChannel } from "../cache/meetupChannels";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if message with provided ID exists in meetup create channel
+ * Checks if a message with provided ID exists in the meetup-create-channel
  */
 
 export async function assertValidMessageInMeetupCreateChannel(messageID: string): Promise<Message> {
-    const message = await getMeetupCreateChannel().messages.fetch(messageID);
+    const message: Message<true> = await getMeetupCreateChannel().messages.fetch(messageID);
 
     if (!message) {
         throw new Error(

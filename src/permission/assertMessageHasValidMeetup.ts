@@ -2,7 +2,7 @@ import { getMeetupByMessageID, MeetupRow } from "../database/table/Meetup";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if message with given messageID corresponds to a valid meetup
+ * Checks if the message with a given messageID corresponds to a valid meetup
  */
 
 export async function assertMessageHasValidMeetup(messageID: string): Promise<MeetupRow> {

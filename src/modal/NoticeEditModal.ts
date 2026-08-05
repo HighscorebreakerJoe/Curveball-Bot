@@ -33,7 +33,7 @@ export class NoticeEditModal extends NoticeCreateModal {
         assertUserHasMeetupConfigRole(interaction);
 
         const messageID: string = interaction.options.getString("message_id")!;
-        const message = await assertValidMessageInMeetupCreateChannel(messageID);
+        const message: Message = await assertValidMessageInMeetupCreateChannel(messageID);
 
         assertMessagePostedByBot(message);
         assertMessageHasOneEmbed(message);
@@ -47,7 +47,7 @@ export class NoticeEditModal extends NoticeCreateModal {
         this.submitCustomId = "notice_edit:" + (this.additionalData.message as Message).id;
     }
 
-     protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {
+    protected async applyDefaultInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {
         const { title, description, type } = inputs;
 
         //use message embed directly as default
@@ -60,12 +60,13 @@ export class NoticeEditModal extends NoticeCreateModal {
         const descriptionInput = description.data.component as TextInputBuilder;
         descriptionInput.setValue(embed.description ?? "");
 
-        const typeValue = embed.color === noticeTypeMap.get("hint")! ? "hint" : "tutorial";
+        const typeValue: "hint" | "tutorial" =
+            embed.color === noticeTypeMap.get("hint")! ? "hint" : "tutorial";
 
         const typeInput = type.data.component as StringSelectMenuBuilder;
 
         for (const option of typeInput.options) {
             option.setDefault(option.data.value === typeValue);
         }
-    };
+    }
 }

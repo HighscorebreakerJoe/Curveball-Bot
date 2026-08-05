@@ -2,7 +2,9 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
+    Collection,
     EmbedBuilder,
+    GuildMember,
     time,
     TimestampStyles,
 } from "discord.js";
@@ -148,12 +150,14 @@ export async function getParticipantData(meetupID: number): Promise<ParticipantD
 
     const userIDs: string[] = meetupUserRows.map((row) => row.userID);
 
-    const members = await getGuild().members.fetch({ user: userIDs });
+    const members: Collection<string, GuildMember> = await getGuild().members.fetch({
+        user: userIDs,
+    });
 
     const participantData: ParticipantData[] = [];
 
     for (const row of meetupUserRows) {
-        const member = members.get(row.userID);
+        const member: GuildMember | undefined = members.get(row.userID);
 
         participantData.push({
             userID: row.userID,

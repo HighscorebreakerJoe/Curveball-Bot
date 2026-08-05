@@ -1,4 +1,11 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Channel, EmbedBuilder, Message } from "discord.js";
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    Channel,
+    EmbedBuilder,
+    Message,
+} from "discord.js";
 import { getMeetupInfoChannel, getMeetupListChannel } from "../cache/meetupChannels";
 import { client } from "../client";
 import { MeetupRow } from "../database/table/Meetup";
@@ -15,9 +22,8 @@ import { splitMessage } from "../util/splitMessage";
  */
 
 class UIManager {
-
     /**
-     * Resets meetup list and generates message listing all currently available meetups from now on
+     * Resets meetups-list and generates message-listing all currently available meetups from now on
      */
     public async resetMeetupListChannel(): Promise<void> {
         //clear meetup list channel
@@ -36,15 +42,15 @@ class UIManager {
      */
     public async updateMeetupInfoEmbed(
         meetup: MeetupRow,
-        participantData: ParticipantData[]
+        participantData: ParticipantData[],
     ): Promise<void> {
-        if(!meetup.messageID) {
+        if (!meetup.messageID) {
             return;
         }
 
         const message: Message = await getMeetupInfoChannel().messages.fetch(meetup.messageID);
 
-        if (!message) { 
+        if (!message) {
             return;
         }
 
@@ -64,28 +70,28 @@ class UIManager {
      */
     public async updateParticipantList(
         meetup: MeetupRow,
-        participantData: ParticipantData[]
+        participantData: ParticipantData[],
     ): Promise<void> {
-        if(!meetup.threadID || !meetup.participantListMessageID) {
+        if (!meetup.threadID || !meetup.participantListMessageID) {
             return;
         }
 
-        const thread: Channel|null = await client.channels.fetch(meetup.threadID);
+        const thread: Channel | null = await client.channels.fetch(meetup.threadID);
         if (!thread || !thread.isThread()) {
             return;
         }
 
         const message: Message = await thread.messages.fetch(meetup.participantListMessageID);
-        if (!message) { 
+        if (!message) {
             return;
         }
 
         const participantListMessage: string = createParticipantListMessage(participantData);
         const participantListPages: string[] = splitMessage(participantListMessage);
- 
+
         const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
-        if(participantListPages.length > 1){
+        if (participantListPages.length > 1) {
             //add button
             const showAllParticipantsButton: ButtonBuilder = new ButtonBuilder()
                 .setCustomId("show_all_participants:" + meetup.meetupID)
@@ -94,16 +100,14 @@ class UIManager {
                 .setStyle(ButtonStyle.Secondary);
 
             const showAllParticipantsButtonRow: ActionRowBuilder<ButtonBuilder> =
-                new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    showAllParticipantsButton,
-                );
+                new ActionRowBuilder<ButtonBuilder>().addComponents(showAllParticipantsButton);
 
             components.push(showAllParticipantsButtonRow);
         }
 
-         await message.edit({
+        await message.edit({
             content: participantListPages[0],
-            components: components
+            components: components,
         });
     }
 }

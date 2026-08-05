@@ -21,44 +21,56 @@ function createMeetupTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup")
         .addColumn(
-            "meetupID",
-            "integer",
+            "meetupID", //
+            "integer", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.notNull().autoIncrement().primaryKey(),
         )
         .addColumn(
-            "pokemon",
-            "varchar(255)",
+            "pokemon", //
+            "varchar(255)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "location",
-            "varchar(255)",
-            (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
-        )
-        .addColumn("note", sql`MEDIUMTEXT`)
-        .addColumn(
-            "time",
-            "datetime",
+            "location", //
+            "varchar(255)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "userID",
-            "varchar(32)",
+            "note", //
+            sql`MEDIUMTEXT`,
+        )
+        .addColumn(
+            "time", //
+            "datetime", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
-        .addColumn("messageID", "varchar(32)")
-        .addColumn("threadID", "varchar(32)")
-        .addColumn("participantListMessageID", "varchar(32)")
         .addColumn(
-            "createTime",
-            "timestamp",
+            "userID", //
+            "varchar(32)", //
+            (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
+        )
+        .addColumn(
+            "messageID", //
+            "varchar(32)", //
+        )
+        .addColumn(
+            "threadID", //
+            "varchar(32)", //
+        )
+        .addColumn(
+            "participantListMessageID", //
+            "varchar(32)", //
+        )
+        .addColumn(
+            "createTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.defaultTo(sql`CURRENT_TIMESTAMP`),
         )
         .addColumn(
-            "lastUpdateTime",
-            "timestamp",
+            "lastUpdateTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 //see: https://github.com/kysely-org/kysely/issues/1163
                 col.modifyEnd(sql`ON UPDATE CURRENT_TIMESTAMP`),
@@ -70,36 +82,36 @@ function createMeetupParticipantTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup_participant")
         .addColumn(
-            "meetupID",
-            "integer",
+            "meetupID", //
+            "integer", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "userID",
-            "varchar(32)",
+            "userID", //
+            "varchar(32)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "participants",
-            "boolean",
+            "participants", //
+            "boolean", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.notNull().defaultTo(false),
         )
         .addColumn(
-            "unsure",
-            "boolean",
+            "unsure", //
+            "boolean", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.notNull().defaultTo(false),
         )
         .addColumn(
-            "remote",
-            "boolean",
+            "remote", //
+            "boolean", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.notNull().defaultTo(false),
         )
         .addColumn(
-            "createTime",
-            "timestamp",
+            "createTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.defaultTo(sql`CURRENT_TIMESTAMP`),
         )
@@ -111,18 +123,18 @@ function createAllowedMentionsRoleTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("meetup_allowed_mentions_role")
         .addColumn(
-            "roleID",
-            "varchar(255)",
+            "roleID", //
+            "varchar(255)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "userID",
-            "varchar(32)",
+            "userID", //
+            "varchar(32)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "createTime",
-            "timestamp",
+            "createTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.defaultTo(sql`CURRENT_TIMESTAMP`),
         )
@@ -134,10 +146,10 @@ function addForeignKeys(db: Kysely<Database>): Promise<void> {
     return db.schema
         .alterTable("meetup_participant")
         .addForeignKeyConstraint(
-            "fk_meetup_participant_meetup",
-            ["meetupID"],
-            "meetup",
-            ["meetupID"],
+            "fk_meetup_participant_meetup", //
+            ["meetupID"], //
+            "meetup", //
+            ["meetupID"], //
             (fk: ForeignKeyConstraintBuilder): ForeignKeyConstraintBuilder =>
                 fk.onDelete("cascade"),
         )

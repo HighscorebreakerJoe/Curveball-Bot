@@ -10,14 +10,14 @@ import { removeRole } from "../util/role/removeRole";
 import { AbstractParticipantButton } from "./AbstractParticipantButton";
 
 /**
- * Class for handling "Remove participant" buttonpress in meetup info embeds
+ * Class for handling "Remove participant" buttonpresses in meetup info embeds
  */
 
 export class MeetupRemoveParticipantButton extends AbstractParticipantButton {
     customId: string = "meetup_remove_participant";
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         await super.checkPermissions(interaction);

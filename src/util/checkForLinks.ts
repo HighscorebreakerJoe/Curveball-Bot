@@ -1,5 +1,5 @@
 /**
- * Checks if input contains any links
+ * Checks if the input contains any links
  */
 export function checkForLinks(input: string): boolean {
     // search for http(s) or www.

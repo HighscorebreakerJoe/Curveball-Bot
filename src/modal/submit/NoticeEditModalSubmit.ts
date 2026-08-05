@@ -22,7 +22,7 @@ export class NoticeEditModalSubmit extends NoticeCreateModalSubmit {
         assertUserHasMeetupConfigRole(interaction);
 
         const messageID: string = getDynamicData(interaction.customId);
-        const message = await assertValidMessageInMeetupCreateChannel(messageID);
+        const message: Message = await assertValidMessageInMeetupCreateChannel(messageID);
 
         assertMessagePostedByBot(message);
         assertMessageHasOneEmbed(message);

@@ -28,7 +28,7 @@ export abstract class AbstractButton {
     }
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(_interaction: ButtonInteraction): Promise<void> {}
 

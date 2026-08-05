@@ -5,7 +5,7 @@ import { tSetup } from "../i18n";
 
 let guild: Guild | null = null;
 
-export async function loadGuild() {
+export async function loadGuild(): Promise<void> {
     guild = client.guilds.cache.get(env.GUILD_ID) ?? (await client.guilds.fetch(env.GUILD_ID));
 
     if (!guild) {

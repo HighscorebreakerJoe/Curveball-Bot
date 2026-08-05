@@ -45,7 +45,7 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
 
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_REMOVE, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${roleID}`
+            additionalInformation: `roleID: ${roleID}`,
         });
 
         //create success embed
@@ -67,7 +67,9 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
 
         if (!result.length) {
             throw new Error(
-                tCommand("meetupRemoveMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
+                tCommand("meetupRemoveMention.error.roleAlreadyAdded", {
+                    roleMention: roleMention(roleID),
+                }),
             );
         }
     }

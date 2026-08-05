@@ -3,7 +3,7 @@ import env from "../env";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if message has been posted by bot
+ * Checks if the bot has posted a given message
  */
 
 export function assertMessagePostedByBot(message: Message): void {

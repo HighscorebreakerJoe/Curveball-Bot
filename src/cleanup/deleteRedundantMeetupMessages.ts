@@ -8,17 +8,18 @@ import { deleteMessage } from "./deleteMessage";
  */
 
 export async function deleteRedundantMeetupMessages(): Promise<void> {
-    const existingMeessageIDs: Set<string> = new Set(await getAllMeetupMessageIDs());
+    const existingMessageIDs: Set<string> = new Set(await getAllMeetupMessageIDs());
 
     const messages = await getMeetupInfoChannel().messages.fetch({ limit: 100 });
 
-    messages.forEach(
-        (message: Message) => deleteValidMessage(message, existingMeessageIDs)
-    )
+    messages.forEach((message: Message) => deleteValidMessage(message, existingMessageIDs));
 }
 
-async function deleteValidMessage(message: Message, existingMeessageIDs: Set<string>): Promise<void> {
-    if(!existingMeessageIDs.has(message.id)) {
+async function deleteValidMessage(
+    message: Message,
+    existingMessageIDs: Set<string>,
+): Promise<void> {
+    if (!existingMessageIDs.has(message.id)) {
         await deleteMessage(message);
     }
 }

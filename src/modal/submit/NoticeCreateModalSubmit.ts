@@ -38,7 +38,7 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
 
     protected checkModalInputs(fields: ModalSubmitFields): void {
         const { title, description, type } = this.sanitizedInputs;
-        
+
         //check title
         if (!title.length) {
             throw new Error(tModal("noticeCreate.submit.error.titleEmpty"));
@@ -52,7 +52,7 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
         //check type
         const typeValues: Set<string> = new Set(fields.getStringSelectValues("type"));
 
-        if(!typeValues.has(type)) {
+        if (!typeValues.has(type)) {
             throw new Error(tModal("noticeCreate.submit.error.invalidType"));
         }
 
@@ -79,7 +79,7 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
         if (type === "tutorial") {
             color = noticeTypeMap.get("tutorial")!;
         }
-        
+
         //remove modal input draft
         await this.deleteModalInputDraft();
 
@@ -92,7 +92,7 @@ export class NoticeCreateModalSubmit extends AbstractModalSubmit {
 
         await createAuditLog(AuditLogAction.NOTICE_CREATE, {
             userID: interaction.user.id,
-            additionalInformation: `message.id: ${message.id}`
+            additionalInformation: `message.id: ${message.id}`,
         });
     }
 }

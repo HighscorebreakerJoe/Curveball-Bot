@@ -12,7 +12,7 @@ import { delay } from "../util/delay";
 
 /**
  * Event handler, when a message is deleted.
- * Also runs on bulk deleting messages and when a message is deleted manually by the user.
+ * Also runs on bulk deleting messages and when the user deletes a message manually.
  */
 
 export default function onMessageDelete(client: Client): void {
@@ -58,6 +58,6 @@ async function handleInfoMessage(
     //audit log
     await createAuditLog(AuditLogAction.NOTICE_DELETE, {
         //userID: , //TODO: Add user ID if possible
-        additionalInformation: `message.id: ${message.id}`
+        additionalInformation: `message.id: ${message.id}`,
     });
 }

@@ -15,33 +15,34 @@ function createAuditLogTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("audit_log")
         .addColumn(
-            "auditLogID",
-            "integer",
-            (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.autoIncrement().primaryKey(),
+            "auditLogID", //
+            "integer", //
+            (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
+                col.autoIncrement().primaryKey(),
         )
         .addColumn(
-            "action",
-            "smallint",
+            "action", //
+            "smallint", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "userID",
-            "varchar(32)",
+            "userID", //
+            "varchar(32)", //
         )
         .addColumn(
-            "meetupID",
-            "integer",
+            "meetupID", //
+            "integer", //
         )
         .addColumn(
-            "additionalInformation",
-            "text",
+            "additionalInformation", //
+            "text", //
         )
         .addColumn(
-            "createTime",
-            "timestamp",
+            "createTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.defaultTo(sql`CURRENT_TIMESTAMP`),
-        )        
+        )
         .execute();
 }
 

@@ -5,7 +5,7 @@ import { tSetup } from "../i18n";
 
 const meetupChannels = new Map<string, TextChannel>();
 
-export async function loadMeetupChannels() {
+export async function loadMeetupChannels(): Promise<void> {
     const meetupInfoChannel = (await client.channels.fetch(
         env.MEETUP_INFO_CHANNEL_ID,
     )) as TextChannel;

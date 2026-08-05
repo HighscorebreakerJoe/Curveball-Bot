@@ -1,4 +1,9 @@
-import { ButtonInteraction, ChatInputCommandInteraction, LabelBuilder, ModalBuilder } from "discord.js";
+import {
+    ButtonInteraction,
+    ChatInputCommandInteraction,
+    LabelBuilder,
+    ModalBuilder,
+} from "discord.js";
 import { getModalInputDrafts, ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { postError } from "../util/postEmbeds";
@@ -60,7 +65,7 @@ export abstract class AbstractModal {
             .setCustomId(this.submitCustomId)
             .setTitle(this.modalTitle);
 
-        const inputs = this.buildInputs();
+        const inputs: Record<string, LabelBuilder> = this.buildInputs();
         await this.setInputValues(inputs);
 
         modal.addLabelComponents(...Object.values(inputs));
@@ -75,32 +80,35 @@ export abstract class AbstractModal {
 
     /**
      * Sets the values of the modal's input fields.
-     * 
+     *
      * May be ignored if an unexpected error occurs and discord applies its own draft.
      */
     protected async setInputValues(inputs: Record<string, LabelBuilder>): Promise<void> {
-        if(this.useDraftAsInputRestore) {
+        if (this.useDraftAsInputRestore) {
             //search for draft if available
             const draft = await getModalInputDrafts(this.interactionUserID, this.draftCustomID);
 
-            if(draft){
+            if (draft) {
                 this.applyDraftInputValues(inputs, draft);
                 return;
             }
         }
 
         await this.applyDefaultInputValues(inputs);
-    };
+    }
 
     /**
      * Applies values from draft on input fields
      */
-    protected async applyDraftInputValues(_inputs: Record<string, LabelBuilder>, _draft: ModalInputDraftRow): Promise<void> {};
+    protected async applyDraftInputValues(
+        _inputs: Record<string, LabelBuilder>,
+        _draft: ModalInputDraftRow,
+    ): Promise<void> {}
 
     /**
-     * Default behaviour for applying values on input fields (e.g. from database or just do nothing)
+     * Default behaviour for applying values on input fields (e.g., from database or just do nothing)
      */
-    protected async applyDefaultInputValues(_inputs: Record<string, LabelBuilder>): Promise<void> {};
+    protected async applyDefaultInputValues(_inputs: Record<string, LabelBuilder>): Promise<void> {}
 
     /**
      * Sets customID for modal submit
@@ -124,7 +132,7 @@ export abstract class AbstractModal {
     ): Promise<void> {}
 
     /**
-     * Checks if current user is allowed to use and submit this modal
+     * Checks if the current user is allowed to use and submit this modal
      */
     protected async checkPermissions(
         _interaction: ChatInputCommandInteraction | ButtonInteraction,
@@ -133,8 +141,10 @@ export abstract class AbstractModal {
     /**
      * Sets the user ID of the user who opened the modal
      */
-    private setInteractionUserID(interaction: ChatInputCommandInteraction | ButtonInteraction): void {
-        if(interaction.user.id){
+    private setInteractionUserID(
+        interaction: ChatInputCommandInteraction | ButtonInteraction,
+    ): void {
+        if (interaction.user.id) {
             this.interactionUserID = interaction.user.id;
         }
     }

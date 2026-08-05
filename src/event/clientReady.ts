@@ -34,7 +34,7 @@ export default function onClientReady(client: Client): void {
         await loadMeetupAllowedMentionsRoles();
         await loadMeetupChannels();
 
-        //register cronjobs
+        //register cron jobs
         if (!env.DISABLE_CRONJOBS) {
             await setupHourlyCleanupCronjob();
             await setupDailyCleanupCronjob();

@@ -28,12 +28,10 @@ async function cronjob(): Promise<void> {
 
 async function runCleanup(): Promise<void> {
     await createAuditLog(AuditLogAction.CRON_DAILY_RUN);
-    
+
     await deleteRedundantMeetupThreads();
     await deleteRedundantMeetupRoles();
     await deleteNonBotMessagesFromCreateChannel();
 
     await deleteOldModalInputDrafts();
 }
-
-

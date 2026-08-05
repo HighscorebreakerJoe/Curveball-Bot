@@ -27,7 +27,7 @@ async function cronjob(): Promise<void> {
 
 async function runCleanup(): Promise<void> {
     await createAuditLog(AuditLogAction.CRON_HOURLY_RUN);
-    
+
     await deleteOldMeetups();
     await deleteRedundantMeetupMessages();
 

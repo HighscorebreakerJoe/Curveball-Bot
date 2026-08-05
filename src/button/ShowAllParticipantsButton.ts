@@ -1,4 +1,10 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, MessageFlags } from "discord.js";
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+    MessageFlags,
+} from "discord.js";
 import { MeetupRow } from "../database/table/Meetup";
 import { tButton } from "../i18n";
 import { assertMessageIsValidParticipantListMessage } from "../permission/assertMessageIsValidParticipantListMessage";
@@ -8,7 +14,7 @@ import { splitMessage } from "../util/splitMessage";
 import { AbstractButton } from "./AbstractButton";
 
 /**
- * Class for handling "Show all participants" buttonpress in meetup participant list messages
+ * Class for handling "Show all participants" buttonpresses in meetup participant list messages
  */
 
 export class ShowAllParticipantsButton extends AbstractButton {
@@ -16,18 +22,17 @@ export class ShowAllParticipantsButton extends AbstractButton {
     protected context: Record<string, unknown> = {};
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         //check meetup
         const messageID: string = interaction.message.id;
-        const meetup: MeetupRow = await assertMessageIsValidParticipantListMessage(messageID);
 
-        this.context.meetup = meetup;
+        this.context.meetup = await assertMessageIsValidParticipantListMessage(messageID);
     }
 
     protected async run(interaction: ButtonInteraction): Promise<void> {
-        //post empheral + navigation Buttons
+        //post ephemeral + navigation Buttons
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         //get participant data
@@ -40,17 +45,17 @@ export class ShowAllParticipantsButton extends AbstractButton {
 
         //components
         const components = [];
-        if(participantListPages.length > 1){
+        if (participantListPages.length > 1) {
             //add navigation buttons
             const previousPageButton: ButtonBuilder = new ButtonBuilder()
-                .setCustomId("show_participants_switch_page:{" + meetup.meetupID +",0}")
+                .setCustomId("show_participants_switch_page:{" + meetup.meetupID + ",0}")
                 .setLabel(tButton("showAllParticipants.previousPage"))
                 .setEmoji("⬅️")
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true);
 
             const nextPageButton: ButtonBuilder = new ButtonBuilder()
-                .setCustomId("show_participants_switch_page:{" + meetup.meetupID +",1}")
+                .setCustomId("show_participants_switch_page:{" + meetup.meetupID + ",1}")
                 .setLabel(tButton("showAllParticipants.nextPage"))
                 .setEmoji("➡️")
                 .setStyle(ButtonStyle.Secondary);
@@ -58,7 +63,7 @@ export class ShowAllParticipantsButton extends AbstractButton {
             const navigationButtonRow: ActionRowBuilder<ButtonBuilder> =
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     previousPageButton,
-                    nextPageButton
+                    nextPageButton,
                 );
 
             components.push(navigationButtonRow);

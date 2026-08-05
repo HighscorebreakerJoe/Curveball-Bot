@@ -51,7 +51,7 @@ export abstract class AbstractModalSubmit {
     }
 
     /**
-     * Checks if current user is allowed to use and submit this modal
+     * Checks if the current user is allowed to use and submit this modal
      */
     protected async checkPermissions(_interaction: ModalSubmitInteraction): Promise<void> {}
 

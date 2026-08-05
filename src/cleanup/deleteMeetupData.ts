@@ -5,7 +5,7 @@ import { createAuditLog } from "../database/table/AuditLog";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
-    MeetupRow
+    MeetupRow,
 } from "../database/table/Meetup";
 import { tCommon, tMeetup } from "../i18n";
 import { delay } from "../util/delay";
@@ -20,7 +20,11 @@ type CategorizedMessageIDs = {
 /**
  * Function for deleting meetup-channels and data
  */
-export async function deleteMeetupData(meetupIDs: number[], automaticallyDeleted: boolean = false, userID?: string): Promise<void> {
+export async function deleteMeetupData(
+    meetupIDs: number[],
+    automaticallyDeleted: boolean = false,
+    userID?: string,
+): Promise<void> {
     const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
     const categorizedMessageIDs: CategorizedMessageIDs = getMessageIDsFromMeetups(toDeleteMeetups);
@@ -28,12 +32,7 @@ export async function deleteMeetupData(meetupIDs: number[], automaticallyDeleted
         .map((meetup) => meetup.mentionRoleID)
         .filter((roleID): roleID is string => Boolean(roleID));
 
-    await Promise.allSettled(
-        [
-            deleteMessages(categorizedMessageIDs),
-            deleteRoleByRoleIDs(roleIDs)
-        ]
-    );
+    await Promise.allSettled([deleteMessages(categorizedMessageIDs), deleteRoleByRoleIDs(roleIDs)]);
 
     await deleteMeetupsByMeetupIDs(meetupIDs);
 
@@ -41,12 +40,14 @@ export async function deleteMeetupData(meetupIDs: number[], automaticallyDeleted
         createAuditLog(AuditLogAction.MEETUP_DELETE, {
             userID: userID,
             meetupID: meetupID,
-            additionalInformation: (automaticallyDeleted ? tCommon("defaultDeleteReason") : undefined)
+            additionalInformation: automaticallyDeleted
+                ? tCommon("defaultDeleteReason")
+                : undefined,
         });
     });
 }
 
-function getMessageIDsFromMeetups(meetups: MeetupRow[]){
+function getMessageIDsFromMeetups(meetups: MeetupRow[]) {
     // Discord allows bulk deleting up to 100 messages which are not older than 14 days old
     // -> split up messages into two categories
 
@@ -72,7 +73,7 @@ async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs) {
     }
 
     if (categorizedMessageIDs.moreThanTwoWeeks.length > 0) {
-       await deleteMessagesManually(categorizedMessageIDs.moreThanTwoWeeks);
+        await deleteMessagesManually(categorizedMessageIDs.moreThanTwoWeeks);
     }
 }
 
@@ -123,8 +124,9 @@ function setMessageIDCategory(
         return;
     }
 
-    const isLessThanTwoWeeks: boolean = 
-        !!(toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate);
+    const isLessThanTwoWeeks: boolean = !!(
+        toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate
+    );
 
     if (isLessThanTwoWeeks) {
         categorizedMessageIDs.lessThanTwoWeeks.push(messageID);

@@ -5,9 +5,9 @@ import { getPositiveNumberFromString } from "./util/getPositiveNumberFromString"
 
 const defaultStage = "prod";
 const allowedStages = new Set(["dev", "test", "prod"]);
-const requestedStage = process.env.STAGE ?? defaultStage;
+const requestedStage: string = process.env.STAGE ?? defaultStage;
 
-const stage = allowedStages.has(requestedStage) ? requestedStage : defaultStage;
+const stage: string = allowedStages.has(requestedStage) ? requestedStage : defaultStage;
 const envFile = `.env.${stage}`;
 
 console.log(`### Stage: ${stage} ###`);
@@ -16,12 +16,10 @@ if (!fs.existsSync(envFile)) {
     throw new Error(`Missing env file: ${envFile}`);
 }
 
-dotenv.config(
-    { 
-        path: envFile,
-        quiet: true,
-    }
-);
+dotenv.config({
+    path: envFile,
+    quiet: true,
+});
 
 declare type envStruct = {
     BOT_TOKEN: string;
@@ -58,8 +56,11 @@ const env: envStruct = {
     MEETUP_CREATE_DISABLE_DEFAULT_NOTICES:
         process.env.MEETUP_CREATE_DISABLE_DEFAULT_NOTICES === "true",
     MEETUP_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MEETUP_DELETE_LIMIT_HOURS),
-    MEETUP_LIST_SORT_ORDER: (process.env.MEETUP_LIST_SORT_ORDER?.toLocaleLowerCase() === "asc" ? "asc" : "desc"),
-    MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS),
+    MEETUP_LIST_SORT_ORDER:
+        process.env.MEETUP_LIST_SORT_ORDER?.toLocaleLowerCase() === "asc" ? "asc" : "desc",
+    MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS: getPositiveNumberFromString(
+        process.env.MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS,
+    ),
     DB_HOST: process.env.DB_HOST || "",
     DB_PORT: process.env.DB_PORT || "",
     DB_USERNAME: process.env.DB_USERNAME || "",

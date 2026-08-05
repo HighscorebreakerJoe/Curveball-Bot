@@ -1,5 +1,5 @@
 /**
- * Calculates if provided date occurs in the current or in the next year
+ * Calculates if the provided date occurs in the current or in the next year
  */
 export function calculateYear(day: number, month: number): number {
     const now = new Date();

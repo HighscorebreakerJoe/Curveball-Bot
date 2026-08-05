@@ -16,19 +16,19 @@ const command: TranslationObject = {
     },
 
     meetupAddMention: {
-        description: "Fügt eine Rolle zu den erwähnbaren Rollen in Meetups hinzu",
+        description: "Fügt eine Rolle zu den verwendbaren Rollen in Meetups hinzu",
 
         option: {
-            roleDescription: "Die Rolle, die zu den erwähnbaren Rollen hinzugefügt werden soll",
+            roleDescription: "Die Rolle, die zu den verwendbaren Rollen hinzugefügt werden soll",
         },
 
         error: {
             invalidRole: "Die angegebene Rolle wurde nicht gefunden.",
             roleAlreadyAdded:
-                "Die Rolle {{roleMention}} befindet sich bereits in den erwähnabren Rollen.",
+                "Die Rolle {{roleMention}} befindet sich bereits in den verwendbaren Rollen.",
         },
 
-        success: "Die Rolle {{roleMention}} ist nun in Meetups erwähnbar.",
+        success: "Die Rolle {{roleMention}} ist nun in Meetups verwendbar.",
     },
 
     meetupCleanup: {
@@ -37,18 +37,18 @@ const command: TranslationObject = {
     },
 
     meetupRemoveMention: {
-        description: "Entfernt eine Rolle aus den erwähnbaren Rollen für Meetups",
+        description: "Entfernt eine Rolle aus den verwendbaren Rollen für Meetups",
 
         option: {
-            roleDescription: "Die Rolle, die aus den erwähnbaren Rollen entfernt werden soll",
+            roleDescription: "Die Rolle, die aus den verwendbaren Rollen entfernt werden soll",
         },
 
         error: {
             roleAlreadyAdded:
-                "Die Rolle {{roleMention}} befindet sich nicht in den erwähnabren Rollen.",
+                "Die Rolle {{roleMention}} befindet sich nicht in den verwendbaren Rollen.",
         },
 
-        success: "Die Rolle {{roleMention}} ist nun nicht mehr in Meetups erwähnbar.",
+        success: "Die Rolle {{roleMention}} ist nun nicht mehr in Meetups verwendbar.",
     },
 
     noticeCreate: {

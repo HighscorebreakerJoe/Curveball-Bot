@@ -1,13 +1,7 @@
 import { DeleteResult, Generated, Selectable } from "kysely";
 import { Database, db } from "../Database";
 
-type JsonValue =
-    | string
-    | number
-    | boolean
-    | null
-    | JsonValue[]
-    | { [key: string]: JsonValue };
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
 export interface ModalInputDraft {
     userID: string;
@@ -19,7 +13,10 @@ export interface ModalInputDraft {
 
 export type ModalInputDraftRow = Selectable<Database["modal_input_draft"]>;
 
-export async function getModalInputDrafts(userID: string, draftCustomID: string): Promise<ModalInputDraftRow | undefined> {
+export async function getModalInputDrafts(
+    userID: string,
+    draftCustomID: string,
+): Promise<ModalInputDraftRow | undefined> {
     return (await db
         .selectFrom("modal_input_draft")
         .selectAll()
@@ -32,7 +29,8 @@ export async function deleteModalInputDrafts(
     userIDs: string[],
     draftCustomID: string,
 ): Promise<DeleteResult[]> {
-    return await db.deleteFrom("modal_input_draft")
+    return await db
+        .deleteFrom("modal_input_draft")
         .where("userID", "in", userIDs)
         .where("draftCustomID", "=", draftCustomID)
         .execute();

@@ -2,10 +2,12 @@ import { getMeetupByParticipantListMessageID, MeetupRow } from "../database/tabl
 import { tPermission } from "../i18n";
 
 /**
- * Checks if message with given messageID corresponds to a valid participant list of a meetup
+ * Checks if the message with a given messageID corresponds to a valid participant list of a meetup
  */
 
-export async function assertMessageIsValidParticipantListMessage(messageID: string): Promise<MeetupRow> {
+export async function assertMessageIsValidParticipantListMessage(
+    messageID: string,
+): Promise<MeetupRow> {
     const meetup: MeetupRow | undefined = await getMeetupByParticipantListMessageID(messageID);
 
     if (!meetup) {

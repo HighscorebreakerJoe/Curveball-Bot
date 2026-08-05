@@ -6,7 +6,7 @@ import {
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
     TextInputBuilder,
-    TextInputStyle
+    TextInputStyle,
 } from "discord.js";
 import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
@@ -42,7 +42,7 @@ export class NoticeCreateModal extends AbstractModal {
         }
     }
 
-    protected setSubmitCustomID() {
+    protected setSubmitCustomID(): void {
         this.submitCustomId = "notice_create";
     }
 
@@ -94,35 +94,38 @@ export class NoticeCreateModal extends AbstractModal {
         };
     }
 
-    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
+    protected async applyDraftInputValues(
+        inputs: Record<string, LabelBuilder>,
+        draft: ModalInputDraftRow,
+    ): Promise<void> {
         const { title, description, type } = inputs;
 
         const formData = draft.formData as NoticeCreateModalInputType;
 
-        if(formData === null){
+        if (formData === null) {
             return;
         }
 
         try {
             // title
-            if(formData.title !== undefined) {
+            if (formData.title !== undefined) {
                 const titleInput = title.data.component as TextInputBuilder;
                 titleInput.setValue(String(formData.title));
             }
 
             // description
-            if(formData.description !== undefined) {
+            if (formData.description !== undefined) {
                 const descriptionInput = description.data.component as TextInputBuilder;
                 descriptionInput.setValue(String(formData.description));
             }
 
             // type
-            if(formData.type !== undefined) {
+            if (formData.type !== undefined) {
                 const typeInput = type.data.component as TextInputBuilder;
                 typeInput.setValue(String(formData.type));
             }
         } catch {
             console.error(tModal("global.error.applyDraft"));
         }
-    };
+    }
 }

@@ -15,32 +15,30 @@ function createModalInputDraftTable(db: Kysely<Database>): Promise<void> {
     return db.schema
         .createTable("modal_input_draft")
         .addColumn(
-            "userID",
-            "varchar(32)",
+            "userID", //
+            "varchar(32)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "draftCustomID",
-            "varchar(100)",
+            "draftCustomID", //
+            "varchar(100)", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "formData",
-            "json",
+            "formData", //
+            "json", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder => col.notNull(),
         )
         .addColumn(
-            "createTime",
-            "timestamp",
+            "createTime", //
+            "timestamp", //
             (col: ColumnDefinitionBuilder): ColumnDefinitionBuilder =>
                 col.defaultTo(sql`CURRENT_TIMESTAMP`),
         )
-        .addPrimaryKeyConstraint("modal_input_draft_pk",
-            [
-                "userID",
-                "draftCustomID",
-            ]
-        )
+        .addPrimaryKeyConstraint("modal_input_draft_pk", [
+            "userID", //
+            "draftCustomID", //
+        ])
         .execute();
 }
 

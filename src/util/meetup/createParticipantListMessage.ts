@@ -5,24 +5,33 @@ import { printParticipantData } from "./printParticipantData";
 
 export function createParticipantListMessage(data: ParticipantData[]): string {
     //sum up all participants
-    const totalParticipantsCount: number = data.reduce((sum, currentParticipant) => {
-        return sum + currentParticipant.participants;
-    }, 0);
+    const totalParticipantsCount: number = data.reduce(
+        (sum: number, currentParticipant: ParticipantData): number => {
+            return sum + currentParticipant.participants;
+        },
+        0,
+    );
 
     //categorize participants
     const sureParticipants: ParticipantData[] = data.filter(
-        (currentParticipant) => !currentParticipant.unsure,
+        (currentParticipant: ParticipantData): boolean => !currentParticipant.unsure,
     );
-    const sureParticipantsCount: number = sureParticipants.reduce((sum, currentParticipant) => {
-        return sum + currentParticipant.participants;
-    }, 0);
+    const sureParticipantsCount: number = sureParticipants.reduce(
+        (sum: number, currentParticipant: ParticipantData): number => {
+            return sum + currentParticipant.participants;
+        },
+        0,
+    );
 
     const unsureParticipants: ParticipantData[] = data.filter(
-        (currentParticipant) => currentParticipant.unsure,
+        (currentParticipant: ParticipantData): boolean => currentParticipant.unsure,
     );
-    const unsureParticipantsCount: number = unsureParticipants.reduce((sum, currentParticipant) => {
-        return sum + currentParticipant.participants;
-    }, 0);
+    const unsureParticipantsCount: number = unsureParticipants.reduce(
+        (sum: number, currentParticipant: ParticipantData): number => {
+            return sum + currentParticipant.participants;
+        },
+        0,
+    );
 
     const lines: string[] = [];
 

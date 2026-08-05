@@ -1,7 +1,10 @@
 import {
+    APIRole,
     ButtonInteraction,
     ChatInputCommandInteraction,
+    CommandInteractionOptionResolver,
     LabelBuilder,
+    Role,
     roleMention,
     TextInputBuilder,
     TextInputStyle,
@@ -42,22 +45,23 @@ export class MeetupCreateModal extends AbstractModal {
         }
 
         //check option roles
-        const options = interaction.options;
+        const options: Omit<CommandInteractionOptionResolver, "getMessage" | "getFocused"> =
+            interaction.options;
         const roleIds: string[] = [];
 
-        const role1 = options.getRole("role1");
+        const role1: Role | APIRole | null = options.getRole("role1");
         if (role1 && role1.id) {
             await this.checkRole(role1.id);
             roleIds.push(role1.id);
         }
 
-        const role2 = options.getRole("role2");
+        const role2: Role | APIRole | null = options.getRole("role2");
         if (role2 && role2.id) {
             await this.checkRole(role2.id);
             roleIds.push(role2.id);
         }
 
-        const role3 = options.getRole("role3");
+        const role3: Role | APIRole | null = options.getRole("role3");
         if (role3 && role3.id) {
             await this.checkRole(role3.id);
             roleIds.push(role3.id);
@@ -68,8 +72,8 @@ export class MeetupCreateModal extends AbstractModal {
         });
     }
 
-    protected setSubmitCustomID() {
-        const roleIdString = (this.additionalData.roleIds as string[]).join(",");
+    protected setSubmitCustomID(): void {
+        const roleIdString: string = (this.additionalData.roleIds as string[]).join(",");
 
         this.submitCustomId = "meetup_create:" + roleIdString;
     }

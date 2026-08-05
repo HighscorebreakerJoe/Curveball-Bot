@@ -1,6 +1,8 @@
 import {
     EmbedBuilder,
+    GuildMember,
     heading,
+    Message,
     ModalSubmitInteraction,
     roleMention,
     Snowflake,
@@ -119,13 +121,13 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
 
         //update embed in message
         const messageID = meetup.messageID as Snowflake;
-        const message = await getMeetupInfoChannel().messages.fetch(messageID);
+        const message: Message<true> = await getMeetupInfoChannel().messages.fetch(messageID);
 
         const embed: EmbedBuilder = EmbedBuilder.from(message.embeds[0]);
         let userTag: string = interaction.user?.tag;
 
         if (meetup.userID !== interaction.user?.id) {
-            const member = await getGuild().members.fetch(meetup.userID);
+            const member: GuildMember = await getGuild().members.fetch(meetup.userID);
             userTag = member?.user.tag;
         }
 

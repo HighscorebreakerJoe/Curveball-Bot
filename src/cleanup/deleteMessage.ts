@@ -3,7 +3,7 @@ import { tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 
 /**
- * Deletes given message
+ * Deletes a given message
  */
 export async function deleteMessage(message: Message): Promise<void> {
     try {

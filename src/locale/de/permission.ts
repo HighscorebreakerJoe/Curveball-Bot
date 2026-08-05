@@ -6,7 +6,7 @@ const permission: TranslationObject = {
         meetupCantEdit: "Du hast nicht die notwendigen Rechte, dieses Meetup zu bearbeiten.",
         meetupCantDelete: "Du hast nicht die notwendigen Rechte, dieses Meetup zu löschen.",
         notMeetupCreateChannel:
-            "Falscher Channel. Führe dieses Kommando bitte in <#{{channelID}}> aus.",
+            "Falscher Channel. Führe dieses Kommando bitte in {{channelMention}} aus.",
         invalidMeetup: "Kein Meetup mit der Meetup-ID gefunden: {{meetupID}}",
         noMeetupFoundByMessage: "Kein Meetup mit der folgenden Nachricht-ID gefunden: {{messageID}",
         memberCantExecuteCommand:
