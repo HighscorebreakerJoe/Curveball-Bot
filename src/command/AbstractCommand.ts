@@ -27,7 +27,7 @@ export abstract class AbstractCommand {
             if (this.options.length) {
                 await this.checkOptions(interaction);
             }
-            this.run(interaction);
+            await this.run(interaction);
         } catch (error) {
             let errorMessage: string = tCommon("error.unknown");
 
@@ -40,7 +40,7 @@ export abstract class AbstractCommand {
     }
 
     /**
-     * Builds json structure for slash command
+     * Builds JSON structure for slash command
      */
     public buildSlashCommandJSON(): RESTPostAPIApplicationCommandsJSONBody {
         //base properties
@@ -70,5 +70,5 @@ export abstract class AbstractCommand {
     /**
      * Runs actual command
      */
-    protected abstract run(interaction: ChatInputCommandInteraction): void;
+    protected abstract run(interaction: ChatInputCommandInteraction): Promise<void>;
 }
