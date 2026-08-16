@@ -1,6 +1,7 @@
 import i18next, { i18n } from "i18next";
 import * as fs from "node:fs";
-import path from "path";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import env from "./env";
 
 const namespaces = [
@@ -13,9 +14,11 @@ const namespaces = [
     "permission",
     "setup",
 ] as const;
+
 type Namespace = (typeof namespaces)[number];
-type InitResource = Record<string, Record<string, any>>;
 type TranslationParams = Record<string, string | number | boolean>;
+
+type InitResource = Record<string, Partial<Record<Namespace, TranslationObject>>>;
 
 // general translation object
 export type TranslationObject = {
@@ -38,7 +41,8 @@ export async function initI18n(): Promise<i18n> {
         debug: env.ENABLE_I18NEXT_DEBUG,
         showSupportNotice: false,
 
-        resources: getLocaleResources(),
+        resources: await getLocaleResources(),
+
         interpolation: {
             escapeValue: false,
         },
@@ -47,7 +51,11 @@ export async function initI18n(): Promise<i18n> {
     return i18next;
 }
 
-export function t(key: string, namespace: string = "common", params?: TranslationParams): string {
+export function t(
+    key: string,
+    namespace: Namespace = "common",
+    params?: TranslationParams,
+): string {
     return i18next.t(key, {
         ns: namespace,
         ...params,
@@ -86,7 +94,7 @@ export function tSetup(key: string, params?: TranslationParams): string {
     return t(key, "setup", params);
 }
 
-function getLocaleResources(): InitResource {
+async function getLocaleResources(): Promise<InitResource> {
     const resources: InitResource = {};
 
     const localeDir: string = path.join(__dirname, "locale");
@@ -98,7 +106,7 @@ function getLocaleResources(): InitResource {
             continue;
         }
 
-        resources[lang] = {} as Record<Namespace, any>;
+        resources[lang] = {};
 
         for (const name of namespaces) {
             const file: string = path.join(langDir, `${name}.js`);
@@ -106,7 +114,9 @@ function getLocaleResources(): InitResource {
                 continue;
             }
 
-            resources[lang][name] = require(file).default;
+            const module = await import(pathToFileURL(file).href);
+            //TODO: replace this workaround with a better solution
+            resources[lang][name] = module.default?.default ?? module.default;
         }
     }
 
