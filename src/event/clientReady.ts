@@ -67,5 +67,8 @@ export default function onClientReady(client: Client): void {
                 await postMeetupCreateNotices();
             }
         }
+
+        //GO!
+        console.log(tSetup("step.complete"));
     });
 }

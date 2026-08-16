@@ -1,5 +1,5 @@
 /**
- * Splits message into chunk to avoid posting too big messages
+ * Splits a message into chunk to avoid posting too big messages
  */
 export function splitMessage(message: string, maxLength = 2000): string[] {
     const chunks: string[] = [];
