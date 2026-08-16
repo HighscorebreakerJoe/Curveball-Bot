@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const permission: TranslationObject = {
+const permission = {
     error: {
         invalidDynamicData: "Invalid dynamic data",
         invalidPageNumber: "Invalid page number",
@@ -17,6 +17,6 @@ const permission: TranslationObject = {
         messageHasMoreThanOneEmbed: "Message with ID {{messageID}} has more than one embed.",
         messageNotPostedByBot: "Message with ID {{messageID}} has not been posted by the bot.",
     },
-};
+} as const satisfies TranslationObject;
 
 export default permission;

@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type permissionEn from "../en/permission";
 
-const permission: TranslationObject = {
+const permission = {
     error: {
         memberNotFound: "Member nicht gefunden.",
         meetupCantEdit: "Du hast nicht die notwendigen Rechte, dieses Meetup zu bearbeiten.",
@@ -17,6 +18,6 @@ const permission: TranslationObject = {
         messageHasMoreThanOneEmbed: "Nachricht mit der {{messageID}} hat mehr als eine Einbettung.",
         messageNotPostedByBot: "Nachricht mit der {{messageID}} wurde nicht vom Bot verfasst.",
     },
-};
+} satisfies PartialTranslationObject<typeof permissionEn>;
 
 export default permission;

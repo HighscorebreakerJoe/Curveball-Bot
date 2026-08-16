@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import path from "path";
 import env from "./env";
 
-const namespaces: string[] = [
+const namespaces = [
     "button",
     "command",
     "common",
@@ -12,14 +12,20 @@ const namespaces: string[] = [
     "modal",
     "permission",
     "setup",
-];
+] as const;
 type Namespace = (typeof namespaces)[number];
 type InitResource = Record<string, Record<string, any>>;
-type translationParams = Record<string, string | number | boolean>;
+type TranslationParams = Record<string, string | number | boolean>;
 
-export interface TranslationObject {
+// general translation object
+export type TranslationObject = {
     [key: string]: string | TranslationObject;
-}
+};
+
+// used for translations which do not fully cover the original english locales
+export type PartialTranslationObject<T> = {
+    [K in keyof T]?: T[K] extends object ? PartialTranslationObject<T[K]> : string;
+};
 
 export async function initI18n(): Promise<i18n> {
     await i18next.init({
@@ -41,42 +47,42 @@ export async function initI18n(): Promise<i18n> {
     return i18next;
 }
 
-export function t(key: string, namespace: string = "common", params?: translationParams): string {
+export function t(key: string, namespace: string = "common", params?: TranslationParams): string {
     return i18next.t(key, {
         ns: namespace,
         ...params,
     });
 }
 
-export function tButton(key: string, params?: translationParams): string {
+export function tButton(key: string, params?: TranslationParams): string {
     return t(key, "button", params);
 }
 
-export function tCommand(key: string, params?: translationParams): string {
+export function tCommand(key: string, params?: TranslationParams): string {
     return t(key, "command", params);
 }
 
-export function tCommon(key: string, params?: translationParams): string {
+export function tCommon(key: string, params?: TranslationParams): string {
     return t(key, "common", params);
 }
 
-export function tCronjob(key: string, params?: translationParams): string {
+export function tCronjob(key: string, params?: TranslationParams): string {
     return t(key, "cronjob", params);
 }
 
-export function tMeetup(key: string, params?: translationParams): string {
+export function tMeetup(key: string, params?: TranslationParams): string {
     return t(key, "meetup", params);
 }
 
-export function tModal(key: string, params?: translationParams): string {
+export function tModal(key: string, params?: TranslationParams): string {
     return t(key, "modal", params);
 }
 
-export function tPermission(key: string, params?: translationParams): string {
+export function tPermission(key: string, params?: TranslationParams): string {
     return t(key, "permission", params);
 }
 
-export function tSetup(key: string, params?: translationParams): string {
+export function tSetup(key: string, params?: TranslationParams): string {
     return t(key, "setup", params);
 }
 

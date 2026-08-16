@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type meetupEn from "../en/meetup";
 
-const meetup: TranslationObject = {
+const meetup = {
     info: {
         titleRaidFrom: "Raid von",
         threadTitle: "Meetup #{{meetupID}}: Absprache",
@@ -90,6 +91,6 @@ const meetup: TranslationObject = {
                 "*Aus diesem Grund: Bitte hier __nicht__ chatten!*",
         },
     },
-};
+} satisfies PartialTranslationObject<typeof meetupEn>;
 
 export default meetup;

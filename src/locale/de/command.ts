@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type commandEn from "../en/command";
 
-const command: TranslationObject = {
+const command = {
     meetup: {
         description: "Erstellt ein Meetup",
 
@@ -70,6 +71,6 @@ const command: TranslationObject = {
     postMeetupCreateNotices: {
         description: "Verfasst die Standardhinweise im Meetup-Erstellungskanal",
     },
-};
+} satisfies PartialTranslationObject<typeof commandEn>;
 
 export default command;

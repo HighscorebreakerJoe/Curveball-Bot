@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const meetup: TranslationObject = {
+const meetup = {
     info: {
         titleRaidFrom: "Raid from",
         threadTitle: "Meetup #{{meetupID}}: Discussion",
@@ -106,6 +106,6 @@ const meetup: TranslationObject = {
                 "*For this reason: Please __do not__ chat here in this channel!*",
         },
     },
-};
+} as const satisfies TranslationObject;
 
 export default meetup;

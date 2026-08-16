@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type commonEn from "../en/common";
 
-const common: TranslationObject = {
+const common = {
     edit: "Bearbeiten",
     delete: "Löschen",
     unknown: "Unbekannt",
@@ -18,6 +19,6 @@ const common: TranslationObject = {
         notANumber: "Wert ist keine gültige Zahl: {{var}}",
         linkDetected: "Hey, bitte keine Links posten!",
     },
-};
+} satisfies PartialTranslationObject<typeof commonEn>;
 
 export default common;

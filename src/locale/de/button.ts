@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type buttonEn from "../en/button";
 
-const button: TranslationObject = {
+const button = {
     meetupAddParticipant: {
         error: {
             maxParticipantsReached:
@@ -35,6 +36,6 @@ const button: TranslationObject = {
         previousPage: "Vorherige Seite",
         nextPage: "Nächste Seite",
     },
-};
+} satisfies PartialTranslationObject<typeof buttonEn>;
 
 export default button;

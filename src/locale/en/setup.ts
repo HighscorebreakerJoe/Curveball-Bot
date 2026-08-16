@@ -1,6 +1,6 @@
-import { TranslationObject } from "../../i18n";
+import type { TranslationObject } from "../../i18n";
 
-const setup: TranslationObject = {
+const setup = {
     client: {
         activity: "Pokémon GO",
         loginMessage: "Logged in as: {{tag}}",
@@ -35,6 +35,6 @@ const setup: TranslationObject = {
         interactionModal: "Failed to process modal.",
         interactionButton: "Failed to execute button action.",
     },
-};
+} as const satisfies TranslationObject;
 
 export default setup;

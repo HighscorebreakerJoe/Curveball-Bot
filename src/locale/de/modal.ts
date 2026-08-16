@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type modalEn from "../en/modal";
 
-const modal: TranslationObject = {
+const modal = {
     global: {
         error: {
             invalidInteractionType: "Falscher Interaktionstyp",
@@ -87,6 +88,6 @@ const modal: TranslationObject = {
     noticeEdit: {
         title: "Ankündigung bearbeiten",
     },
-};
+} satisfies PartialTranslationObject<typeof modalEn>;
 
 export default modal;

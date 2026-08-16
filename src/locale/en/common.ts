@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const common: TranslationObject = {
+const common = {
     edit: "Edit",
     delete: "Delete",
     unknown: "Unknown",
@@ -20,6 +20,6 @@ const common: TranslationObject = {
         meetupDeleteError: "An error occurred while deleting a meetup",
         threadDeleteError: "An error occurred while deleting a thread",
     },
-};
+} as const satisfies TranslationObject;
 
 export default common;

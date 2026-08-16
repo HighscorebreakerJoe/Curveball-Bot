@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const modal: TranslationObject = {
+const modal = {
     global: {
         error: {
             invalidInteractionType: "Invalid interaction type",
@@ -92,6 +92,6 @@ const modal: TranslationObject = {
     noticeEdit: {
         title: "Edit notice",
     },
-};
+} as const satisfies TranslationObject;
 
 export default modal;

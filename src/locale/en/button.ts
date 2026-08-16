@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const button: TranslationObject = {
+const button = {
     meetupAddParticipant: {
         error: {
             maxParticipantsReached:
@@ -36,6 +36,6 @@ const button: TranslationObject = {
         previousPage: "Previous page",
         nextPage: "Next page",
     },
-};
+} as const satisfies TranslationObject;
 
 export default button;
