@@ -43,7 +43,7 @@ export class NoticeEditModal extends NoticeCreateModal {
         });
     }
 
-    protected setSubmitCustomID() {
+    protected setSubmitCustomID(): void {
         this.submitCustomId = "notice_edit:" + (this.additionalData.message as Message).id;
     }
 

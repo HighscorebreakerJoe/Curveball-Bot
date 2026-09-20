@@ -89,7 +89,7 @@ export abstract class AbstractModal {
             const draft = await getModalInputDrafts(this.interactionUserID, this.draftCustomID);
 
             if (draft) {
-                this.applyDraftInputValues(inputs, draft);
+                await this.applyDraftInputValues(inputs, draft);
                 return;
             }
         }

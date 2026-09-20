@@ -69,41 +69,41 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         };
     }
 
-    protected validateModalInputs(): void {
+    protected async validateModalInputs(): Promise<void> {
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         //check pokémon
         if (!pokemon.length) {
-            this.handleError(tModal("meetupCreate.submit.error.pokemonEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.pokemonEmpty"));
         }
 
         if (checkForLinks(pokemon)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
 
         //check location
         if (!location.length) {
-            this.handleError(tModal("meetupCreate.submit.error.locationEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.locationEmpty"));
         }
 
         if (checkForLinks(location)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
 
         //check time
         if (!time.length) {
-            this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
         }
 
         const timeRegexp = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
         if (!timeRegexp.test(time)) {
-            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const timeParts: string[] = time.split(":");
         if (timeParts.length !== 2) {
-            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const [hour, minute] = timeParts.map(Number);
@@ -113,18 +113,18 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         //check date
         if (!date.length) {
-            this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
         }
 
         const dateRegexp = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$/;
 
         if (!dateRegexp.test(date)) {
-            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const dateParts: string[] = date.split(".");
         if (dateParts.length !== 2) {
-            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const [day, month] = dateParts.map(Number);
@@ -133,16 +133,16 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         const dateObject = new Date(year, month - 1, day, hour, minute);
 
         if (dateObject.getDate() !== day || dateObject.getMonth() !== month - 1) {
-            this.handleError(tModal("meetupCreate.submit.error.dateInvalid"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateInvalid"));
         }
 
         if (dateObject < currentDate) {
-            this.handleError(tModal("meetupCreate.submit.error.dateInThePast"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateInThePast"));
         }
 
         //check note (optional)
         if (note.length > 0 && checkForLinks(note)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
     }
 

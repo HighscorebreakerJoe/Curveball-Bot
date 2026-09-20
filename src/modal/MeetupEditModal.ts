@@ -1,4 +1,9 @@
-import { ButtonInteraction, ChatInputCommandInteraction, LabelBuilder, TextInputBuilder } from "discord.js";
+import {
+    ButtonInteraction,
+    ChatInputCommandInteraction,
+    LabelBuilder,
+    TextInputBuilder,
+} from "discord.js";
 import { MeetupRow } from "../database/table/Meetup";
 import { tModal } from "../i18n";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
@@ -33,7 +38,7 @@ export class MeetupEditModal extends MeetupCreateModal {
         });
     }
 
-    protected setSubmitCustomID() {
+    protected setSubmitCustomID(): void {
         this.submitCustomId = "meetup_edit:" + (this.additionalData.meetup as MeetupRow).meetupID;
     }
 
@@ -75,5 +80,5 @@ export class MeetupEditModal extends MeetupCreateModal {
             const noteInput = note.data.component as TextInputBuilder;
             noteInput.setValue(meetup.note);
         }
-    };
+    }
 }

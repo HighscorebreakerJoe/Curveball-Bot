@@ -16,7 +16,7 @@ export abstract class AbstractModalSubmit {
     public readonly dynamicId!: boolean;
     protected sanitizedInputs: Record<string, string> = {};
     protected additionalData: AdditionalDataRecord = {};
-    protected responseMode = InteractionResponseMode.UPDATE;
+    protected responseMode: string = InteractionResponseMode.UPDATE;
     protected saveInputDraftOnError: boolean = true;
     protected interactionUserID: string = "";
     protected draftCustomID: string = "";
@@ -31,7 +31,7 @@ export abstract class AbstractModalSubmit {
             this.setInteractionUserID(interaction);
             this.setDraftCustomID(interaction);
             this.sanitizeModalInputs(interaction.fields);
-            this.validateModalInputs();
+            await this.validateModalInputs();
             await this.successModalInputs(interaction);
         } catch (error) {
             let errorMessage: string = tCommon("error.unknown");
@@ -64,7 +64,7 @@ export abstract class AbstractModalSubmit {
     /**
      * Checks and verifies user inputs of this modal
      */
-    protected validateModalInputs(): void {}
+    protected async validateModalInputs(): Promise<void> {}
 
     /**
      * Called after user inputs of this modal have been successfully verified
@@ -74,9 +74,9 @@ export abstract class AbstractModalSubmit {
     /**
      * Handles validation errors for modal inputs
      */
-    protected handleError(errorMessage: string): Promise<void> {
+    protected async handleError(errorMessage: string): Promise<void> {
         if (this.saveInputDraftOnError) {
-            this.saveModalInputDraft();
+            await this.saveModalInputDraft();
         }
 
         throw new Error(errorMessage);
