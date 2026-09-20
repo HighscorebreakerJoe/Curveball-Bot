@@ -11,6 +11,7 @@ import { tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 import { splitArray } from "../util/splitArray";
 import { deleteRoleByRoleIDs } from "./deleteRoleByRoleIDs";
+import { logger } from "../logger";
 
 type CategorizedMessageIDs = {
     lessThanTwoWeeks: string[];
@@ -94,7 +95,7 @@ async function deleteMessagesBulk(messageIDs: string[]): Promise<void> {
                 continue;
             }
 
-            console.error(tMeetup("message.error.delete", { messageID: "0" }), error);
+            logger.error({ err: error }, tMeetup("message.error.delete", { messageID: "0" }));
         }
     }
 }
@@ -111,7 +112,7 @@ async function deleteMessagesManually(messageIDs: string[]): Promise<void> {
                 continue;
             }
 
-            console.error(tMeetup("message.error.delete", { messageID: messageID }), error);
+            logger.error({ err: error }, tMeetup("message.error.delete", { messageID: messageID }));
         }
     }
 }

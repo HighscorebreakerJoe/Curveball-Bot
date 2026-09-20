@@ -3,6 +3,7 @@ import { getAllMeetupThreadIDs } from "../database/table/Meetup";
 import { tCommon, tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 import { getAllAvailableMeetupInfoThreads } from "../util/meetup/getAllAvailableMeetupInfoThreads";
+import { logger } from "../logger";
 
 /**
  * Deletes threads which are linked by already deleted meetups
@@ -26,7 +27,7 @@ export async function deleteRedundantMeetupThreads(): Promise<void> {
             await thread.delete(tMeetup("info.threadDefaultDeleteReason"));
             await delay(500);
         } catch {
-            console.error(tCommon("error.threadDeleteError"));
+            logger.error({}, tCommon("error.threadDeleteError"));
         }
     }
 }

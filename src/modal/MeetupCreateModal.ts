@@ -15,6 +15,7 @@ import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
 import { MeetupCreateModalInputType } from "./type/MeetupCreateModalInputType";
+import { logger } from "../logger";
 
 /**
  * Displays Create Meetup Modal
@@ -190,8 +191,8 @@ export class MeetupCreateModal extends AbstractModal {
                 const noteInput = note.data.component as TextInputBuilder;
                 noteInput.setValue(String(formData.note));
             }
-        } catch {
-            console.error(tModal("global.error.applyDraft"));
+        } catch (error: unknown) {
+            logger.error({ err: error }, tModal("global.error.applyDraft"));
         }
     }
 

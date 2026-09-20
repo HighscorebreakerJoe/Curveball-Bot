@@ -12,6 +12,7 @@ import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
 import { NoticeCreateModalInputType } from "./type/NoticeCreateModalInputType";
+import { logger } from "../logger";
 
 /**
  * Displays Create Notice Modal
@@ -124,8 +125,8 @@ export class NoticeCreateModal extends AbstractModal {
                 const typeInput = type.data.component as TextInputBuilder;
                 typeInput.setValue(String(formData.type));
             }
-        } catch {
-            console.error(tModal("global.error.applyDraft"));
+        } catch (error: unknown) {
+            logger.error({ err: error }, tModal("global.error.applyDraft"));
         }
     }
 }

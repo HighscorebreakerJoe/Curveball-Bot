@@ -14,6 +14,7 @@ import { buttonsMap } from "../map/buttonsMap";
 import { commandsMap } from "../map/commandsMap";
 import { modalSubmitsMap } from "../map/modalSubmitsMap";
 import { AbstractModalSubmit } from "../modal/submit/AbstractModalSubmit";
+import { logger } from "../logger";
 
 export default function onInteractionCreate(client: Client): void {
     client.on(Events.InteractionCreate, async (interaction: Interaction): Promise<void> => {
@@ -26,7 +27,7 @@ export default function onInteractionCreate(client: Client): void {
                 await handleButton(interaction);
             }
         } catch (error) {
-            console.error(error);
+            logger.error({ err: error });
             if (interaction.isRepliable()) {
                 await interaction.reply({
                     content: tSetup("error.interactionGeneral"),
@@ -48,7 +49,7 @@ async function handleCommand(interaction: ChatInputCommandInteraction): Promise<
         const commandInstance = new command();
         await commandInstance.execute(interaction);
     } catch (error) {
-        console.error(error);
+        logger.error({ err: error });
         if (interaction.isRepliable()) {
             await interaction.reply({
                 content: tSetup("error.interactionCommand"),
@@ -74,7 +75,7 @@ async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<v
         const modal = new ModalSubmit();
         await modal.execute(interaction);
     } catch (error) {
-        console.error(error);
+        logger.error({ err: error });
         if (interaction.isRepliable()) {
             await interaction.reply({
                 content: tSetup("error.interactionModal"),
@@ -101,7 +102,7 @@ async function handleButton(interaction: ButtonInteraction): Promise<void> {
         const button = new Button();
         await button.execute(interaction);
     } catch (error) {
-        console.error(error);
+        logger.error({ err: error });
         if (interaction.isRepliable()) {
             await interaction.reply({
                 content: tSetup("error.interactionButton"),

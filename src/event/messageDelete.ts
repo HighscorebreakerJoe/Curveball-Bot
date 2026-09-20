@@ -9,6 +9,7 @@ import {
 } from "../database/table/Meetup";
 import { tCommon } from "../i18n";
 import { delay } from "../util/delay";
+import { logger } from "../logger";
 
 /**
  * Event handler, when a message is deleted.
@@ -43,7 +44,7 @@ async function handleMeetupMessage(
     try {
         await deleteMeetupsByMeetupIDs([meetup.meetupID]);
     } catch (error) {
-        console.error(tCommon("error.meetupDeleteError"), error);
+        logger.error({ err: error }, tCommon("error.meetupDeleteError"));
     }
 }
 

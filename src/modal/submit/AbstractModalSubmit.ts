@@ -5,6 +5,7 @@ import { deleteModalInputDrafts } from "../../database/table/ModalInputDraft";
 import { tCommon, tModal } from "../../i18n";
 import { postError } from "../../util/postEmbeds";
 import { AdditionalDataRecord } from "../type/AdditionalDataType";
+import { logger } from "../../logger";
 
 /**
  * Base class for all modals submit handlers for Curveball Bot.
@@ -107,7 +108,7 @@ export abstract class AbstractModalSubmit {
                 })
                 .execute();
         } catch (error) {
-            console.error(tModal("error.draft"), error);
+            logger.error({ err: error }, tModal("error.draft"));
         }
     }
 

@@ -6,6 +6,7 @@ import { deleteRedundantMeetupThreads } from "../cleanup/deleteRedundantMeetupTh
 import { AuditLogAction } from "../constant/auditLogAction";
 import { createAuditLog } from "../database/table/AuditLog";
 import { tCronjob, tSetup } from "../i18n";
+import { logger } from "../logger";
 
 export async function setupDailyCleanupCronjob(): Promise<void> {
     nodeCron.schedule("0 30 0 * * *", cronjob);
@@ -19,7 +20,10 @@ async function cronjob(): Promise<void> {
         console.log(tCronjob("dailyCleanup.success", { time: new Date().toISOString() }));
         await createAuditLog(AuditLogAction.CRON_DAILY_SUCCESS);
     } catch (error) {
-        console.error(tCronjob("dailyCleanup.error", { time: new Date().toISOString() }), error);
+        logger.error(
+            { err: error },
+            tCronjob("dailyCleanup.error", { time: new Date().toISOString() }),
+        );
         await createAuditLog(AuditLogAction.CRON_DAILY_ERROR, {
             additionalInformation: error instanceof Error ? error.message : String(error),
         });

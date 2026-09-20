@@ -1,5 +1,8 @@
+import { logger } from "../../logger";
+import { tSetup } from "../../i18n";
+
 /**
- * Creates a keyed debounce + queue scheduler for async tasks.
+ * Creates a keyed debounce and queue scheduler for async tasks.
  * Tasks with the same key are debounced and executed sequentially,
  * preventing concurrent execution and merging rapid updates.
  */
@@ -40,7 +43,9 @@ export function createKeyedDebouncedQueue(delay = 1500) {
 
         const newQueue: Promise<void> = currentQueue
             .then(taskToRun) //run function
-            .catch(console.error);
+            .catch((error: unknown): void => {
+                logger.error({ err: error }, tSetup("error.keyedDebouncedQueue"));
+            });
 
         queues.set(key, newQueue);
 

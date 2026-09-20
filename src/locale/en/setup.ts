@@ -34,6 +34,7 @@ const setup = {
         interactionCommand: "Failed to execute command.",
         interactionModal: "Failed to process modal.",
         interactionButton: "Failed to execute button action.",
+        keyedDebouncedQueue: "Failed to execute keyed debounced queue.",
     },
 } as const satisfies TranslationObject;
 

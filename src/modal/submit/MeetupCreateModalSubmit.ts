@@ -28,6 +28,7 @@ import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
 import { splitMessage } from "../../util/splitMessage";
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
+import { logger } from "../../logger";
 
 /**
  * Handles Create Modal submits
@@ -327,7 +328,10 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
                 reason: tCommon("defaultCreateReason"),
             });
         } catch (error) {
-            console.error(tModal("meetupCreate.error.createRole", { meetupID: meetupID }), error);
+            logger.error(
+                { err: error },
+                tModal("meetupCreate.error.createRole", { meetupID: meetupID }),
+            );
 
             return null;
         }

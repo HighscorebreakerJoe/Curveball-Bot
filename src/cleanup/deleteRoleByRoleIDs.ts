@@ -2,6 +2,7 @@ import { DiscordAPIError } from "discord.js";
 import { getGuild } from "../cache/guild";
 import { tCommon, tMeetup } from "../i18n";
 import { delay } from "../util/delay";
+import { logger } from "../logger";
 
 /**
  * Delete roles by their roleIDs
@@ -16,7 +17,7 @@ export async function deleteRoleByRoleIDs(roleIDs: string[]): Promise<void> {
                 continue;
             }
 
-            console.error(tMeetup("role.error.delete", { roleID: roleID }), error);
+            logger.error({ err: error }, tMeetup("role.error.delete", { roleID: roleID }));
         }
     }
 }
