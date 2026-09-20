@@ -7,14 +7,25 @@ import env from "./env";
  */
 
 const transport = pino.transport({
-    target: "pino-roll",
-    options: {
-        file: path.join(process.cwd(), "log", "curveball-bot.jsonl"),
-        frequency: "daily",
-        dateFormat: "yyyy-MM-dd",
-        extension: ".jsonl",
-        mkdir: true,
-    },
+    targets: [
+        {
+            target: "pino-roll",
+            options: {
+                file: path.join(process.cwd(), "log", "curveball-bot.jsonl"),
+                frequency: "daily",
+                dateFormat: "yyyy-MM-dd",
+                extension: ".jsonl",
+                mkdir: true,
+            },
+        },
+        {
+            target: "pino-pretty",
+            options: {
+                colorize: true,
+                destination: 1, //stdout
+            },
+        },
+    ],
 });
 
 export const logger = pino(
