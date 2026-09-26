@@ -11,7 +11,7 @@ import { db } from "../database/Database";
 import { createAuditLog } from "../database/table/AuditLog";
 import { tCommand } from "../i18n";
 import { postSuccess } from "../util/postEmbeds";
-import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRole";
+import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRoleCommand";
 
 /**
  * Command for removing roles from the allowed mention roles whitelist

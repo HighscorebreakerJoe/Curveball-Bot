@@ -1,12 +1,12 @@
 import { AbstractCommand } from "../command/AbstractCommand";
-import { MeetupAddMentionRoleCommand } from "../command/MeetupAddMentionRole";
+import { MeetupAddMentionRoleCommand } from "../command/MeetupAddMentionRoleCommand";
 import { MeetupCleanUpCommand } from "../command/MeetupCleanUpCommand";
 import { MeetupCommand } from "../command/MeetupCommand";
-import { MeetupRemoveMentionRoleCommand } from "../command/MeetupRemoveMentionRole";
+import { MeetupRemoveMentionRoleCommand } from "../command/MeetupRemoveMentionRoleCommand";
 import { NoticeCreateCommand } from "../command/NoticeCreateCommand";
 import { NoticeEditCommand } from "../command/NoticeEditCommand";
 import { PollCommand } from "../command/PollCommand";
-import { PostMeetupCreateNoticesCommand } from "../command/PostMeetupCreateNotices";
+import { PostMeetupCreateNoticesCommand } from "../command/PostMeetupCreateNoticesCommand";
 
 const commandClasses: Array<new () => AbstractCommand> = [
     MeetupCommand,
