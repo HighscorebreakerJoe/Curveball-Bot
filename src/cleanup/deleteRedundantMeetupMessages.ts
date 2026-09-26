@@ -12,7 +12,9 @@ export async function deleteRedundantMeetupMessages(): Promise<void> {
 
     const messages = await getMeetupInfoChannel().messages.fetch({ limit: 100 });
 
-    messages.forEach((message: Message) => deleteValidMessage(message, existingMessageIDs));
+    for (const message of messages.values()) {
+        await deleteValidMessage(message, existingMessageIDs);
+    }
 }
 
 async function deleteValidMessage(

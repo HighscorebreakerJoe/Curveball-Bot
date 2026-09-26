@@ -11,9 +11,9 @@ import { deleteRole } from "./deleteRole";
 export async function deleteRedundantMeetupRoles(): Promise<void> {
     const existingMeetupIDs: Set<number> = new Set(await getAllMeetupIDs());
 
-    getGuild().roles.cache.forEach((role: Role): Promise<void> =>
-        deleteValidRole(role, existingMeetupIDs),
-    );
+    for (const role of getGuild().roles.cache.values()) {
+        await deleteValidRole(role, existingMeetupIDs);
+    }
 }
 
 async function deleteValidRole(role: Role, existingMeetupIDs: Set<number>): Promise<void> {

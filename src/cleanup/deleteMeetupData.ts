@@ -42,13 +42,13 @@ export async function deleteMeetupData(
         reason: automaticallyDeleted ? "Deleted automatically" : undefined,
     });
 
-    meetupIDs?.forEach((meetupID: number): void => {
-        createAuditLog(AuditLogAction.MEETUP_DELETE, {
+    for (const meetupID of meetupIDs) {
+        await createAuditLog(AuditLogAction.MEETUP_DELETE, {
             userID: userID,
             meetupID: meetupID,
             additionalInformation: additionalInformation,
         });
-    });
+    }
 }
 
 function getMessageIDsFromMeetups(meetups: MeetupRow[]): CategorizedMessageIDs {
