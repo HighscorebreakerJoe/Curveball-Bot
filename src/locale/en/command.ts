@@ -59,6 +59,10 @@ const command = {
         option: {
             messageIDDescription: "The ID of the message which embed will be edited",
         },
+
+        error: {
+            invalidMessageID: "Invalid messageID",
+        },
     },
 
     poll: {

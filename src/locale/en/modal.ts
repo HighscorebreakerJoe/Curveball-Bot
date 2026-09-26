@@ -85,6 +85,7 @@ const modal = {
                 titleEmpty: "You forgot to enter a title.",
                 descriptionEmpty: "You forgot enter a description.",
                 typeEmpty: "You forgot to specify a type.",
+                invalidType: "Invalid type entered.",
             },
         },
     },

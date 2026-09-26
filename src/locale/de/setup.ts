@@ -7,6 +7,7 @@ const setup = {
         interactionCommand: "Fehler beim Ausführen des Befehls.",
         interactionModal: "Fehler beim Verarbeiten des Modals.",
         interactionButton: "Fehler beim Ausführen der Funktion des Buttons.",
+        invalidCreateChannel: "Kein gültiger Kanal für das Erstellen von Meetups angegeben.",
     },
 } satisfies PartialTranslationObject<typeof setupEn>;
 

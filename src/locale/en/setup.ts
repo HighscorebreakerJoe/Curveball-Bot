@@ -35,6 +35,7 @@ const setup = {
         interactionModal: "Failed to process modal.",
         interactionButton: "Failed to execute button action.",
         keyedDebouncedQueue: "Failed to execute keyed debounced queue.",
+        invalidCreateChannel: "Invalid channel for creating meetups specified.",
     },
 } as const satisfies TranslationObject;
 

@@ -1,7 +1,7 @@
 import { ButtonInteraction, Message, User } from "discord.js";
 import { deleteMeetupData } from "../cleanup/deleteMeetupData";
 import { MeetupRow } from "../database/table/Meetup";
-import { tButton, tCommand, tCommon } from "../i18n";
+import { tButton, tCommon } from "../i18n";
 import { scheduleManager } from "../manager/ScheduleManager";
 import { assertMeetupIDIsValid } from "../permission/assertMeetupIDIsValid";
 import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMeetupCreatorOrConfig";
@@ -24,7 +24,7 @@ export class MeetupDeleteConfirmButton extends AbstractButton {
         const meetupID: number = Number(getDynamicData(interaction.customId));
 
         if (Number.isNaN(meetupID)) {
-            throw new Error(tCommand("error.notANumber", { var: "meetupID" }));
+            throw new Error(tCommon("error.notANumber", { var: "meetupID" }));
         }
 
         const meetup: MeetupRow = await assertMeetupIDIsValid(meetupID);

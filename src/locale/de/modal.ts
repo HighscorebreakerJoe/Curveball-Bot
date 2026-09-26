@@ -6,6 +6,7 @@ const modal = {
         error: {
             invalidInteractionType: "Falscher Interaktionstyp",
             invalidCommand: "Ungültiges Kommando {{commandName}}",
+            saveDraft: "Fehler beim Speichern des Entwurfs",
         },
     },
 
@@ -81,6 +82,7 @@ const modal = {
                 titleEmpty: "Du hast vergessen, einen Titel anzugeben.",
                 descriptionEmpty: "Du hast vergessen, eine Beschreibung anzugeben.",
                 typeEmpty: "Du hast vergessen, einen Typ anzugeben.",
+                invalidType: "Ungültigen Typ angegeben.",
             },
         },
     },

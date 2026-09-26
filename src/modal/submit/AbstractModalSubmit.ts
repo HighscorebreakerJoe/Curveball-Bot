@@ -108,7 +108,7 @@ export abstract class AbstractModalSubmit {
                 })
                 .execute();
         } catch (error) {
-            logger.error({ err: error }, tModal("error.draft"));
+            logger.error({ err: error }, tModal("global.error.saveDraft"));
         }
     }
 

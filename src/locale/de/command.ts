@@ -62,6 +62,10 @@ const command = {
         option: {
             messageIDDescription: "Die ID der Nachricht, deren Einbettung bearbeitet wird.",
         },
+
+        error: {
+            invalidMessageID: "Ungültige Nachricht-ID",
+        },
     },
 
     poll: {

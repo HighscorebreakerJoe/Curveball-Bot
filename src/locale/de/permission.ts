@@ -17,6 +17,7 @@ const permission = {
         messageHasNoEmbeds: "Nachricht mit der ID {{messageID}} hat keine Einbettungen.",
         messageHasMoreThanOneEmbed: "Nachricht mit der {{messageID}} hat mehr als eine Einbettung.",
         messageNotPostedByBot: "Nachricht mit der {{messageID}} wurde nicht vom Bot verfasst.",
+        invalidPageNumber: "Ungültige Seitenzahl angegeben.",
     },
 } satisfies PartialTranslationObject<typeof permissionEn>;
 

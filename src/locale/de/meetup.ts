@@ -10,6 +10,7 @@ const meetup = {
         createSuccess: "Dein Meetup wurde erfolgreich erstellt!",
         createSuccessLink: "Hier geht es zu deinem erstellten Meetup.",
         editSuccess: "Das Meetup wurde erfolgreich bearbeitet!",
+        footerText: "Meetup #{{meetupID}}",
 
         pokemon: "Pokémon / Event",
         location: "Treffpunkt",
