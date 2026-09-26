@@ -12,7 +12,7 @@ import { MeetupRow } from "../database/table/Meetup";
 import { tButton } from "../i18n";
 import { createParticipantListMessage } from "../util/meetup/createParticipantListMessage";
 import { editMeetupInfoEmbed, ParticipantData } from "../util/meetup/editMeetupInfoEmbed";
-import { generateMeetupListMessage } from "../util/meetup/generareMeetupListMessage";
+import { generateMeetupListMessage } from "../util/meetup/generateMeetupListMessage";
 import { sendChunkedMessages } from "../util/sendChunkedMessages";
 import { splitMessage } from "../util/splitMessage";
 
