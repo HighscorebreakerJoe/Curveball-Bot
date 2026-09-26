@@ -18,5 +18,5 @@ function addMentionColumnInMeetupTable(db: Kysely<Database>): Promise<void> {
 // === down ===
 
 function removeMentionColumnFromMeetupTable(db: Kysely<Database>): Promise<void> {
-    return db.schema.alterTable("meetup_participant").dropColumn("mentionRoleID").execute();
+    return db.schema.alterTable("meetup").dropColumn("mentionRoleID").execute();
 }
