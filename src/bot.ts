@@ -5,6 +5,7 @@ import onClientReady from "./event/clientReady";
 import onInteractionCreate from "./event/interactionCreate";
 import onMessageDelete from "./event/messageDelete";
 import { initI18n } from "./i18n";
+import { logger } from "./logger";
 
 async function main(): Promise<void> {
     //language
@@ -23,6 +24,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((mainError) => {
-    console.error(mainError);
+    logger.fatal({ err: mainError }, "Error executing the bot.");
     process.exit(1);
 });

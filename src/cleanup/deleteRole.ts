@@ -1,6 +1,7 @@
 import { Role } from "discord.js";
 import { tCommon, tMeetup } from "../i18n";
 import { delay } from "../util/delay";
+import { logger } from "../logger";
 
 /**
  * Deletes given role
@@ -10,6 +11,6 @@ export async function deleteRole(role: Role): Promise<void> {
         await role.delete(tCommon("defaultDeleteReason"));
         await delay(500);
     } catch (error: unknown) {
-        console.error(tMeetup("role.error.delete", { roleID: role.id }), error);
+        logger.error({ err: error }, tMeetup("role.error.delete", { roleID: role.id }));
     }
 }

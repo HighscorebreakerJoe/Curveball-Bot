@@ -12,7 +12,7 @@ import { postError } from "../util/postEmbeds";
 
 export abstract class AbstractCommand {
     public readonly name!: string;
-    protected sanitizedInputs: Record<string, any> = {};
+    protected sanitizedInputs: Record<string, string> = {};
 
     protected abstract get description(): string;
 
@@ -27,7 +27,7 @@ export abstract class AbstractCommand {
             if (this.options.length) {
                 await this.checkOptions(interaction);
             }
-            this.run(interaction);
+            await this.run(interaction);
         } catch (error) {
             let errorMessage: string = tCommon("error.unknown");
 
@@ -40,7 +40,7 @@ export abstract class AbstractCommand {
     }
 
     /**
-     * Builds json structure for slash command
+     * Builds JSON structure for slash command
      */
     public buildSlashCommandJSON(): RESTPostAPIApplicationCommandsJSONBody {
         //base properties
@@ -58,17 +58,17 @@ export abstract class AbstractCommand {
     }
 
     /**
-     * Checks if current user is allowed to execute this command
+     * Checks if the current user is allowed to execute this command
      */
-    protected async checkPermissions(interaction: ChatInputCommandInteraction): Promise<void> {}
+    protected async checkPermissions(_interaction: ChatInputCommandInteraction): Promise<void> {}
 
     /**
      * Validates options if given
      */
-    protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {}
+    protected async checkOptions(_interaction: ChatInputCommandInteraction): Promise<void> {}
 
     /**
      * Runs actual command
      */
-    protected abstract run(interaction: ChatInputCommandInteraction): void;
+    protected abstract run(interaction: ChatInputCommandInteraction): Promise<void>;
 }

@@ -6,7 +6,7 @@ import { MeetupParticipantRow } from "../database/table/MeetupParticipant";
 import { MeetupAddParticipantButton } from "./MeetupAddParticipantButton";
 
 /**
- * Class for handling "unsure" buttonpress in meetup info embeds
+ * Class for handling "unsure" buttonpresses in meetup info embeds
  */
 
 export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
@@ -14,7 +14,7 @@ export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
     defaultUnsureState: boolean = true;
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         await super.checkPermissions(interaction);
@@ -23,7 +23,7 @@ export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
     /**
      * Updates existing participation entry for this user
      */
-    protected async handleUpdateExisting(add: boolean): Promise<void> {
+    protected async handleUpdateExisting(_add: boolean): Promise<void> {
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         const newStatus = !meetupParticipant.unsure;
@@ -37,16 +37,18 @@ export class MeetupUnsureParticipantButton extends MeetupAddParticipantButton {
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
 
-        const auditAction = (newStatus ? AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE : AuditLogAction.MEETUP_PARTICIPANT_UNSURE_DISABLE);
+        const auditAction = newStatus
+            ? AuditLogAction.MEETUP_PARTICIPANT_UNSURE_ENABLE
+            : AuditLogAction.MEETUP_PARTICIPANT_UNSURE_DISABLE;
 
         await createAuditLog(auditAction, {
             userID: meetupParticipant.userID,
             meetupID: meetupParticipant.meetupID,
-        });  
+        });
     }
 
     /**
-     * Checks if user has too many participants
+     * Checks if the current user has too many participants
      */
     protected checkParticipants(): void {
         //not needed here

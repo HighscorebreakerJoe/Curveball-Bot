@@ -1,6 +1,8 @@
 import {
     EmbedBuilder,
+    GuildMember,
     heading,
+    Message,
     ModalSubmitInteraction,
     roleMention,
     Snowflake,
@@ -56,7 +58,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
     /**
      * Posts meetup after modal inputs have been successfully validated
      */
-    protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {        
+    protected async successModalInputs(interaction: ModalSubmitInteraction): Promise<void> {
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         const meetup = this.additionalData.meetup as MeetupRow;
@@ -65,7 +67,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         const toSaveDate: Date = this.getToSaveDate(time, date);
 
         //save differences for later use
-        const differences: MeetupDifferenceMap  = new Map();
+        const differences: MeetupDifferenceMap = new Map();
 
         if (meetup.pokemon !== pokemon) {
             differences.set("pokemon", {
@@ -108,24 +110,26 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
                 time: toSaveDate,
                 note: note,
             })
-            .where("meetupID", "=", this.additionalData.meetup.meetupID)
+            .where("meetupID", "=", (this.additionalData.meetup as MeetupRow).meetupID)
             .execute();
+
+        const additionalInformation = JSON.stringify(this.prepareAuditLogChanges(differences));
 
         await createAuditLog(AuditLogAction.MEETUP_EDIT, {
             userID: interaction.user.id,
-            meetupID: this.additionalData.meetup.meetupID,
-            additionalInformation: JSON.stringify(this.prepareAuditLogChanges(differences))
-        });    
+            meetupID: (this.additionalData.meetup as MeetupRow).meetupID,
+            additionalInformation: additionalInformation,
+        });
 
         //update embed in message
         const messageID = meetup.messageID as Snowflake;
-        const message = await getMeetupInfoChannel().messages.fetch(messageID);
+        const message: Message<true> = await getMeetupInfoChannel().messages.fetch(messageID);
 
         const embed: EmbedBuilder = EmbedBuilder.from(message.embeds[0]);
         let userTag: string = interaction.user?.tag;
 
         if (meetup.userID !== interaction.user?.id) {
-            const member = await getGuild().members.fetch(meetup.userID);
+            const member: GuildMember = await getGuild().members.fetch(meetup.userID);
             userTag = member?.user.tag;
         }
 
@@ -155,7 +159,10 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         //schedule meetup list channel reset
         scheduleManager.scheduleResetMeetupList();
 
-        interaction.deleteReply();
+        //remove modal input draft
+        await this.deleteModalInputDraft();
+
+        await interaction.deleteReply();
     }
 
     protected setDraftCustomID(): void {
@@ -203,9 +210,7 @@ export class MeetupEditModalSubmit extends MeetupCreateModalSubmit {
         });
     }
 
-    private prepareAuditLogChanges(
-        differences: MeetupDifferenceMap,
-    ): MeetupDifferenceAuditRecord{
+    private prepareAuditLogChanges(differences: MeetupDifferenceMap): MeetupDifferenceAuditRecord {
         return Object.fromEntries(
             [...differences.entries()].map(([key, value]) => [
                 key,

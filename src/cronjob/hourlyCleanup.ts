@@ -5,6 +5,7 @@ import { AuditLogAction } from "../constant/auditLogAction";
 import { createAuditLog } from "../database/table/AuditLog";
 import { tCronjob, tSetup } from "../i18n";
 import { scheduleManager } from "../manager/ScheduleManager";
+import { logger } from "../logger";
 
 export async function setupHourlyCleanupCronjob(): Promise<void> {
     nodeCron.schedule("0 0 * * * *", cronjob);
@@ -18,7 +19,10 @@ async function cronjob(): Promise<void> {
         console.log(tCronjob("hourlyCleanup.success", { time: new Date().toISOString() }));
         await createAuditLog(AuditLogAction.CRON_HOURLY_SUCCESS);
     } catch (error) {
-        console.error(tCronjob("hourlyCleanup.error", { time: new Date().toISOString() }), error);
+        logger.error(
+            { err: error },
+            tCronjob("hourlyCleanup.error", { time: new Date().toISOString() }),
+        );
         await createAuditLog(AuditLogAction.CRON_HOURLY_ERROR, {
             additionalInformation: error instanceof Error ? error.message : String(error),
         });
@@ -27,7 +31,7 @@ async function cronjob(): Promise<void> {
 
 async function runCleanup(): Promise<void> {
     await createAuditLog(AuditLogAction.CRON_HOURLY_RUN);
-    
+
     await deleteOldMeetups();
     await deleteRedundantMeetupMessages();
 

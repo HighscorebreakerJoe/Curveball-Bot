@@ -1,12 +1,13 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type buttonEn from "../en/button";
 
-const button: TranslationObject = {
+const button = {
     meetupAddParticipant: {
         error: {
             maxParticipantsReached:
                 "Maximalanzahl der Mitteilnehmenden erreicht. Mich freut es aber, dass du so viele Freunde hast!",
-            invalidCreateAdditionalAuditLogCall :
-                "Dev: Ungültiger Aufruf von createAdditionalAuditLog. Genau einer der Werte defaultRemoteState oder defaultUnsureState muss true sein."
+            invalidCreateAdditionalAuditLogCall:
+                "Dev: Ungültiger Aufruf von createAdditionalAuditLog. Genau einer der Werte defaultRemoteState oder defaultUnsureState muss true sein.",
         },
     },
 
@@ -33,8 +34,8 @@ const button: TranslationObject = {
     showAllParticipants: {
         show: "Alle Teilnehmer anzeigen",
         previousPage: "Vorherige Seite",
-        nextPage: "Nächste Seite"
+        nextPage: "Nächste Seite",
     },
-};
+} satisfies PartialTranslationObject<typeof buttonEn>;
 
 export default button;

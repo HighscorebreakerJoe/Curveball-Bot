@@ -15,11 +15,18 @@ import env from "../env";
 import { tSetup } from "../i18n";
 import { commandsMap } from "../map/commandsMap";
 import { postMeetupCreateNotices } from "../util/meetup/postMeetupCreateNotices";
+import { logger } from "../logger";
 
 export default function onClientReady(client: Client): void {
     client.on(Events.ClientReady, async () => {
         if (!client.user || !client.application) {
-            console.error(tSetup("error.loginFailed"));
+            logger.error(
+                {
+                    hasUser: Boolean(client.user),
+                    hasApplication: Boolean(client.application),
+                },
+                tSetup("error.loginFailed"),
+            );
             return;
         }
 
@@ -34,7 +41,7 @@ export default function onClientReady(client: Client): void {
         await loadMeetupAllowedMentionsRoles();
         await loadMeetupChannels();
 
-        //register cronjobs
+        //register cron jobs
         if (!env.DISABLE_CRONJOBS) {
             await setupHourlyCleanupCronjob();
             await setupDailyCleanupCronjob();
@@ -56,7 +63,7 @@ export default function onClientReady(client: Client): void {
             });
             console.log(tSetup("step.registeredCommands"));
         } catch (error) {
-            console.error(tSetup("error.registerCommands"), error);
+            logger.error({ err: error }, tSetup("error.registerCommands"));
         }
 
         //post meetup create notices
@@ -67,5 +74,8 @@ export default function onClientReady(client: Client): void {
                 await postMeetupCreateNotices();
             }
         }
+
+        //GO!
+        console.log(tSetup("step.complete"));
     });
 }

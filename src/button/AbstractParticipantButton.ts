@@ -15,7 +15,7 @@ export abstract class AbstractParticipantButton extends AbstractButton {
     protected context: Record<string, unknown> = {};
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         //check meetup
@@ -52,13 +52,19 @@ export abstract class AbstractParticipantButton extends AbstractButton {
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
 
-        const auditAction = (add ? AuditLogAction.MEETUP_PARTICIPANT_ADD : AuditLogAction.MEETUP_PARTICIPANT_REMOVE);
+        const auditAction = add
+            ? AuditLogAction.MEETUP_PARTICIPANT_ADD
+            : AuditLogAction.MEETUP_PARTICIPANT_REMOVE;
+
+        const additionalInformation: string = JSON.stringify({
+            new_count: participantCount,
+        });
 
         await createAuditLog(auditAction, {
             userID: meetupParticipant.userID,
             meetupID: meetupParticipant.meetupID,
-            additionalInformation: `new count: ${participantCount}`,
-        });   
+            additionalInformation: additionalInformation,
+        });
     }
 
     /**

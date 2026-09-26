@@ -11,7 +11,7 @@ import { db } from "../database/Database";
 import { createAuditLog } from "../database/table/AuditLog";
 import { tCommand } from "../i18n";
 import { postSuccess } from "../util/postEmbeds";
-import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRole";
+import { MeetupAddMentionRoleCommand } from "./MeetupAddMentionRoleCommand";
 
 /**
  * Command for removing roles from the allowed mention roles whitelist
@@ -39,19 +39,23 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
         //post defer reply to prevent timeout errors
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-        const { role } = this.sanitizedInputs;
+        const { roleID } = this.sanitizedInputs;
 
-        await db.deleteFrom("meetup_allowed_mentions_role").where("roleID", "=", role.id).execute();
+        await db.deleteFrom("meetup_allowed_mentions_role").where("roleID", "=", roleID).execute();
+
+        const additionalInformation: string = JSON.stringify({
+            role_id: roleID,
+        });
 
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_REMOVE, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${role.id}`
+            additionalInformation: additionalInformation,
         });
 
         //create success embed
         await postSuccess(
             interaction,
-            tCommand("meetupRemoveMention.success", { roleMention: roleMention(role.id) }),
+            tCommand("meetupRemoveMention.success", { roleMention: roleMention(roleID) }),
         );
     }
 
@@ -67,7 +71,9 @@ export class MeetupRemoveMentionRoleCommand extends MeetupAddMentionRoleCommand 
 
         if (!result.length) {
             throw new Error(
-                tCommand("meetupRemoveMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
+                tCommand("meetupRemoveMention.error.roleAlreadyAdded", {
+                    roleMention: roleMention(roleID),
+                }),
             );
         }
     }

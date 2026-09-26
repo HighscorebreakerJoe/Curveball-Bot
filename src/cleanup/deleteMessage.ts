@@ -1,15 +1,16 @@
 import { Message } from "discord.js";
 import { tMeetup } from "../i18n";
 import { delay } from "../util/delay";
+import { logger } from "../logger";
 
 /**
- * Deletes given message
+ * Deletes a given message
  */
 export async function deleteMessage(message: Message): Promise<void> {
     try {
         await message.delete();
         await delay(500);
     } catch (error: unknown) {
-        console.error(tMeetup("message.error.delete", { messageID: message.id }), error);
+        logger.error({ err: error }, tMeetup("message.error.delete", { messageID: message.id }));
     }
 }

@@ -3,7 +3,7 @@ import { tSetup } from "../i18n";
 
 const meetupAllowedMentionsRoles = new Set<string>();
 
-export async function loadMeetupAllowedMentionsRoles() {
+export async function loadMeetupAllowedMentionsRoles(): Promise<void> {
     const rows = await db.selectFrom("meetup_allowed_mentions_role").select("roleID").execute();
 
     meetupAllowedMentionsRoles.clear();
@@ -19,10 +19,10 @@ export function getMeetupAllowedMentionsRoles(): Set<string> {
     return meetupAllowedMentionsRoles;
 }
 
-export function addRole(roleID: string) {
+export function addRole(roleID: string): void {
     meetupAllowedMentionsRoles.add(roleID);
 }
 
-export function removeRole(roleID: string) {
+export function removeRole(roleID: string): void {
     meetupAllowedMentionsRoles.delete(roleID);
 }

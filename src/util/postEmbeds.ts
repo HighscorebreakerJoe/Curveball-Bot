@@ -9,7 +9,7 @@ import {
 import { tCommon } from "../i18n";
 
 /**
- * Posts success message to user
+ * Posts a success message to the user
  */
 export async function postSuccess(
     interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
@@ -24,7 +24,7 @@ export async function postSuccess(
 }
 
 /**
- * Posts error message to user
+ * Posts an error message to the user
  */
 export async function postError(
     interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
@@ -39,7 +39,7 @@ export async function postError(
 }
 
 /**
- * prepares embedded message without sending it
+ * Prepares an embedded message without sending it
  */
 export function prepareEmbedMessage(
     message: string,
@@ -50,7 +50,7 @@ export function prepareEmbedMessage(
 }
 
 /**
- * Posts embedded message to user
+ * Posts an embedded message to the user
  */
 export async function postEmbedMessage(
     interaction: ChatInputCommandInteraction | ModalSubmitInteraction | ButtonInteraction,
@@ -58,7 +58,7 @@ export async function postEmbedMessage(
     title: string,
     color: ColorResolvable | null,
 ): Promise<void> {
-    const embed = prepareEmbedMessage(message, title, color);
+    const embed: EmbedBuilder = prepareEmbedMessage(message, title, color);
 
     if (interaction.replied || interaction.deferred) {
         await interaction.editReply({

@@ -1,8 +1,10 @@
 import {
     APIApplicationCommandOption,
+    APIRole,
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     MessageFlags,
+    Role,
     roleMention,
 } from "discord.js";
 import { addRole } from "../cache/meetupAllowedMentionsRoles";
@@ -44,14 +46,14 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
     protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {
         //check role
-        const role = interaction.options.getRole("role");
+        const role: Role | APIRole | null = interaction.options.getRole("role");
 
         if (!role) {
             throw new Error(tCommand("meetupAddMention.error.invalidRole"));
         }
 
         this.sanitizedInputs = {
-            role,
+            roleID: role.id,
         };
 
         await this.checkInList(role.id);
@@ -61,27 +63,31 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
         //post defer reply to prevent timeout errors
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-        const { role } = this.sanitizedInputs;
+        const { roleID } = this.sanitizedInputs;
 
         await db
             .insertInto("meetup_allowed_mentions_role")
             .values({
-                roleID: role.id,
+                roleID: roleID,
                 userID: interaction.user.id,
             })
             .execute();
 
-        addRole(role.id);
+        addRole(roleID);
+
+        const additionalInformation: string = JSON.stringify({
+            role_id: roleID,
+        });
 
         await createAuditLog(AuditLogAction.MEETUP_MENTION_ROLE_ADD, {
             userID: interaction.user.id,
-            additionalInformation: `roleID: ${role.id}`
+            additionalInformation: additionalInformation,
         });
 
         //create success embed
         await postSuccess(
-            interaction, 
-            tCommand("meetupAddMention.success", { roleMention: roleMention(role.id) }),
+            interaction,
+            tCommand("meetupAddMention.success", { roleMention: roleMention(roleID) }),
         );
     }
 
@@ -95,7 +101,9 @@ export class MeetupAddMentionRoleCommand extends AbstractCommand {
 
         if (result.length) {
             throw new Error(
-                tCommand("meetupAddMention.error.roleAlreadyAdded", { roleMention: roleMention(roleID) }),
+                tCommand("meetupAddMention.error.roleAlreadyAdded", {
+                    roleMention: roleMention(roleID),
+                }),
             );
         }
     }

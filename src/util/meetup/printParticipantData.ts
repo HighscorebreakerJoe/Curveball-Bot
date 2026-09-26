@@ -10,7 +10,7 @@ export function printParticipantData(
     asList = false,
     showUnsure = true,
 ): string {
-    let additionalParticipants: number = data.participants - 1;
+    const additionalParticipants: number = data.participants - 1;
 
     return (
         (asList ? "- " : "") +

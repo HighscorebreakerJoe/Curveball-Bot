@@ -1,5 +1,5 @@
 /**
- * Splits array into chunks
+ * Splits an array into chunks
  * Shoutouts to: https://stackoverflow.com/a/8495740
  */
 export function splitArray<T>(array: T[], size = 100): T[][] {

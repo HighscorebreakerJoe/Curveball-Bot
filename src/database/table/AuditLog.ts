@@ -21,12 +21,12 @@ export async function createAuditLog(
         meetupID?: number;
         additionalInformation?: string;
     },
-): Promise<InsertResult|undefined> {
+): Promise<InsertResult | undefined> {
     if (env.DISABLE_AUDIT_LOG) {
         return;
     }
 
-    return ( await db
+    return await db
         .insertInto("audit_log")
         .values({
             action,
@@ -34,6 +34,5 @@ export async function createAuditLog(
             meetupID: options?.meetupID ?? null,
             additionalInformation: options?.additionalInformation ?? null,
         })
-        .executeTakeFirst()
-    )
+        .executeTakeFirst();
 }

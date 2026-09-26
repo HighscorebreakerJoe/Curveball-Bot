@@ -1,6 +1,7 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type meetupEn from "../en/meetup";
 
-const meetup: TranslationObject = {
+const meetup = {
     info: {
         titleRaidFrom: "Raid von",
         threadTitle: "Meetup #{{meetupID}}: Absprache",
@@ -9,6 +10,7 @@ const meetup: TranslationObject = {
         createSuccess: "Dein Meetup wurde erfolgreich erstellt!",
         createSuccessLink: "Hier geht es zu deinem erstellten Meetup.",
         editSuccess: "Das Meetup wurde erfolgreich bearbeitet!",
+        footerText: "Meetup #{{meetupID}}",
 
         pokemon: "Pokémon / Event",
         location: "Treffpunkt",
@@ -90,6 +92,6 @@ const meetup: TranslationObject = {
                 "*Aus diesem Grund: Bitte hier __nicht__ chatten!*",
         },
     },
-};
+} satisfies PartialTranslationObject<typeof meetupEn>;
 
 export default meetup;

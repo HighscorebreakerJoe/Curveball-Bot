@@ -3,6 +3,7 @@ import { FileMigrationProvider, MigrationResult, Migrator } from "kysely";
 import * as path from "path";
 import { tSetup } from "../i18n";
 import { db } from "./Database";
+import { logger } from "../logger";
 
 const migrator = new Migrator({
     db,
@@ -19,7 +20,7 @@ export async function migrateToLatest(): Promise<void> {
     const { error, results } = await migrator.migrateToLatest();
 
     if (error) {
-        console.error(tSetup("error.databaseMigrationFailed"), error);
+        logger.error({ err: error }, tSetup("error.databaseMigrationFailed"));
         process.exit(1);
     }
 
@@ -33,7 +34,8 @@ export async function migrateToLatest(): Promise<void> {
                 tSetup("step.databaseMigrationsSuccess", { migrationName: result.migrationName }),
             );
         } else if (result.status === "Error") {
-            console.error(
+            logger.error(
+                {},
                 tSetup("error.executeDatabaseMigrationFailed", {
                     migrationName: result.migrationName,
                 }),

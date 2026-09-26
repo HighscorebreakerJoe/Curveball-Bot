@@ -1,6 +1,6 @@
 import { TranslationObject } from "../../i18n";
 
-const command: TranslationObject = {
+const command = {
     meetup: {
         description: "Creates a meetup",
 
@@ -59,6 +59,10 @@ const command: TranslationObject = {
         option: {
             messageIDDescription: "The ID of the message which embed will be edited",
         },
+
+        error: {
+            invalidMessageID: "Invalid messageID",
+        },
     },
 
     poll: {
@@ -68,6 +72,6 @@ const command: TranslationObject = {
     postMeetupCreateNotices: {
         description: "Creates default notices in meetup create channel",
     },
-};
+} as const satisfies TranslationObject;
 
 export default command;

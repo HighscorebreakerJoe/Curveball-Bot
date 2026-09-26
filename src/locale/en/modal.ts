@@ -1,11 +1,12 @@
 import { TranslationObject } from "../../i18n";
 
-const modal: TranslationObject = {
+const modal = {
     global: {
         error: {
             invalidInteractionType: "Invalid interaction type",
             invalidCommand: "Invalid command {{commandName}}",
-            draft: "Failed to save modal input draft",
+            applyDraft: "Failed to apply modal input draft to modal",
+            saveDraft: "Failed to save modal input draft",
             unknown: "Unknown error",
         },
 
@@ -29,12 +30,11 @@ const modal: TranslationObject = {
             datePlaceholder: "e.g. 24.12",
 
             note: "Note",
-            notePlaceholder:
-                "Additional information/notes to your meetup",
+            notePlaceholder: "Additional information/notes to your meetup",
         },
 
         error: {
-            invalidRole: "Invalid role with roleID: {{roleID}}",
+            roleNotSupported: "Role {{roleMention}} must not be used in meetups.",
             createRole: "Could not create role for meetup {{meetupID}}",
         },
 
@@ -71,12 +71,12 @@ const modal: TranslationObject = {
 
             typeHint: {
                 label: "Hint",
-                description: "Used for hints - Border color will be blue",
+                description: "Used for hints - Border color will be orange",
             },
 
             typeTutorial: {
                 label: "Tutorial",
-                description: "Used for tutorials - Border color will be orange",
+                description: "Used for tutorials - Border color will be blue",
             },
         },
 
@@ -85,6 +85,7 @@ const modal: TranslationObject = {
                 titleEmpty: "You forgot to enter a title.",
                 descriptionEmpty: "You forgot enter a description.",
                 typeEmpty: "You forgot to specify a type.",
+                invalidType: "Invalid type entered.",
             },
         },
     },
@@ -92,6 +93,6 @@ const modal: TranslationObject = {
     noticeEdit: {
         title: "Edit notice",
     },
-};
+} as const satisfies TranslationObject;
 
 export default modal;

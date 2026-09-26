@@ -1,10 +1,12 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type modalEn from "../en/modal";
 
-const modal: TranslationObject = {
+const modal = {
     global: {
         error: {
             invalidInteractionType: "Falscher Interaktionstyp",
             invalidCommand: "Ungültiges Kommando {{commandName}}",
+            saveDraft: "Fehler beim Speichern des Entwurfs",
         },
     },
 
@@ -25,12 +27,11 @@ const modal: TranslationObject = {
             datePlaceholder: "z.B. 24.12",
 
             note: "Anmerkungen",
-            notePlaceholder:
-                "Zusätzliche Infos/Anmerkungen zu deinem Meetup",
+            notePlaceholder: "Zusätzliche Infos/Anmerkungen zu deinem Meetup",
         },
 
         error: {
-            invalidRole: "Ungültige Rolle mit der RoleID: {{roleID}}",
+            roleNotSupported: "Die Rolle {{roleMention}} darf nicht in Meetups verwendet werden.",
         },
 
         submit: {
@@ -51,6 +52,44 @@ const modal: TranslationObject = {
     meetupEdit: {
         title: "Meetup bearbeiten",
     },
-};
+
+    noticeCreate: {
+        title: "Neue Ankündigung erstellen",
+
+        field: {
+            title: "Titel",
+            titlePlaceholder: "Der Titel deiner Ankündigung",
+
+            description: "Beschreibung",
+            descriptionPlaceholder: "Der Inhalt deiner Ankündigung",
+
+            type: "Typ",
+            typePlaceholder: "Wähle den Typ deiner Ankündigung aus",
+
+            typeHint: {
+                label: "Hinweis",
+                description: "Für Hinweise verwendet - Orangene Randfarbe",
+            },
+
+            typeTutorial: {
+                label: "Tutorial",
+                description: "Für Tutorials verwendet - Blaue Randfarbe",
+            },
+        },
+
+        submit: {
+            error: {
+                titleEmpty: "Du hast vergessen, einen Titel anzugeben.",
+                descriptionEmpty: "Du hast vergessen, eine Beschreibung anzugeben.",
+                typeEmpty: "Du hast vergessen, einen Typ anzugeben.",
+                invalidType: "Ungültigen Typ angegeben.",
+            },
+        },
+    },
+
+    noticeEdit: {
+        title: "Ankündigung bearbeiten",
+    },
+} satisfies PartialTranslationObject<typeof modalEn>;
 
 export default modal;

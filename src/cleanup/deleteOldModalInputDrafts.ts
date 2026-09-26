@@ -11,8 +11,5 @@ export async function deleteOldModalInputDrafts(): Promise<void> {
     const deleteLimitHours: number = 3600000 * env.MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS;
     const deleteLimitDate = new Date(dateNow.getTime() - deleteLimitHours);
 
-    await db
-        .deleteFrom("modal_input_draft")
-        .where("createTime", "<", deleteLimitDate)
-        .execute();
+    await db.deleteFrom("modal_input_draft").where("createTime", "<", deleteLimitDate).execute();
 }

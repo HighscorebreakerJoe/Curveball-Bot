@@ -3,11 +3,13 @@ import fs from "fs";
 import { OrderByModifiers } from "kysely";
 import { getPositiveNumberFromString } from "./util/getPositiveNumberFromString";
 
+// stage
+
 const defaultStage = "prod";
 const allowedStages = new Set(["dev", "test", "prod"]);
-const requestedStage = process.env.STAGE ?? defaultStage;
+const requestedStage: string = process.env.STAGE ?? defaultStage;
 
-const stage = allowedStages.has(requestedStage) ? requestedStage : defaultStage;
+const stage: string = allowedStages.has(requestedStage) ? requestedStage : defaultStage;
 const envFile = `.env.${stage}`;
 
 console.log(`### Stage: ${stage} ###`);
@@ -16,18 +18,26 @@ if (!fs.existsSync(envFile)) {
     throw new Error(`Missing env file: ${envFile}`);
 }
 
-dotenv.config(
-    { 
-        path: envFile,
-        quiet: true,
-    }
-);
+dotenv.config({
+    path: envFile,
+    quiet: true,
+});
+
+// log level
+
+const defaultLogLevel = "warn";
+const allowedLogLevels = new Set(["debug", "info", "warn", "error"]);
+const requestedLogLevel: string = process.env.LOG_LEVEL ?? defaultLogLevel;
+const logLevel: string = allowedLogLevels.has(requestedLogLevel)
+    ? requestedLogLevel
+    : defaultLogLevel;
 
 declare type envStruct = {
     BOT_TOKEN: string;
     LANGUAGE: string;
     CLIENT_ID: string;
     GUILD_ID: string;
+
     MEETUP_CONFIGURATOR_ROLE_ID: string;
     MEETUP_CREATE_CHANNEL_ID: string;
     MEETUP_INFO_CHANNEL_ID: string;
@@ -36,11 +46,14 @@ declare type envStruct = {
     MEETUP_DELETE_LIMIT_HOURS: number;
     MEETUP_LIST_SORT_ORDER: OrderByModifiers;
     MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS: number;
+
     DB_HOST: string;
     DB_PORT: string;
     DB_USERNAME: string;
     DB_PASSWORD: string;
     DB_DATABASE: string;
+
+    LOG_LEVEL: string;
     ENABLE_I18NEXT_DEBUG: boolean;
     DISABLE_CRONJOBS: boolean;
     DISABLE_AUDIT_LOG: boolean;
@@ -51,6 +64,7 @@ const env: envStruct = {
     LANGUAGE: process.env.LANGUAGE || "",
     CLIENT_ID: process.env.CLIENT_ID || "",
     GUILD_ID: process.env.GUILD_ID || "",
+
     MEETUP_CONFIGURATOR_ROLE_ID: process.env.MEETUP_CONFIGURATOR_ROLE_ID || "",
     MEETUP_CREATE_CHANNEL_ID: process.env.MEETUP_CREATE_CHANNEL_ID || "",
     MEETUP_INFO_CHANNEL_ID: process.env.MEETUP_INFO_CHANNEL_ID || "",
@@ -58,13 +72,19 @@ const env: envStruct = {
     MEETUP_CREATE_DISABLE_DEFAULT_NOTICES:
         process.env.MEETUP_CREATE_DISABLE_DEFAULT_NOTICES === "true",
     MEETUP_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MEETUP_DELETE_LIMIT_HOURS),
-    MEETUP_LIST_SORT_ORDER: (process.env.MEETUP_LIST_SORT_ORDER?.toLocaleLowerCase() === "asc" ? "asc" : "desc"),
-    MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS: getPositiveNumberFromString(process.env.MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS),
+    MEETUP_LIST_SORT_ORDER:
+        process.env.MEETUP_LIST_SORT_ORDER?.toLocaleLowerCase() === "asc" ? "asc" : "desc",
+    MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS: getPositiveNumberFromString(
+        process.env.MODAL_INPUT_DRAFT_DELETE_LIMIT_HOURS,
+    ),
+
     DB_HOST: process.env.DB_HOST || "",
     DB_PORT: process.env.DB_PORT || "",
     DB_USERNAME: process.env.DB_USERNAME || "",
     DB_PASSWORD: process.env.DB_PASSWORD || "",
     DB_DATABASE: process.env.DB_DATABASE || "",
+
+    LOG_LEVEL: logLevel,
     ENABLE_I18NEXT_DEBUG: process.env.ENABLE_I18NEXT_DEBUG === "true",
     DISABLE_CRONJOBS: process.env.DISABLE_CRONJOBS === "true",
     DISABLE_AUDIT_LOG: process.env.DISABLE_AUDIT_LOG === "true",

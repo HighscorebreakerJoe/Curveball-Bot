@@ -3,7 +3,7 @@ import env from "../env";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if user has meetup configurator role
+ * Checks if a user has the meetup configurator role
  */
 
 export function assertUserHasMeetupConfigRole(

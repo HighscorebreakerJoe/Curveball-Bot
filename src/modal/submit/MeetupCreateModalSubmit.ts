@@ -1,8 +1,11 @@
 import {
     hyperlink,
+    Message,
     ModalSubmitFields,
     ModalSubmitInteraction,
+    PublicThreadChannel,
     Role,
+    roleMention,
 } from "discord.js";
 import { InsertResult } from "kysely";
 import { getGuild } from "../../cache/guild";
@@ -25,6 +28,7 @@ import { assignRole } from "../../util/role/assignRole";
 import { sanitizeTextInput } from "../../util/sanitizeTextInput";
 import { splitMessage } from "../../util/splitMessage";
 import { AbstractModalSubmit } from "./AbstractModalSubmit";
+import { logger } from "../../logger";
 
 /**
  * Handles Create Modal submits
@@ -65,41 +69,41 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         };
     }
 
-    protected validateModalInputs(): void {
+    protected async validateModalInputs(): Promise<void> {
         const { pokemon, location, time, date, note } = this.sanitizedInputs;
 
         //check pokémon
         if (!pokemon.length) {
-            this.handleError(tModal("meetupCreate.submit.error.pokemonEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.pokemonEmpty"));
         }
 
         if (checkForLinks(pokemon)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
 
         //check location
         if (!location.length) {
-            this.handleError(tModal("meetupCreate.submit.error.locationEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.locationEmpty"));
         }
 
         if (checkForLinks(location)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
 
         //check time
         if (!time.length) {
-            this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeEmpty"));
         }
 
-        const timeRegexp = new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
+        const timeRegexp = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
         if (!timeRegexp.test(time)) {
-            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const timeParts: string[] = time.split(":");
         if (timeParts.length !== 2) {
-            this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.timeWrongFormat"));
         }
 
         const [hour, minute] = timeParts.map(Number);
@@ -109,18 +113,18 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         //check date
         if (!date.length) {
-            this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateEmpty"));
         }
 
-        const dateRegexp = new RegExp("^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$");
+        const dateRegexp = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])$/;
 
         if (!dateRegexp.test(date)) {
-            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const dateParts: string[] = date.split(".");
         if (dateParts.length !== 2) {
-            this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateWrongFormat"));
         }
 
         const [day, month] = dateParts.map(Number);
@@ -129,16 +133,16 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         const dateObject = new Date(year, month - 1, day, hour, minute);
 
         if (dateObject.getDate() !== day || dateObject.getMonth() !== month - 1) {
-            this.handleError(tModal("meetupCreate.submit.error.dateInvalid"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateInvalid"));
         }
 
         if (dateObject < currentDate) {
-            this.handleError(tModal("meetupCreate.submit.error.dateInThePast"));
+            await this.handleError(tModal("meetupCreate.submit.error.dateInThePast"));
         }
 
         //check note (optional)
         if (note.length > 0 && checkForLinks(note)) {
-            this.handleError(tCommon("error.linkDetected"));
+            await this.handleError(tCommon("error.linkDetected"));
         }
     }
 
@@ -168,7 +172,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         await createAuditLog(AuditLogAction.MEETUP_CREATE, {
             userID: interaction.user.id,
-            meetupID: meetupID
+            meetupID: meetupID,
         });
 
         //save meetup creator as meetup participant
@@ -185,11 +189,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         await createAuditLog(AuditLogAction.MEETUP_PARTICIPANT_ADD, {
             userID: interaction.user.id,
-            meetupID: meetupID
+            meetupID: meetupID,
         });
 
         //create and post meetup-embed
-        let embedTitle: string =
+        const embedTitle: string =
             pokemon + ": " + tMeetup("info.titleRaidFrom") + " " + interaction.user?.tag;
 
         const meetupCreatorParticipant: ParticipantData = {
@@ -214,11 +218,11 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
 
         //set role mentions
         const roleMentions: string[] = [];
-        this.additionalData.roleIds.forEach((roleID: string) => {
-            roleMentions.push(`<@&${roleID}>`);
+        (this.additionalData.roleIds as string[]).forEach((roleID: string) => {
+            roleMentions.push(roleMention(roleID));
         });
 
-        const meetupInfoMessage = await getMeetupInfoChannel().send({
+        const meetupInfoMessage: Message<true> = await getMeetupInfoChannel().send({
             content: roleMentions.join(" "),
             embeds: [embed],
             components: components,
@@ -230,19 +234,21 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
         });
 
         //create thread
-        const meetupInfoThread = await meetupInfoMessage.startThread({
+        const meetupInfoThread: PublicThreadChannel<false> = await meetupInfoMessage.startThread({
             name: tMeetup("info.threadTitle", { meetupID: meetupID }),
             autoArchiveDuration: 60,
             reason: tMeetup("info.threadDefaultCreateReason"),
         });
 
         //write participant message in thread, with meetup creator as the only participant
-        const participantListMessage: string = createParticipantListMessage([meetupCreatorParticipant]);
+        const participantListMessage: string = createParticipantListMessage([
+            meetupCreatorParticipant,
+        ]);
         //shouldn't exceed message length limit, but better be safe than sorry
         const participantListPages: string[] = splitMessage(participantListMessage);
 
-        const participantListThreadMessage = await meetupInfoThread.send({
-            content: participantListPages[0]
+        const participantListThreadMessage: Message<true> = await meetupInfoThread.send({
+            content: participantListPages[0],
         });
 
         // create meetup role
@@ -281,7 +287,7 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
     }
 
     /**
-     * Calculates datetime to save based on provided date and time
+     * Calculates datetime to save based on the provided date and time
      */
     protected getToSaveDate(time: string, date = ""): Date {
         const [hour, minute] = time.split(":").map(Number);
@@ -322,7 +328,10 @@ export class MeetupCreateModalSubmit extends AbstractModalSubmit {
                 reason: tCommon("defaultCreateReason"),
             });
         } catch (error) {
-            console.error(tModal("meetupCreate.error.createRole", { meetupID: meetupID }), error);
+            logger.error(
+                { err: error },
+                tModal("meetupCreate.error.createRole", { meetupID: meetupID }),
+            );
 
             return null;
         }

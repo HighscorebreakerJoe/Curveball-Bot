@@ -6,7 +6,7 @@ import { assertUserHasMeetupConfigRole } from "../permission/assertUserHasMeetup
 import { AbstractCommand } from "./AbstractCommand";
 
 /**
- * Command for creating an embed-message in meetup create channel
+ * Command for creating an embed-message in meetup-create-channel
  */
 
 export class NoticeCreateCommand extends AbstractCommand {

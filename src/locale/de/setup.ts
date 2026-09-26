@@ -1,12 +1,14 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type setupEn from "../en/setup";
 
-const setup: TranslationObject = {
+const setup = {
     error: {
         interactionGeneral: "Fehler beim Verarbeiten der Interaktion.",
         interactionCommand: "Fehler beim Ausführen des Befehls.",
         interactionModal: "Fehler beim Verarbeiten des Modals.",
-        interactionButton: "Fehler beim Ausführen der Buttonfunktion.",
+        interactionButton: "Fehler beim Ausführen der Funktion des Buttons.",
+        invalidCreateChannel: "Kein gültiger Kanal für das Erstellen von Meetups angegeben.",
     },
-};
+} satisfies PartialTranslationObject<typeof setupEn>;
 
 export default setup;

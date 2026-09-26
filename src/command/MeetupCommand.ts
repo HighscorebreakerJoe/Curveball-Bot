@@ -4,6 +4,7 @@ import {
     ApplicationCommandOptionType,
     ChatInputCommandInteraction,
     Role,
+    roleMention,
 } from "discord.js";
 import { tCommand } from "../i18n";
 import { modalsMap } from "../map/modalsMap";
@@ -50,20 +51,14 @@ export class MeetupCommand extends AbstractCommand {
 
     protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {
         //check roles
-        const role1 = interaction.options.getRole("role1");
+        const role1: Role | APIRole | null = interaction.options.getRole("role1");
         this.checkRole(role1);
 
-        const role2 = interaction.options.getRole("role2");
+        const role2: Role | APIRole | null = interaction.options.getRole("role2");
         this.checkRole(role2);
 
-        const role3 = interaction.options.getRole("role3");
+        const role3: Role | APIRole | null = interaction.options.getRole("role3");
         this.checkRole(role3);
-
-        this.sanitizedInputs = {
-            role1: role1,
-            role2: role2,
-            role3: role3,
-        };
     }
 
     protected async run(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -79,7 +74,9 @@ export class MeetupCommand extends AbstractCommand {
 
     private checkRole(role: Role | APIRole | null): void {
         if (role && !role.mentionable) {
-            throw new Error(tCommand("meetup.error.roleNotMentionable", { roleID: role.id }));
+            throw new Error(
+                tCommand("meetup.error.roleNotMentionable", { roleMention: roleMention(role.id) }),
+            );
         }
     }
 }

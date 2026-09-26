@@ -2,7 +2,7 @@ import { getMeetupByMeetupID, MeetupRow } from "../database/table/Meetup";
 import { tPermission } from "../i18n";
 
 /**
- * Checks if given meetupID is related to a valid meetup
+ * Checks if the given meetupID is related to a valid meetup
  */
 
 export async function assertMeetupIDIsValid(meetupID: number): Promise<MeetupRow> {

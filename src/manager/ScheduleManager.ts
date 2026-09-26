@@ -16,7 +16,7 @@ class ScheduleManager {
      * Schedules meetup list reset
      */
     public scheduleResetMeetupList() {
-        this.scheduler.schedule("reset-meetup-list", async () => {
+        this.scheduler.schedule("reset-meetup-list", async (): Promise<void> => {
             await uiManager.resetMeetupListChannel();
         });
     }
@@ -24,9 +24,8 @@ class ScheduleManager {
     /**
      * Schedules embed-info and participant list update of a specific meetup
      */
-    public scheduleUpdateMeetupInfo(
-        meetupID: number) {
-        this.scheduler.schedule(`update-meetup-info-${meetupID}`, async () => {
+    public scheduleUpdateMeetupInfo(meetupID: number) {
+        this.scheduler.schedule(`update-meetup-info-${meetupID}`, async (): Promise<void> => {
             const meetup = await getMeetupByMeetupID(meetupID);
 
             if (!meetup) {

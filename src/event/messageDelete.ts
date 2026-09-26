@@ -9,10 +9,11 @@ import {
 } from "../database/table/Meetup";
 import { tCommon } from "../i18n";
 import { delay } from "../util/delay";
+import { logger } from "../logger";
 
 /**
  * Event handler, when a message is deleted.
- * Also runs on bulk deleting messages and when a message is deleted manually by the user.
+ * Also runs on bulk deleting messages and when the user deletes a message manually.
  */
 
 export default function onMessageDelete(client: Client): void {
@@ -43,7 +44,7 @@ async function handleMeetupMessage(
     try {
         await deleteMeetupsByMeetupIDs([meetup.meetupID]);
     } catch (error) {
-        console.error(tCommon("error.meetupDeleteError"), error);
+        logger.error({ err: error }, tCommon("error.meetupDeleteError"));
     }
 }
 
@@ -56,8 +57,12 @@ async function handleInfoMessage(
     }
 
     //audit log
+    const additionalInformation: string = JSON.stringify({
+        message_id: message.id,
+    });
+
     await createAuditLog(AuditLogAction.NOTICE_DELETE, {
         //userID: , //TODO: Add user ID if possible
-        additionalInformation: `message.id: ${message.id}`
+        additionalInformation: additionalInformation,
     });
 }

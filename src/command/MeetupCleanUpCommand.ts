@@ -45,7 +45,7 @@ export class MeetupCleanUpCommand extends AbstractCommand {
         await deleteRedundantMeetupThreads();
         await deleteRedundantMeetupRoles();
         await deleteRedundantMeetupMessages();
-    
+
         scheduleManager.scheduleResetMeetupList();
     }
 }

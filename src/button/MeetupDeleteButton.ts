@@ -16,7 +16,7 @@ import { assertUserIsMeetupCreatorOrConfig } from "../permission/assertUserIsMee
 import { AbstractButton } from "./AbstractButton";
 
 /**
- * Class for handling "Delete meetup" buttonpress in meetup info embeds
+ * Class for handling "Delete meetup" buttonpresses in meetup info embeds
  */
 
 export class MeetupDeleteButton extends AbstractButton {
@@ -24,7 +24,7 @@ export class MeetupDeleteButton extends AbstractButton {
     protected context: Record<string, unknown> = {};
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         const messageID: string = interaction.message.id;

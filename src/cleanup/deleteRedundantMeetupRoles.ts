@@ -11,9 +11,9 @@ import { deleteRole } from "./deleteRole";
 export async function deleteRedundantMeetupRoles(): Promise<void> {
     const existingMeetupIDs: Set<number> = new Set(await getAllMeetupIDs());
 
-    getGuild().roles.cache.forEach(
-        (role: Role) => deleteValidRole(role, existingMeetupIDs)
-    )
+    for (const role of getGuild().roles.cache.values()) {
+        await deleteValidRole(role, existingMeetupIDs);
+    }
 }
 
 async function deleteValidRole(role: Role, existingMeetupIDs: Set<number>): Promise<void> {
@@ -24,10 +24,10 @@ async function deleteValidRole(role: Role, existingMeetupIDs: Set<number>): Prom
         return;
     }
 
-    const number = Number(match[1]);
+    const number: number = Number(match[1]);
 
     //number is not in existing IDs -> delete role
-    if(!existingMeetupIDs.has(number)) {
+    if (!existingMeetupIDs.has(number)) {
         await deleteRole(role);
     }
 }

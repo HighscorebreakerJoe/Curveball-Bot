@@ -11,7 +11,7 @@ import { assertValidMessageInMeetupCreateChannel } from "../permission/assertVal
 import { AbstractCommand } from "./AbstractCommand";
 
 /**
- * Command for editing an embed-message from meetup create channel
+ * Command for editing an embed-message from meetup-create-channel
  */
 
 export class NoticeEditCommand extends AbstractCommand {
@@ -39,7 +39,7 @@ export class NoticeEditCommand extends AbstractCommand {
 
     protected async checkOptions(interaction: ChatInputCommandInteraction): Promise<void> {
         //check messageID
-        const messageID = interaction.options.getString("message_id")?.trim();
+        const messageID: string | undefined = interaction.options.getString("message_id")?.trim();
 
         if (!messageID) {
             throw new Error(tCommand("noticeEdit.error.invalidMessageID"));

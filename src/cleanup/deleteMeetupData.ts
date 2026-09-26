@@ -1,16 +1,17 @@
-import { DiscordAPIError } from "discord.js";
+import { DiscordAPIError, Message } from "discord.js";
 import { getMeetupInfoChannel } from "../cache/meetupChannels";
 import { AuditLogAction } from "../constant/auditLogAction";
 import { createAuditLog } from "../database/table/AuditLog";
 import {
     deleteMeetupsByMeetupIDs,
     getMeetupsByMeetupIDs,
-    MeetupRow
+    MeetupRow,
 } from "../database/table/Meetup";
-import { tCommon, tMeetup } from "../i18n";
+import { tMeetup } from "../i18n";
 import { delay } from "../util/delay";
 import { splitArray } from "../util/splitArray";
 import { deleteRoleByRoleIDs } from "./deleteRoleByRoleIDs";
+import { logger } from "../logger";
 
 type CategorizedMessageIDs = {
     lessThanTwoWeeks: string[];
@@ -20,33 +21,37 @@ type CategorizedMessageIDs = {
 /**
  * Function for deleting meetup-channels and data
  */
-export async function deleteMeetupData(meetupIDs: number[], automaticallyDeleted: boolean = false, userID?: string): Promise<void> {
+export async function deleteMeetupData(
+    meetupIDs: number[],
+    automaticallyDeleted: boolean = false,
+    userID?: string,
+): Promise<void> {
     const toDeleteMeetups: MeetupRow[] = await getMeetupsByMeetupIDs(meetupIDs);
 
     const categorizedMessageIDs: CategorizedMessageIDs = getMessageIDsFromMeetups(toDeleteMeetups);
     const roleIDs: string[] = toDeleteMeetups
-        .map((meetup) => meetup.mentionRoleID)
-        .filter((roleID): roleID is string => Boolean(roleID));
+        .map((meetup): string | null => meetup.mentionRoleID)
+        .filter((roleID: string | null): roleID is string => Boolean(roleID));
 
-    await Promise.allSettled(
-        [
-            deleteMessages(categorizedMessageIDs),
-            deleteRoleByRoleIDs(roleIDs)
-        ]
-    );
+    await Promise.allSettled([deleteMessages(categorizedMessageIDs), deleteRoleByRoleIDs(roleIDs)]);
 
     await deleteMeetupsByMeetupIDs(meetupIDs);
 
-    meetupIDs?.forEach((meetupID: number): void => {
-        createAuditLog(AuditLogAction.MEETUP_DELETE, {
+    // Use stable values instead of translated strings. Audit logs should not depend on the active locale
+    const additionalInformation: string = JSON.stringify({
+        reason: automaticallyDeleted ? "Deleted automatically" : undefined,
+    });
+
+    for (const meetupID of meetupIDs) {
+        await createAuditLog(AuditLogAction.MEETUP_DELETE, {
             userID: userID,
             meetupID: meetupID,
-            additionalInformation: (automaticallyDeleted ? tCommon("defaultDeleteReason") : undefined)
+            additionalInformation: additionalInformation,
         });
-    });
+    }
 }
 
-function getMessageIDsFromMeetups(meetups: MeetupRow[]){
+function getMessageIDsFromMeetups(meetups: MeetupRow[]): CategorizedMessageIDs {
     // Discord allows bulk deleting up to 100 messages which are not older than 14 days old
     // -> split up messages into two categories
 
@@ -66,17 +71,17 @@ function getMessageIDsFromMeetups(meetups: MeetupRow[]){
     return categorizedMessageIDs;
 }
 
-async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs) {
+async function deleteMessages(categorizedMessageIDs: CategorizedMessageIDs): Promise<void> {
     if (categorizedMessageIDs.lessThanTwoWeeks.length > 0) {
         await deleteMessagesBulk(categorizedMessageIDs.lessThanTwoWeeks);
     }
 
     if (categorizedMessageIDs.moreThanTwoWeeks.length > 0) {
-       await deleteMessagesManually(categorizedMessageIDs.moreThanTwoWeeks);
+        await deleteMessagesManually(categorizedMessageIDs.moreThanTwoWeeks);
     }
 }
 
-async function deleteMessagesBulk(messageIDs: string[]) {
+async function deleteMessagesBulk(messageIDs: string[]): Promise<void> {
     //split message IDs in chunks
     const messageIDChunks: string[][] = splitArray([...messageIDs], 100);
 
@@ -90,15 +95,15 @@ async function deleteMessagesBulk(messageIDs: string[]) {
                 continue;
             }
 
-            console.error(tMeetup("message.error.delete", { messageID: "0" }), error);
+            logger.error({ err: error }, tMeetup("message.error.delete", { messageID: "0" }));
         }
     }
 }
 
-async function deleteMessagesManually(messageIDs: string[]) {
+async function deleteMessagesManually(messageIDs: string[]): Promise<void> {
     for (const messageID of messageIDs) {
         try {
-            const message = await getMeetupInfoChannel().messages.fetch(messageID);
+            const message: Message<true> = await getMeetupInfoChannel().messages.fetch(messageID);
             await message.delete();
 
             await delay(500);
@@ -107,7 +112,7 @@ async function deleteMessagesManually(messageIDs: string[]) {
                 continue;
             }
 
-            console.error(tMeetup("message.error.delete", { messageID: messageID }), error);
+            logger.error({ err: error }, tMeetup("message.error.delete", { messageID: messageID }));
         }
     }
 }
@@ -123,8 +128,9 @@ function setMessageIDCategory(
         return;
     }
 
-    const isLessThanTwoWeeks: boolean = 
-        !!(toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate);
+    const isLessThanTwoWeeks: boolean = !!(
+        toDeleteMeetup.createTime && toDeleteMeetup.createTime > limitDate
+    );
 
     if (isLessThanTwoWeeks) {
         categorizedMessageIDs.lessThanTwoWeeks.push(messageID);

@@ -67,7 +67,9 @@ export async function deleteMeetupsByMeetupIDs(
     return await db.deleteFrom("meetup").where("meetupID", "in", toDeleteMeetupIDs).execute();
 }
 
-export async function getMeetupByParticipantListMessageID(messageID: string): Promise<MeetupRow | undefined> {
+export async function getMeetupByParticipantListMessageID(
+    messageID: string,
+): Promise<MeetupRow | undefined> {
     return (await db
         .selectFrom("meetup")
         .selectAll()

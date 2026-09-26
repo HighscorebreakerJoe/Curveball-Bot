@@ -14,7 +14,7 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     defaultRemoteState: boolean = true;
 
     /**
-     * Checks if current user is allowed to execute the function of this button
+     * Checks if the current user is allowed to execute the function of this button
      */
     protected async checkPermissions(interaction: ButtonInteraction): Promise<void> {
         await super.checkPermissions(interaction);
@@ -23,7 +23,7 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     /**
      * Updates existing participation entry for this user
      */
-    protected async handleUpdateExisting(add: boolean): Promise<void> {
+    protected async handleUpdateExisting(_add: boolean): Promise<void> {
         const meetupParticipant = this.context.meetupParticipant as MeetupParticipantRow;
 
         const newStatus = !meetupParticipant.remote;
@@ -37,8 +37,10 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
             .where("userID", "=", meetupParticipant.userID)
             .executeTakeFirstOrThrow();
 
-        const auditAction = (newStatus ? AuditLogAction.MEETUP_PARTICIPANT_REMOTE_ENABLE : AuditLogAction.MEETUP_PARTICIPANT_REMOTE_DISABLE);
-        
+        const auditAction = newStatus
+            ? AuditLogAction.MEETUP_PARTICIPANT_REMOTE_ENABLE
+            : AuditLogAction.MEETUP_PARTICIPANT_REMOTE_DISABLE;
+
         await createAuditLog(auditAction, {
             userID: meetupParticipant.userID,
             meetupID: meetupParticipant.meetupID,
@@ -46,7 +48,7 @@ export class MeetupRemoteParticipantButton extends MeetupAddParticipantButton {
     }
 
     /**
-     * Checks if user has too many participants
+     * Checks if the current user has too many participants
      */
     protected checkParticipants(): void {
         //not needed here

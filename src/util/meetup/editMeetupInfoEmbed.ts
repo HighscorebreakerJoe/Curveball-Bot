@@ -33,45 +33,45 @@ export function editMeetupInfoEmbed(
     const fields = newEmbed.data.fields?.map((f) => ({ ...f })) ?? [];
 
     if (options.pokemon) {
-        const pokemonIndex = fields.findIndex((f) => f.name.startsWith("👾"));
+        const pokemonIndex: number = fields.findIndex((f): boolean => f.name.startsWith("👾"));
         if (pokemonIndex !== -1) {
             fields[pokemonIndex].value = options.pokemon;
         }
     }
 
     if (options.location) {
-        const locationIndex = fields.findIndex((f) => f.name.startsWith("📍"));
+        const locationIndex: number = fields.findIndex((f): boolean => f.name.startsWith("📍"));
         if (locationIndex !== -1) {
             fields[locationIndex].value = options.location;
         }
     }
 
     if (options.toSaveDate) {
-        const dateIndex = fields.findIndex((f) => f.name.startsWith("🗓️"));
+        const dateIndex: number = fields.findIndex((f): boolean => f.name.startsWith("🗓️"));
         if (dateIndex !== -1) {
             fields[dateIndex].value = time(options.toSaveDate, TimestampStyles.LongDateShortTime);
         }
 
-        const dateRemainIndex = fields.findIndex((f) => f.name.startsWith("⏳"));
+        const dateRemainIndex: number = fields.findIndex((f): boolean => f.name.startsWith("⏳"));
         if (dateRemainIndex !== -1) {
             fields[dateRemainIndex].value = time(options.toSaveDate, TimestampStyles.RelativeTime);
         }
     }
 
     if (options.note) {
-        const noteIndex = fields.findIndex((f) => f.name.startsWith("📝"));
+        const noteIndex: number = fields.findIndex((f): boolean => f.name.startsWith("📝"));
         if (noteIndex !== -1) {
             fields[noteIndex].value = options.note;
         }
     }
 
     if (options.participants) {
-        const participantsIndex: number = fields.findIndex((f) => f.name.startsWith("✅"));
+        const participantsIndex: number = fields.findIndex((f): boolean => f.name.startsWith("✅"));
         const participantStrings: string[] = [];
 
         options.participants
             .slice(0, 10)
-            .forEach((participant) =>
+            .forEach((participant: ParticipantData): number =>
                 participantStrings.push(printParticipantData(participant, true)),
             );
 

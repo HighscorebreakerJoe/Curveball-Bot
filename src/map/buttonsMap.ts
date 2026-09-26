@@ -20,7 +20,7 @@ const buttonClasses: Array<new () => AbstractButton> = [
     MeetupDeleteConfirmButton,
     MeetupDeleteCancelButton,
     ShowAllParticipantsButton,
-    ShowParticipantsSwitchPageButton
+    ShowParticipantsSwitchPageButton,
 ];
 
 export const buttonsMap = new Map<string, new () => AbstractButton>();

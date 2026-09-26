@@ -4,7 +4,7 @@ import { prepareEmbedMessage } from "../util/postEmbeds";
 import { AbstractButton } from "./AbstractButton";
 
 /**
- * Class for handling "Meetup delete cancel" buttonpress in meetup delete embeds
+ * Class for handling "Meetup delete cancel" buttonpresses in meetup delete embeds
  */
 
 export class MeetupDeleteCancelButton extends AbstractButton {
@@ -20,8 +20,12 @@ export class MeetupDeleteCancelButton extends AbstractButton {
     }
 
     protected async postCancelSuccess(user: User) {
-        const embed = prepareEmbedMessage(tButton("meetupDeleteCancel.success"), tCommon("successDefaultEmbedTitle"), 0x00ff00);
-        
+        const embed = prepareEmbedMessage(
+            tButton("meetupDeleteCancel.success"),
+            tCommon("successDefaultEmbedTitle"),
+            0x00ff00,
+        );
+
         await user.send({
             embeds: [embed],
             components: [],

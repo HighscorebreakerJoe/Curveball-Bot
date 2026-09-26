@@ -1,12 +1,13 @@
-import { TranslationObject } from "../../i18n";
+import { PartialTranslationObject } from "../../i18n";
+import type permissionEn from "../en/permission";
 
-const permission: TranslationObject = {
+const permission = {
     error: {
         memberNotFound: "Member nicht gefunden.",
         meetupCantEdit: "Du hast nicht die notwendigen Rechte, dieses Meetup zu bearbeiten.",
         meetupCantDelete: "Du hast nicht die notwendigen Rechte, dieses Meetup zu löschen.",
         notMeetupCreateChannel:
-            "Falscher Channel. Führe dieses Kommando bitte in <#{{channelID}}> aus.",
+            "Falscher Channel. Führe dieses Kommando bitte in {{channelMention}} aus.",
         invalidMeetup: "Kein Meetup mit der Meetup-ID gefunden: {{meetupID}}",
         noMeetupFoundByMessage: "Kein Meetup mit der folgenden Nachricht-ID gefunden: {{messageID}",
         memberCantExecuteCommand:
@@ -16,7 +17,8 @@ const permission: TranslationObject = {
         messageHasNoEmbeds: "Nachricht mit der ID {{messageID}} hat keine Einbettungen.",
         messageHasMoreThanOneEmbed: "Nachricht mit der {{messageID}} hat mehr als eine Einbettung.",
         messageNotPostedByBot: "Nachricht mit der {{messageID}} wurde nicht vom Bot verfasst.",
+        invalidPageNumber: "Ungültige Seitenzahl angegeben.",
     },
-};
+} satisfies PartialTranslationObject<typeof permissionEn>;
 
 export default permission;

@@ -1,15 +1,21 @@
 import {
+    APIRole,
     ButtonInteraction,
     ChatInputCommandInteraction,
+    CommandInteractionOptionResolver,
     LabelBuilder,
+    Role,
+    roleMention,
     TextInputBuilder,
-    TextInputStyle
+    TextInputStyle,
 } from "discord.js";
 import { db } from "../database/Database";
 import { MeetupAllowedMentionsRoleRow } from "../database/table/MeetupAllowedMentionsRole";
 import { ModalInputDraftRow } from "../database/table/ModalInputDraft";
 import { tModal } from "../i18n";
 import { AbstractModal } from "./AbstractModal";
+import { MeetupCreateModalInputType } from "./type/MeetupCreateModalInputType";
+import { logger } from "../logger";
 
 /**
  * Displays Create Meetup Modal
@@ -40,23 +46,24 @@ export class MeetupCreateModal extends AbstractModal {
         }
 
         //check option roles
-        const options = interaction.options;
+        const options: Omit<CommandInteractionOptionResolver, "getMessage" | "getFocused"> =
+            interaction.options;
         const roleIds: string[] = [];
 
-        const role1 = options.getRole("role1");
-        if (role1 && role1.id) {
+        const role1: Role | APIRole | null = options.getRole("role1");
+        if (role1 && role1.id && role1.mentionable) {
             await this.checkRole(role1.id);
             roleIds.push(role1.id);
         }
 
-        const role2 = options.getRole("role2");
-        if (role2 && role2.id) {
+        const role2: Role | APIRole | null = options.getRole("role2");
+        if (role2 && role2.id && role2.mentionable) {
             await this.checkRole(role2.id);
             roleIds.push(role2.id);
         }
 
-        const role3 = options.getRole("role3");
-        if (role3 && role3.id) {
+        const role3: Role | APIRole | null = options.getRole("role3");
+        if (role3 && role3.id && role3.mentionable) {
             await this.checkRole(role3.id);
             roleIds.push(role3.id);
         }
@@ -66,8 +73,8 @@ export class MeetupCreateModal extends AbstractModal {
         });
     }
 
-    protected setSubmitCustomID() {
-        const roleIdString = this.additionalData.roleIds.join(",");
+    protected setSubmitCustomID(): void {
+        const roleIdString: string = (this.additionalData.roleIds as string[]).join(",");
 
         this.submitCustomId = "meetup_create:" + roleIdString;
     }
@@ -142,41 +149,52 @@ export class MeetupCreateModal extends AbstractModal {
         };
     }
 
-    protected async applyDraftInputValues(inputs: Record<string, LabelBuilder>, draft: ModalInputDraftRow): Promise<void> {
+    protected async applyDraftInputValues(
+        inputs: Record<string, LabelBuilder>,
+        draft: ModalInputDraftRow,
+    ): Promise<void> {
         const { pokemon, location, time, date, note } = inputs;
 
-        const formData = JSON.parse(draft.formData);
+        const formData = draft.formData as MeetupCreateModalInputType;
 
-        // pokemon
-        if(formData.pokemon !== undefined) {
-            const pokemonInput = pokemon.data.component as TextInputBuilder;
-            pokemonInput.setValue(String(formData.pokemon));
+        if (formData === null) {
+            return;
         }
 
-        // location
-        if(formData.location !== undefined) {
-            const locationInput = location.data.component as TextInputBuilder;
-            locationInput.setValue(String(formData.location));
-        }
+        try {
+            // pokemon
+            if (formData.pokemon !== undefined) {
+                const pokemonInput = pokemon.data.component as TextInputBuilder;
+                pokemonInput.setValue(String(formData.pokemon));
+            }
 
-        // time
-        if(formData.time !== undefined) {
-            const timeInput = time.data.component as TextInputBuilder;
-            timeInput.setValue(String(formData.time));
-        }
+            // location
+            if (formData.location !== undefined) {
+                const locationInput = location.data.component as TextInputBuilder;
+                locationInput.setValue(String(formData.location));
+            }
 
-        // date
-        if(formData.date !== undefined) {
-            const dateInput = date.data.component as TextInputBuilder;
-            dateInput.setValue(String(formData.date));
-        }
+            // time
+            if (formData.time !== undefined) {
+                const timeInput = time.data.component as TextInputBuilder;
+                timeInput.setValue(String(formData.time));
+            }
 
-        // note
-        if(formData.note !== undefined) {
-            const noteInput = note.data.component as TextInputBuilder;
-            noteInput.setValue(String(formData.note));
+            // date
+            if (formData.date !== undefined) {
+                const dateInput = date.data.component as TextInputBuilder;
+                dateInput.setValue(String(formData.date));
+            }
+
+            // note
+            if (formData.note !== undefined) {
+                const noteInput = note.data.component as TextInputBuilder;
+                noteInput.setValue(String(formData.note));
+            }
+        } catch (error: unknown) {
+            logger.error({ err: error }, tModal("global.error.applyDraft"));
         }
-    };
+    }
 
     private async checkRole(roleId: string): Promise<void> {
         const role = (await db
@@ -186,7 +204,9 @@ export class MeetupCreateModal extends AbstractModal {
             .executeTakeFirst()) as MeetupAllowedMentionsRoleRow | undefined;
 
         if (!role) {
-            throw new Error(tModal("meetupCreate.error.invalidRole", { roleID: roleId }));
+            throw new Error(
+                tModal("meetupCreate.error.roleNotSupported", { roleMention: roleMention(roleId) }),
+            );
         }
     }
 }
